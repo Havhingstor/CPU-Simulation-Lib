@@ -64,7 +64,7 @@ private func removePrefixOfString(_ val: String, prefix: String) -> String {
     var cleanedString = val
     
     cleanedString = removePrefixOfStringWithoutDealingWithMinus(cleanedString, prefix: prefix)
-    cleanedString = removePrefixOfStringAfterMinus(cleanedString, prefix: prefix)
+    cleanedString = removePrefixOfStringAfterMinusIfNeeded(cleanedString, prefix: prefix)
     
     return cleanedString
 }
@@ -79,7 +79,7 @@ private func removePrefixOfStringWithoutDealingWithMinus(_ val: String, prefix: 
     return cleanedStr
 }
 
-private func removePrefixOfStringAfterMinus(_ val: String, prefix: String) -> String {
+private func removePrefixOfStringAfterMinusIfNeeded(_ val: String, prefix: String) -> String {
     var cleanedStr = val
     
     if val.starts(with: "-" + prefix) {
