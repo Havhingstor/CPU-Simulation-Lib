@@ -154,4 +154,16 @@ final class NumberToNumberTester: XCTestCase {
         XCTAssertEqual(signedToUnsigned(signed), UInt16(0xffff))
     }
     
+    func testUnsignedToSigned() {
+        var unsigned = UInt16(0x1234)
+        XCTAssertEqual(unsignedToSigned(unsigned), 0x1234)
+        
+        unsigned = 0x5678
+        XCTAssertEqual(unsignedToSigned(unsigned), 0x5678)
+    }
+    
+    func testHighUnsignedToSigned() {
+        let unsigned = UInt16(0xabcd)
+        XCTAssertEqual(unsignedToSigned(unsigned), -0x5433)
+    }
 }
