@@ -1,15 +1,15 @@
 //
 //  Utilities.swift
-//  
+//
 //
 //  Created by Paul on 28.01.22.
 //
 
 import Foundation
 
-private let decimalCharSet = ["0","1","2","3","4","5","6","7","8","9","-"]
-private let binaryCharSet = ["0","1","-"]
-private let hexadecimalCharSet = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","-"]
+private let decimalCharSet = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-"]
+private let binaryCharSet = ["0", "1", "-"]
+private let hexadecimalCharSet = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", "-"]
 
 public func decFromString(_ number: String) throws -> UInt16 {
     try guaranteeDecimalNumber(number)
@@ -62,30 +62,30 @@ private func guaranteeBinaryNumber(_ number: String) throws {
 
 private func removePrefixOfString(_ val: String, prefix: String) -> String {
     var cleanedString = val
-    
+
     cleanedString = removePrefixOfStringWithoutDealingWithMinus(cleanedString, prefix: prefix)
     cleanedString = removePrefixOfStringAfterMinusIfNeeded(cleanedString, prefix: prefix)
-    
+
     return cleanedString
 }
 
 private func removePrefixOfStringWithoutDealingWithMinus(_ val: String, prefix: String) -> String {
     var cleanedStr = val
-    
+
     if val.starts(with: prefix) {
         cleanedStr = removeFirstNChars(val, n: prefix.count)
     }
-    
+
     return cleanedStr
 }
 
 private func removePrefixOfStringAfterMinusIfNeeded(_ val: String, prefix: String) -> String {
     var cleanedStr = val
-    
+
     if val.starts(with: "-" + prefix) {
         cleanedStr = replacePrefixAfterMinus(val, prefix: prefix)
     }
-    
+
     return cleanedStr
 }
 
@@ -96,13 +96,13 @@ private func replacePrefixAfterMinus(_ val: String, prefix: String) -> String {
     return strWithMinus
 }
 
-private func removeFirstNChars(_ val: String, n: Int) -> String{
+private func removeFirstNChars(_ val: String, n: Int) -> String {
     var result = val
-    
+
     for _ in 0 ..< n {
         result = String(result.dropFirst())
     }
-    
+
     return result
 }
 
