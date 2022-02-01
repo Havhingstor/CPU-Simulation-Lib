@@ -28,6 +28,10 @@ public func binFromString(_ number: String) throws -> UInt16 {
     return try uintFromString(cleanedNum, radix: 2)
 }
 
+public func signedToUnsigned(_ number: Int16) -> UInt16 {
+    UInt16(bitPattern: number)
+}
+
 private func lowercasedCharIsInCharset(_ charSet: [String], _ character: String.Element) -> Bool {
     return charSet.contains(String(character).lowercased())
 }

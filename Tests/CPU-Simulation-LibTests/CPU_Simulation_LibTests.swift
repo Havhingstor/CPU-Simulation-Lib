@@ -136,5 +136,22 @@ final class StringToNumbersTester: XCTestCase {
 
         XCTAssertEqual(try binFromString(num), try binFromString("-100"))
     }
+
+}
+
+final class NumberToNumberTester: XCTestCase {
+
+    func testSignedToUnsigned() {
+        var signed = Int16(15)
+        XCTAssertEqual(signedToUnsigned(signed), UInt16(15))
+
+        signed = 25
+        XCTAssertEqual(signedToUnsigned(signed), UInt16(25))
+    }
+
+    func testNegativeSignedToUnsigned() {
+        let signed = Int16(-1)
+        XCTAssertEqual(signedToUnsigned(signed), UInt16(0xffff))
+    }
     
 }
