@@ -36,6 +36,14 @@ public func unsignedToSigned(_ number: UInt16) -> Int16 {
     return Int16(bitPattern: number)
 }
 
+public func toDecString(_ number: UInt16) -> String {
+    String(number)
+}
+
+public func toDecString(_ number: Int16) -> String {
+    String(number)
+}
+
 private func lowercasedCharIsInCharset(_ charSet: [String], _ character: String.Element) -> Bool {
     return charSet.contains(String(character).lowercased())
 }

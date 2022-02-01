@@ -153,17 +153,37 @@ final class NumberToNumberTester: XCTestCase {
         let signed = Int16(-1)
         XCTAssertEqual(signedToUnsigned(signed), UInt16(0xffff))
     }
-    
+
     func testUnsignedToSigned() {
         var unsigned = UInt16(0x1234)
         XCTAssertEqual(unsignedToSigned(unsigned), 0x1234)
-        
+
         unsigned = 0x5678
         XCTAssertEqual(unsignedToSigned(unsigned), 0x5678)
     }
-    
+
     func testHighUnsignedToSigned() {
         let unsigned = UInt16(0xabcd)
         XCTAssertEqual(unsignedToSigned(unsigned), -0x5433)
     }
+}
+
+final class NumberToStringTester: XCTestCase {
+
+    func testUIntToDec() {
+        var num = UInt16(100)
+        XCTAssertEqual(toDecString(num), "100")
+
+        num = UInt16(56789)
+        XCTAssertEqual(toDecString(num), "56789")
+    }
+
+    func testIntToDec() {
+        var num = Int16(200)
+        XCTAssertEqual(toDecString(num), "200")
+
+        num = Int16(-100)
+        XCTAssertEqual(toDecString(num), "-100")
+    }
+
 }
