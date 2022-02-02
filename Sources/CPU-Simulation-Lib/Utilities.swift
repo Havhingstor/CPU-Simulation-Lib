@@ -44,6 +44,110 @@ public func toDecString(_ number: Int16) -> String {
     String(number)
 }
 
+public func toHexString(_ number: UInt16) -> String {
+    String(number, radix: 16).uppercased()
+}
+
+public func toLongHexString(_ number: UInt16) -> String {
+    "0x" + toHexString(number)
+}
+
+public func toHexString(_ number: Int16) -> String {
+    String(number, radix: 16).uppercased()
+}
+
+public func toLongHexString(_ number: Int16) -> String {
+    getMinusIfNegative(number) + "0x" + getHexPositiveRepresentationOfNumber(number)
+}
+
+public func toBinString(_ number: UInt16) -> String {
+    String(number, radix: 2)
+}
+
+public func toSeparatedBinString(_ number: UInt16) -> String {
+    let normalString = toBinString(number)
+    return addWhitespacesToNumberString(normalString, charsInGroup: 4)
+}
+
+public func toLongBinString(_ number: UInt16) -> String {
+    "0b" + toBinString(number)
+}
+
+public func toSeparatedLongBinString(_ number: UInt16)->String {
+    "0b " + toSeparatedBinString(number)
+}
+
+public func toBinString(_ number: Int16) -> String {
+    String(number, radix: 2)
+}
+
+public func toSeparatedBinString(_ number: Int16) -> String {
+    let normalString =  getBinPositiveRepresentationOfNumber(number)
+    return getMinusIfNegative(number) + " " + addWhitespacesToNumberString(normalString, charsInGroup: 4)
+}
+
+public func toLongBinString(_ number: Int16) -> String {
+    getMinusIfNegative(number) + "0b" + getBinPositiveRepresentationOfNumber(number)
+}
+
+public func toSeparatedLongBinString(_ number: Int16)->String {
+    let normalString =  getBinPositiveRepresentationOfNumber(number)
+    return getMinusIfNegative(number) + "0b " + addWhitespacesToNumberString(normalString, charsInGroup: 4)
+}
+
+private func addWhitespacesToNumberString(_ numberString: String, charsInGroup: Int) -> String {
+    var result = ""
+
+    for i in getReverseStringIndexes(numberString) {
+        updateStringWithChar(&result, origin: numberString, index: i, charsInGroup: charsInGroup)
+    }
+
+    return removeWhitespacesAtStartAndEnd(result)
+}
+
+private func removeWhitespacesAtStartAndEnd(_ string: String) -> String {
+    string.trimmingCharacters(in: .whitespaces)
+}
+
+private func updateStringWithChar(_ string: inout String, origin: String, index i: Int, charsInGroup: Int) {
+    string = getReverseCharOfString(origin, index: i) + string
+    string = addWhitespaceIfGroupHasEnded(string, index: i, charsInGroup: charsInGroup)
+}
+
+private func addWhitespaceIfGroupHasEnded(_ string: String, index i: Int, charsInGroup: Int) -> String {
+    if dividableThrough(i, charsInGroup) {
+        return " " + string
+    }
+    return string
+}
+
+private func dividableThrough(_ i: Int, _ charsInGroup: Int) -> Bool {
+    return i % charsInGroup == 0
+}
+
+private func getReverseCharOfString(_ string: String, index i: Int) -> String {
+    let offset = string.count - i
+    return String(string[String.Index(utf16Offset: offset, in: string)])
+}
+
+private func getReverseStringIndexes(_ string: String) -> ClosedRange<Int> {
+    1 ... string.count
+}
+
+private func getHexPositiveRepresentationOfNumber(_ number: Int16) -> String {
+    let positiveNumber = abs(number)
+    return toHexString(positiveNumber)
+}
+
+private func getBinPositiveRepresentationOfNumber(_ number: Int16) -> String {
+    let positiveNumber = abs(number)
+    return toBinString(positiveNumber)
+}
+
+private func getMinusIfNegative(_ number: Int16) -> String {
+    number < 0 ? "-" : ""
+}
+
 private func lowercasedCharIsInCharset(_ charSet: [String], _ character: String.Element) -> Bool {
     return charSet.contains(String(character).lowercased())
 }
