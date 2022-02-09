@@ -189,7 +189,7 @@ final class NumberToStringTester: XCTestCase {
     func testUIntToHex() {
         var num = UInt16(0x100)
         XCTAssertEqual(toHexString(num), "100")
-        XCTAssertEqual(toLongHexString(num), "0x100")
+        XCTAssertEqual(toLongHexString(num), "0x0100")
 
         num = 0xabcd
         XCTAssertEqual(toHexString(num), "ABCD")
@@ -199,11 +199,11 @@ final class NumberToStringTester: XCTestCase {
     func testIntToHex() {
         var num = Int16(0x100)
         XCTAssertEqual(toHexString(num), "100")
-        XCTAssertEqual(toLongHexString(num), "0x100")
+        XCTAssertEqual(toLongHexString(num), "0x0100")
 
         num = -0xabc
         XCTAssertEqual(toHexString(num), "-ABC")
-        XCTAssertEqual(toLongHexString(num), "-0xABC")
+        XCTAssertEqual(toLongHexString(num), "-0x0ABC")
     }
     
     func testUIntToBinary() {
@@ -215,18 +215,20 @@ final class NumberToStringTester: XCTestCase {
         XCTAssertEqual(toBinString(num), "1010101111001101")
         XCTAssertEqual(toLongBinString(num), "0b1010101111001101")
         XCTAssertEqual(toSeparatedBinString(num), "1010 1011 1100 1101")
-        XCTAssertEqual(toSeparatedLongBinString(num), "0b 1010 1011 1100 1101")
+        XCTAssertEqual(toSeparatedLongBinString(num), "0b1010 1011 1100 1101")
     }
     
     func testIntToBinary() {
         var num = Int16(0b0110_0101_0101_0100)
         XCTAssertEqual(toBinString(num), "110010101010100")
-        XCTAssertEqual(toLongBinString(num), "0b110010101010100")
+        XCTAssertEqual(toLongBinString(num), "0b0110010101010100")
+        XCTAssertEqual(toSeparatedBinString(num), "110 0101 0101 0100")
+        XCTAssertEqual(toSeparatedLongBinString(num), "0b0110 0101 0101 0100")
         
         num = -0b111_0101_1010_1011
         XCTAssertEqual(toBinString(num), "-111010110101011")
-        XCTAssertEqual(toLongBinString(num), "-0b111010110101011")
-        XCTAssertEqual(toSeparatedBinString(num), "- 111 0101 1010 1011")
-        XCTAssertEqual(toSeparatedLongBinString(num), "-0b 111 0101 1010 1011")
+        XCTAssertEqual(toLongBinString(num), "-0b0111010110101011")
+        XCTAssertEqual(toSeparatedBinString(num), "-111 0101 1010 1011")
+        XCTAssertEqual(toSeparatedLongBinString(num), "-0b0111 0101 1010 1011")
     }
 }
