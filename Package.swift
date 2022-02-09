@@ -21,8 +21,11 @@ let package = Package(
         .target(
             name: "CPU-Simulation-Lib",
             dependencies: []),
+        .target(
+            name: "CPU-Simulation-Utilities",
+            dependencies: []),
         .testTarget(
             name: "CPU-Simulation-LibTests",
-            dependencies: ["CPU-Simulation-Lib"]),
+            dependencies: ["CPU-Simulation-Lib", "CPU-Simulation-Utilities"]),
     ]
 )

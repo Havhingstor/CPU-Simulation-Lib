@@ -1,5 +1,5 @@
 import XCTest
-@testable import CPU_Simulation_Lib
+@testable import CPU_Simulation_Utilities
 
 final class StringToNumbersTester: XCTestCase {
 
