@@ -1,0 +1,42 @@
+//
+//  MemoryTests.swift
+//  
+//
+//  Created by Paul on 09.02.22.
+//
+
+import XCTest
+@testable import CPU_Simulation_Lib
+
+class MemoryTests: XCTestCase {
+    var memory: Memory = Memory()
+    
+    func testMemory() {
+        memory.write(10, address: 0)
+        XCTAssertEqual(memory.read(address: 0), 10)
+        
+        memory.write(20, address: 1)
+        XCTAssertEqual(memory.read(address: 0), 10)
+        XCTAssertEqual(memory.read(address: 1), 20)
+    }
+    
+    func testMemoryLoopbackSafetyGuard() {
+        XCTAssertEqual(memory.read(address: 0xfffe), 0xffff)
+        XCTAssertEqual(memory.read(address: 0xffff), 0xffff)
+    }
+    
+    func testMemoryExtractArray() {
+        memory.write(0xaaaa, address: 0xeeee)
+        
+        let memoryArray = memory.internalArray
+        XCTAssertEqual(memoryArray[0xeeee], 0xaaaa)
+    }
+    
+    func testMemoryReset() {
+        memory.write(25, address: 0)
+        XCTAssertEqual(memory.read(address: 0), 25)
+        
+        memory.reset()
+        XCTAssertEqual(memory.read(address: 0), 0)
+    }
+}
