@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import CPU_Simulation_Lib
+import CPU_Simulation_Lib
 
 class CPUStatesTests: XCTestCase {
     

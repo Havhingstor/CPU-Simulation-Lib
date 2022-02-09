@@ -28,7 +28,7 @@ public class StateExecuted: CPUState {
         true
     }
     
-    
+    public init() {}
 }
 
 public class StateHold: StateExecuted {
@@ -43,6 +43,8 @@ public class StateFetched: CPUState {
     public func shouldIncrement() -> Bool {
         false
     }
+    
+    public init() {}
 }
 
 public class StateDecoded: CPUState {
@@ -53,4 +55,6 @@ public class StateDecoded: CPUState {
     public func shouldIncrement() -> Bool {
         false
     }
+    
+    public init() {}
 }
