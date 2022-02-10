@@ -9,10 +9,8 @@ import Foundation
 
 public class CPU {
     private var _memory: Memory
-    private var _programCounter: UInt16 = 0
-    private var _state: CPUState = CPU.startingState
-    private var _opcode: UInt16 = 0
-    private var _referencedAddress: UInt16 = 0
+    private var execution = CPUExecution()
+    private var internalVars = InternalCPUVars()
     
     public init(memory: Memory) {
         _memory = memory
@@ -20,56 +18,45 @@ public class CPU {
     
     public init(memory: Memory, startingPoint: UInt16) {
         _memory = memory
-        _programCounter = startingPoint
+        execution.programCounter = startingPoint
     }
     
     public var memory: Memory { _memory }
-    public var programCounter: UInt16 { _programCounter }
-    public var state: String { _state.state }
-    public var opcode: UInt16 { _opcode }
-    public var referencedAddress: UInt16 { _referencedAddress }
-    
+    public var programCounter: UInt16 { execution.programCounter }
+    public var state: String { execution.state.state }
+    public var opcode: UInt16 { execution.opcode }
+    public var referencedAddress: UInt16 { execution.referencedAddress }
+    public var stackpointer: UInt16 { internalVars.stackpointer }
+    public var accumulator: UInt16 { internalVars.accumulator }
+    public var dataBus: UInt16 { internalVars.dataBus }
+    public var addressBus: UInt16 { internalVars.addressBus }
+    public var lastMemoryInteraction: UInt16 { internalVars.lastMemoryInteraction }
     
     public func executeNextStep() {
-        applyNewCPUVars(vars: _state.operate(cpu: self))
-        _state = _state.nextState
+        let result = execution.executeNextStep(parent: self)
+        
+        execution.applyNewCPUVars(vars: result)
+        internalVars.applyNewCPUVars(vars: result)
     }
     
     public func endInstruction() {
         repeat {
             executeNextStep()
-        } while !_state.instructionEnded
-    }
-    
-    private func applyNewCPUVars(vars: NewCPUVars) {
-        applyProgramCounter(pc: vars.programCounter)
-        applyOpcode(opcode: vars.opcode)
-        applyReferencedAddress(referencedAddress: vars.referencedAddress)
-    }
-    
-    private func applyProgramCounter(pc: UInt16?) {
-        if let pc = pc {
-            _programCounter = pc
-        }
-    }
-    
-    private func applyOpcode(opcode: UInt16?) {
-        if let opcode = opcode {
-            _opcode = opcode
-        }
-    }
-    
-    private func applyReferencedAddress(referencedAddress: UInt16?) {
-        if let referencedAddress = referencedAddress {
-            _referencedAddress = referencedAddress
-        }
+        } while !execution.state.instructionEnded
     }
 }
+
+
 
 public class NewCPUVars {
     private var _programCounter: UInt16? = nil
     private var _opcode: UInt16? = nil
     private var _referencedAddress: UInt16? = nil
+    private var _stackpointer: UInt16? = nil
+    private var _accumulator: UInt16? = nil
+    private var _dataBus: UInt16? = nil
+    private var _addressBus: UInt16? = nil
+    private var _lastMemoryInteraction: UInt16? = nil
     
     public init() {}
     
@@ -89,6 +76,36 @@ public class NewCPUVars {
         get {_referencedAddress}
         set(referencedAddress) { if referencedAddress != nil
             { _referencedAddress = referencedAddress}
+        }
+    }
+    public var stackpointer: UInt16? {
+        get {_stackpointer}
+        set(stackpointer) { if stackpointer != nil
+            { _stackpointer = stackpointer}
+        }
+    }
+    public var accumulator: UInt16? {
+        get {_accumulator}
+        set(accumulator) { if accumulator != nil
+            { _accumulator = accumulator}
+        }
+    }
+    public var dataBus: UInt16? {
+        get {_dataBus}
+        set(dataBus) { if dataBus != nil
+            { _dataBus = dataBus}
+        }
+    }
+    public var addressBus: UInt16? {
+        get {_addressBus}
+        set(addressBus) { if addressBus != nil
+            { _addressBus = addressBus}
+        }
+    }
+    public var lastMemoryInteraction: UInt16? {
+        get {_lastMemoryInteraction}
+        set(lastMemoryInteraction) { if lastMemoryInteraction != nil
+            { _lastMemoryInteraction = lastMemoryInteraction}
         }
     }
 }

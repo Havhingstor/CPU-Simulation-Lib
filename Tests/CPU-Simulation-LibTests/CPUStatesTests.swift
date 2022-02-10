@@ -11,7 +11,7 @@ import CPU_Simulation_Lib
 class CPUStatesTests: XCTestCase {
     
     func testNewExternalState() {
-        CPU.startingState = NewStart()
+        CPU.startingState = NewStart.Builder()
         let memory = Memory()
         let cpu = CPU(memory: memory, startingPoint: 0x1b)
         XCTAssertEqual(cpu.state, "newState")
@@ -34,7 +34,7 @@ private class NewStart: CPUState {
     
     var state: String {"newState"}
     
-    var nextState: CPUState {NewStart()}
+    var nextState: StateBuilder {Builder()}
     
     public func operate(cpu: CPU) -> NewCPUVars {
         let result = NewCPUVars()
@@ -42,5 +42,11 @@ private class NewStart: CPUState {
         result.programCounter = cpu.programCounter &- 2
         
         return result
+    }
+    
+    class Builder: StateBuilder {
+        func generate() -> CPUState {
+            NewStart()
+        }
     }
 }

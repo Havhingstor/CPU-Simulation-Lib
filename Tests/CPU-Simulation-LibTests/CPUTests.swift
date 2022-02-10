@@ -103,4 +103,13 @@ class CPUTests: XCTestCase {
         XCTAssertEqual(cpu.referencedAddress, 6)
         cpu.endInstruction()
     }
+    
+    func testVarsAtStart() {
+        let cpu = CPU(memory: memory)
+        XCTAssertEqual(cpu.stackpointer, 0xfffe)
+        XCTAssertEqual(cpu.accumulator, 0)
+        XCTAssertEqual(cpu.addressBus, 0)
+        XCTAssertEqual(cpu.dataBus, 0)
+        XCTAssertEqual(cpu.lastMemoryInteraction, 0)
+    }
 }
