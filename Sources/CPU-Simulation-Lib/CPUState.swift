@@ -14,18 +14,24 @@ extension CPU {
 public protocol CPUState {
     var state: String { get }
     var nextState: CPUState { get }
+    var instructionEnded: Bool { get }
     
-    func shouldIncrement() -> Bool
+    func operate(cpu: CPU) -> NewCPUVars
     
 }
 
 public class StateExecuted: CPUState {
     public var state: String { "executed" }
+    public var instructionEnded: Bool { true }
     
     public var nextState: CPUState {StateFetched()}
     
-    public func shouldIncrement() -> Bool {
-        true
+    public func operate(cpu: CPU) -> NewCPUVars {
+        let result = fetchInstruction(cpu: cpu)
+        
+        result.programCounter = cpu.programCounter &+ 2
+        
+        return result
     }
     
     public init() {}
@@ -37,11 +43,12 @@ public class StateHold: StateExecuted {
 
 public class StateFetched: CPUState {
     public var state: String { "fetched" }
+    public var instructionEnded: Bool { false }
     
     public var nextState: CPUState {StateDecoded()}
     
-    public func shouldIncrement() -> Bool {
-        false
+    public func operate(cpu: CPU) -> NewCPUVars {
+        return NewCPUVars()
     }
     
     public init() {}
@@ -49,11 +56,12 @@ public class StateFetched: CPUState {
 
 public class StateDecoded: CPUState {
     public var state: String {"decoded"}
+    public var instructionEnded: Bool { false }
     
     public var nextState: CPUState {StateExecuted()}
     
-    public func shouldIncrement() -> Bool {
-        false
+    public func operate(cpu: CPU) -> NewCPUVars {
+        return NewCPUVars()
     }
     
     public init() {}

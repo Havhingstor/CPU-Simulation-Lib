@@ -39,4 +39,21 @@ class MemoryTests: XCTestCase {
         memory.reset()
         XCTAssertEqual(memory.read(address: 0), 0)
     }
+    
+    func testWriteValuesToMemory() {
+        try? memory.writeValues(values: [1,2,3,4,5,6])
+        XCTAssertEqual(memory.read(address: 0), 1)
+        XCTAssertEqual(memory.read(address: 1), 2)
+        XCTAssertEqual(memory.read(address: 2), 3)
+        XCTAssertEqual(memory.read(address: 3), 4)
+        XCTAssertEqual(memory.read(address: 4), 5)
+        XCTAssertEqual(memory.read(address: 5), 6)
+    }
+    
+    func testWriteTooMuchValues() {
+        let values: [UInt16] = Array(repeating: UInt16(0), count: 0xaaaaa)
+        XCTAssertThrowsError(try memory.writeValues(values: values)) { err in
+            XCTAssertEqual(err as? Memory.Errors, Memory.Errors.tooMuchValues)
+        }
+    }
 }

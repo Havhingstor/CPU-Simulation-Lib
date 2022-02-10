@@ -16,8 +16,11 @@ class CPUStatesTests: XCTestCase {
         let cpu = CPU(memory: memory, startingPoint: 0x1b)
         XCTAssertEqual(cpu.state, "newState")
         cpu.executeNextStep()
-        XCTAssertEqual(cpu.state, "executed")
-        XCTAssertEqual(cpu.programCounter, 0x1b)
+        XCTAssertEqual(cpu.state, "newState")
+        XCTAssertEqual(cpu.programCounter, 0x19)
+        cpu.endInstruction()
+        XCTAssertEqual(cpu.state, "newState")
+        XCTAssertEqual(cpu.programCounter, 0x17)
     }
     
     override func tearDown() {
@@ -27,13 +30,17 @@ class CPUStatesTests: XCTestCase {
 }
 
 private class NewStart: CPUState {
+    var instructionEnded: Bool {true}
+    
     var state: String {"newState"}
     
-    var nextState: CPUState {StateExecuted()}
+    var nextState: CPUState {NewStart()}
     
-    func shouldIncrement() -> Bool {
-        false
+    public func operate(cpu: CPU) -> NewCPUVars {
+        let result = NewCPUVars()
+        
+        result.programCounter = cpu.programCounter &- 2
+        
+        return result
     }
-    
-    
 }

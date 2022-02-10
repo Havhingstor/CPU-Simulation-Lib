@@ -32,8 +32,25 @@ public class Memory {
         addJumpbackSafetyGuard()
     }
     
+    public func writeValues(values: [UInt16]) throws {
+        if arrayTooBig(values) {
+            throw Errors.tooMuchValues
+        }
+        for i in 0 ..< values.count {
+            memory[i] = values[i]
+        }
+    }
+    
+    public enum Errors: Error {
+        case tooMuchValues
+    }
+    
     private func addJumpbackSafetyGuard() {
         memory[0xfffe] = 0xffff
         memory[0xffff] = 0xffff
+    }
+    
+    private func arrayTooBig(_ array: [UInt16]) -> Bool {
+        array.count > 0x10000
     }
 }
