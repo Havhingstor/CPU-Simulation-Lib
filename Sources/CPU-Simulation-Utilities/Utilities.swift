@@ -90,3 +90,8 @@ public func toSeparatedLongBinString(_ number: Int16)->String {
     let normalString =  getBinPositiveRepresentationOfNumberFilledWithZero(number)
     return getMinusIfNegative(number) + "0b" + addWhitespacesToNumberString(normalString, charsInGroup: 4)
 }
+
+public enum UtilityErrors: Error {
+    case NumberTooHighOrLow
+    case NoNumber
+}

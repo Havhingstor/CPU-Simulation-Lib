@@ -9,7 +9,7 @@ import Foundation
 
 public class CPU {
     private var _memory: Memory
-    private var _stackpointer: UInt16 = 0
+    private var _programCounter: UInt16 = 0
     private var _state: CPUState = CPU.startingState
     
     public init(memory: Memory) {
@@ -18,18 +18,18 @@ public class CPU {
     
     public init(memory: Memory, startingPoint: UInt16) {
         _memory = memory
-        _stackpointer = startingPoint
+        _programCounter = startingPoint
     }
     
     public var memory: Memory { _memory }
-    public var stackpointer: UInt16 { _stackpointer }
+    public var programCounter: UInt16 { _programCounter }
     public var state: String { _state.state }
     
     
     public func executeNextStep() {
         let shouldIncrement = _state.shouldIncrement()
         if shouldIncrement {
-            _stackpointer &+= 2
+            _programCounter &+= 2
         }
         _state = _state.nextState
     }

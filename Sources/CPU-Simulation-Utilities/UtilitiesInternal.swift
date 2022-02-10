@@ -181,8 +181,3 @@ func uintFromString(_ number: String, radix: Int = 10) throws -> UInt16 {
     }
     throw UtilityErrors.NumberTooHighOrLow
 }
-
-enum UtilityErrors: Error {
-    case NumberTooHighOrLow
-    case NoNumber
-}

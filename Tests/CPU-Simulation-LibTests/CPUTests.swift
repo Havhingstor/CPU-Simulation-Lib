@@ -11,45 +11,41 @@ import CPU_Simulation_Lib
 class CPUTests: XCTestCase {
     var memory: Memory = Memory()
     
-    override func setUp() {
-        CPU.startingState = CPU.standardStartingState
-    }
-    
     func testCreateCPU() {
         let cpu = CPU(memory: memory)
         XCTAssertEqual(cpu.memory.internalArray, memory.internalArray)
     }
     
-    func testStackpointerAndNextStep() {
+    func testprogramCounterAndNextStep() {
         let cpu = CPU(memory: memory)
-        XCTAssertEqual(cpu.stackpointer, 0)
+        XCTAssertEqual(cpu.programCounter, 0)
         
         cpu.executeNextStep()
-        XCTAssertEqual(cpu.stackpointer, 2)
+        XCTAssertEqual(cpu.programCounter, 2)
         
         cpu.executeNextStep()
-        XCTAssertEqual(cpu.stackpointer, 2)
+        XCTAssertEqual(cpu.programCounter, 2)
         
         cpu.executeNextStep()
-        XCTAssertEqual(cpu.stackpointer, 2)
+        XCTAssertEqual(cpu.programCounter, 2)
         
         cpu.executeNextStep()
-        XCTAssertEqual(cpu.stackpointer, 4)
+        XCTAssertEqual(cpu.programCounter, 4)
     }
     
-    func testStackpointerInit() {
+    func testprogramCounterInit() {
         let cpu = CPU(memory: memory, startingPoint: 10)
-        XCTAssertEqual(cpu.stackpointer, 10)
+        XCTAssertEqual(cpu.programCounter, 10)
         
         cpu.executeNextStep()
-        XCTAssertEqual(cpu.stackpointer, 12)
+        XCTAssertEqual(cpu.programCounter, 12)
     }
     
     func testNextStepOverflow() {
         let cpu = CPU(memory: memory, startingPoint: 0xfffe)
         
         cpu.executeNextStep()
-        XCTAssertEqual(cpu.stackpointer, 0)
+        XCTAssertEqual(cpu.programCounter, 0)
     }
     
     func testFlags() {

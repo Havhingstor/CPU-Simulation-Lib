@@ -17,7 +17,11 @@ class CPUStatesTests: XCTestCase {
         XCTAssertEqual(cpu.state, "newState")
         cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "executed")
-        XCTAssertEqual(cpu.stackpointer, 0x1b)
+        XCTAssertEqual(cpu.programCounter, 0x1b)
+    }
+    
+    override func tearDown() {
+        CPU.startingState = CPU.standardStartingState
     }
     
 }
