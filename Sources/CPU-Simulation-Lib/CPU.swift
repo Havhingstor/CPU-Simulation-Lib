@@ -9,15 +9,13 @@ import Foundation
 
 public class CPU {
     private var _memory: Memory
-    private var execution = CPUExecution()
-    private var internalVars = InternalCPUVars()
+    private var execution: CPUExecution
+    private var internalVars: InternalCPUVars
     
-    public init(memory: Memory) {
+    public init(memory: Memory, startingPoint: UInt16 = 0) {
         _memory = memory
-    }
-    
-    public init(memory: Memory, startingPoint: UInt16) {
-        _memory = memory
+        execution = CPUExecution()
+        internalVars = InternalCPUVars()
         execution.programCounter = startingPoint
     }
     
@@ -43,6 +41,12 @@ public class CPU {
         repeat {
             executeNextStep()
         } while !execution.state.instructionEnded
+    }
+    
+    public func reset(startingPoint: UInt16 = 0) {
+        execution = CPUExecution()
+        internalVars = InternalCPUVars()
+        execution.programCounter = startingPoint
     }
 }
 

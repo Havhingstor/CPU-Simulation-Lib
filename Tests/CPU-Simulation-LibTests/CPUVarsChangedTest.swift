@@ -29,6 +29,26 @@ class CPUVarsChangedTest: XCTestCase {
         XCTAssertEqual(cpu.opcode, 7)
         XCTAssertEqual(cpu.referencedAddress, 8)
     }
+    
+    func testReset() {
+        let memory = Memory()
+        let cpu = CPU(memory: memory)
+        NewStart.standardNextState = StateBuilder(ExecutedState.init)
+        
+        cpu.executeNextStep()
+        XCTAssertEqual(cpu.state, "executed")
+        
+        cpu.reset()
+        XCTAssertEqual(cpu.state, "newState")
+        XCTAssertEqual(cpu.programCounter, 0)
+        XCTAssertEqual(cpu.accumulator, 0)
+        XCTAssertEqual(cpu.stackpointer, 0xfffe)
+        XCTAssertEqual(cpu.lastMemoryInteraction, 0)
+        XCTAssertEqual(cpu.addressBus, 0)
+        XCTAssertEqual(cpu.dataBus, 0)
+        XCTAssertEqual(cpu.opcode, 0)
+        XCTAssertEqual(cpu.referencedAddress, 0)
+    }
 
     override func tearDown() {
         CPUStandardVars.resetStartingState()
