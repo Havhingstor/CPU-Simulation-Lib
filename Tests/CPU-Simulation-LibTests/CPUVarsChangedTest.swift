@@ -11,7 +11,7 @@ import CPU_Simulation_Lib
 class CPUVarsChangedTest: XCTestCase {
 
     override func setUp() {
-        CPU.startingState = NewStart.Builder()
+        CPUStandardVars.startingState = StateBuilder(NewStart.init)
     }
     
     func testChangingVars() {
@@ -31,16 +31,20 @@ class CPUVarsChangedTest: XCTestCase {
     }
 
     override func tearDown() {
-        CPU.startingState = CPU.standardStartingState
+        CPUStandardVars.resetStartingState()
     }
 }
 
 private class NewStart: CPUState {
+    static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(NewStart.init))
+    
+    var nextStateProvider: SingleNextStateProvider = NewStart.standardNextStateProvider.getNewSingleNextStateProvider()
+    
     var instructionEnded: Bool {true}
     
     var state: String {"newState"}
     
-    var nextState: StateBuilder {Builder()}
+    public init() {}
     
     public func operate(cpu: CPU) -> NewCPUVars {
         let result = NewCPUVars()
@@ -55,11 +59,5 @@ private class NewStart: CPUState {
         result.referencedAddress = 8
         
         return result
-    }
-    
-    class Builder: StateBuilder {
-        func generate() -> CPUState {
-            NewStart()
-        }
     }
 }

@@ -6,91 +6,102 @@
 //
 
 import Foundation
-extension CPU {
-    public static var startingState: StateBuilder = StateHold.Builder()
-    public static var standardStartingState: StateBuilder { StateHold.Builder() }
-}
 
 public protocol CPUState {
     var state: String { get }
-    var nextState: StateBuilder { get }
+    static var standardNextStateProvider: StandardNextStateProvider { get }
+    var nextStateProvider: SingleNextStateProvider { get }
     var instructionEnded: Bool { get }
     
     func operate(cpu: CPU) -> NewCPUVars
-    
 }
 
-public protocol StateBuilder {
-    func generate() -> CPUState
-}
-
-public class StateExecuted: CPUState {
-    public var state: String { "executed" }
-    public var instructionEnded: Bool { true }
+extension CPUState {
+    public var nextState: StateBuilder { nextStateProvider.nextState }
     
-    public var nextState: StateBuilder {StateFetched.Builder()}
-    
-    public func operate(cpu: CPU) -> NewCPUVars {
-        let result = fetchInstruction(cpu: cpu)
-        
-        result.programCounter = cpu.programCounter &+ 2
-        
-        return result
-    }
-    
-    public init() {}
-    
-    class Builder: StateBuilder {
-        func generate() -> CPUState {
-            StateExecuted()
+    public static var standardNextState: StateBuilder {
+        get {
+            Self.standardNextStateProvider.standardNextState
+        }
+        set(newStandardNextState) {
+            Self.standardNextStateProvider.standardNextState = newStandardNextState
         }
     }
-}
-
-public class StateHold: StateExecuted {
-    public override var state: String { "hold" }
     
-    class Builder: StateBuilder {
-        func generate() -> CPUState {
-            StateHold()
-        }
+    public static func resetStandardNextState() {
+        standardNextStateProvider.resetStandardNextState()
     }
 }
 
-public class StateFetched: CPUState {
-    public var state: String { "fetched" }
-    public var instructionEnded: Bool { false }
+public class StandardNextStateProvider {
     
-    public var nextState: StateBuilder {StateDecoded.Builder()}
+    private var _originalStandardNextState: StateBuilder
+    private var _standardNextState: StateBuilder?
     
-    public func operate(cpu: CPU) -> NewCPUVars {
-        return NewCPUVars()
+    public init(original: StateBuilder) {
+        _originalStandardNextState = original
     }
     
-    public init() {}
+    public func resetStandardNextState() {
+        _standardNextState = nil
+    }
     
-    class Builder: StateBuilder {
-        func generate() -> CPUState {
-            StateFetched()
+    public var originalStandardNextState: StateBuilder {_originalStandardNextState}
+    public var standardNextState: StateBuilder {
+        get {
+            if let standardNextState = _standardNextState {
+                return standardNextState
+            }
+            return originalStandardNextState
         }
+        set(newStandardNextState) {
+            _standardNextState = newStandardNextState
+        }
+    }
+    
+    public func getNewSingleNextStateProvider() -> SingleNextStateProvider {
+        SingleNextStateProvider(self)
     }
 }
 
-public class StateDecoded: CPUState {
-    public var state: String {"decoded"}
-    public var instructionEnded: Bool { false }
+public class SingleNextStateProvider {
     
-    public var nextState: StateBuilder {StateExecuted.Builder()}
+    private var _nextState: StateBuilder?
+    private var parent: StandardNextStateProvider
     
-    public func operate(cpu: CPU) -> NewCPUVars {
-        return NewCPUVars()
+    fileprivate init(_ parent: StandardNextStateProvider) {
+        self.parent = parent
     }
     
-    public init() {}
-    
-    class Builder: StateBuilder {
-        func generate() -> CPUState {
-            StateDecoded()
+    public var nextState: StateBuilder {
+        get {
+            if let nextState = _nextState {
+                return nextState
+            }
+            return parent.standardNextState
         }
+        set(newNextState) {
+            _nextState = newNextState
+        }
+    }
+    
+    public func resetNextState() {
+        _nextState = nil
+    }
+}
+
+public class StateBuilder: Equatable {
+    public static func == (lhs: StateBuilder, rhs: StateBuilder) -> Bool {
+        lhs.function().state == rhs.function().state
+    }
+    
+    private var function: () -> CPUState
+    
+    public init(_ function: @escaping () -> CPUState) {
+        self.function = function
+    }
+    
+    public func generate() -> CPUState {
+        function()
     }
 }
