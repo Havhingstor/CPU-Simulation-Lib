@@ -7,10 +7,10 @@
 
 import Foundation
 
-public class StateExecuted: CPUState {
-    public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(StateFetched.init))
+public class ExecutedState: CPUState {
+    public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(FetchedState.init))
     
-    public var nextStateProvider: SingleNextStateProvider = StateExecuted.standardNextStateProvider.getNewSingleNextStateProvider()
+    public var nextStateProvider: SingleNextStateProvider = ExecutedState.standardNextStateProvider.getNewSingleNextStateProvider()
     
     public var state: String { "executed" }
     public var instructionEnded: Bool { true }
@@ -26,14 +26,14 @@ public class StateExecuted: CPUState {
     public init() {}
 }
 
-public class StateHold: StateExecuted {
+public class HoldState: ExecutedState {
     public override var state: String { "hold" }
 }
 
-public class StateFetched: CPUState {
-    public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(StateDecoded.init))
+public class FetchedState: CPUState {
+    public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(DecodedState.init))
     
-    public var nextStateProvider: SingleNextStateProvider = StateFetched.standardNextStateProvider.getNewSingleNextStateProvider()
+    public var nextStateProvider: SingleNextStateProvider = FetchedState.standardNextStateProvider.getNewSingleNextStateProvider()
     
     public var state: String { "fetched" }
     public var instructionEnded: Bool { false }
@@ -45,10 +45,10 @@ public class StateFetched: CPUState {
     public init() {}
 }
 
-public class StateDecoded: CPUState {
-    public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(StateExecuted.init))
+public class DecodedState: CPUState {
+    public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(ExecutedState.init))
     
-    public var nextStateProvider: SingleNextStateProvider = StateDecoded.standardNextStateProvider.getNewSingleNextStateProvider()
+    public var nextStateProvider: SingleNextStateProvider = DecodedState.standardNextStateProvider.getNewSingleNextStateProvider()
     
     public var state: String {"decoded"}
     public var instructionEnded: Bool { false }
