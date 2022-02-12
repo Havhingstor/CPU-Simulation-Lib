@@ -40,8 +40,8 @@ class MemoryTests: XCTestCase {
         XCTAssertEqual(memory.read(address: 0), 0)
     }
     
-    func testWriteValuesToMemory() {
-        try? memory.writeValues(values: [1,2,3,4,5,6])
+    func testWriteValuesToMemory() throws {
+        try memory.writeValues(values: [1,2,3,4,5,6])
         XCTAssertEqual(memory.read(address: 0), 1)
         XCTAssertEqual(memory.read(address: 1), 2)
         XCTAssertEqual(memory.read(address: 2), 3)

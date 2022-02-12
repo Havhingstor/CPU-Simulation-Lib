@@ -16,109 +16,109 @@ class CPUTests: XCTestCase {
         XCTAssertEqual(cpu.memory.internalArray, memory.internalArray)
     }
     
-    func testprogramCounterAndNextStep() {
+    func testprogramCounterAndNextStep() throws {
         let cpu = CPU(memory: memory)
         XCTAssertEqual(cpu.programCounter, 0)
         
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.programCounter, 2)
         
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.programCounter, 2)
         
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.programCounter, 2)
         
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.programCounter, 4)
     }
     
-    func testprogramCounterInit() {
+    func testprogramCounterInit() throws {
         let cpu = CPU(memory: memory, startingPoint: 10)
         XCTAssertEqual(cpu.programCounter, 10)
         
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.programCounter, 12)
     }
     
-    func testNextStepOverflow() {
+    func testNextStepOverflow() throws {
         let cpu = CPU(memory: memory, startingPoint: 0xfffe)
         
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.programCounter, 0)
     }
     
-    func testFlags() {
+    func testFlags() throws {
         let cpu = CPU(memory: memory)
         XCTAssertEqual(cpu.state, "hold")
         
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "fetched")
         
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "decoded")
         
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "executed")
         
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "fetched")
     }
     
-    func testEndInstruction() {
+    func testEndInstruction() throws {
         let cpu = CPU(memory: memory)
         XCTAssertEqual(cpu.state, "hold")
         
-        try? cpu.endInstruction()
+        try cpu.endInstruction()
         XCTAssertEqual(cpu.state, "executed")
         
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "fetched")
         
-        try? cpu.endInstruction()
+        try cpu.endInstruction()
         XCTAssertEqual(cpu.state, "executed")
     }
     
-    func testFetchInstructions() {
+    func testFetchInstructions() throws {
         ExecutedToFetchState.standardNextState = StateBuilder(OwnDecode.init)
-        try? memory.writeValues(values: [1,2,3,4,5,6])
+        try memory.writeValues(values: [1,2,3,4,5,6])
 
         let cpu = CPU(memory: memory)
         XCTAssertEqual(cpu.opcode, 0)
         XCTAssertEqual(cpu.referencedAddress, 0)
 
-        try? cpu.endInstruction()
+        try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 1)
         XCTAssertEqual(cpu.referencedAddress, 2)
 
-        try? cpu.endInstruction()
+        try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 3)
         XCTAssertEqual(cpu.referencedAddress, 4)
 
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.opcode, 5)
         XCTAssertEqual(cpu.referencedAddress, 6)
 
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.opcode, 5)
         XCTAssertEqual(cpu.referencedAddress, 6)
         ExecutedToFetchState.resetStandardNextState()
     }
     
-    func testFetchDataBus() {
+    func testFetchDataBus() throws {
         memory.write(0x1000, address: 1)
         let cpu = CPU(memory: memory)
         
         XCTAssertEqual(cpu.dataBus, 0)
         XCTAssertEqual(cpu.addressBus, 0)
         
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.opcode, 0)
         XCTAssertEqual(cpu.referencedAddress, 0x1000)
         XCTAssertEqual(cpu.addressBus, 1)
         XCTAssertEqual(cpu.dataBus, 0x1000)
         
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.opcode, 0)
         XCTAssertEqual(cpu.referencedAddress, 0x1000)
         XCTAssertEqual(cpu.addressBus, 0)

@@ -14,57 +14,57 @@ class CPUStatesTests: XCTestCase {
         CPUStandardVars.startingState = StateBuilder(NewStart.init)
     }
     
-    func testNewExternalState() {
+    func testNewExternalState() throws {
         let memory = Memory()
         let cpu = CPU(memory: memory, startingPoint: 0x1b)
         XCTAssertEqual(cpu.state, "newState")
         
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "newState")
         XCTAssertEqual(cpu.programCounter, 0x19)
         
-        try? cpu.endInstruction()
+        try cpu.endInstruction()
         XCTAssertEqual(cpu.state, "newState")
         XCTAssertEqual(cpu.programCounter, 0x17)
     }
     
-    func testNewStandardState() {
+    func testNewStandardState() throws {
         let memory = Memory()
         let cpu = CPU(memory: memory)
         XCTAssertEqual(cpu.state, "newState")
         
         NewStart.standardNextState = StateBuilder(AnotherState.init)
         XCTAssertEqual(NewStart.standardNextState, StateBuilder(AnotherState.init))
-        try? cpu.endInstruction()
+        try cpu.endInstruction()
         XCTAssertEqual(cpu.state, "anotherState")
         
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "newState")
         
         NewStart.resetStandardNextState()
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "newState")
     }
     
-    func testNewStateChanged() {
+    func testNewStateChanged() throws {
         let memory = Memory()
         let cpu = CPU(memory: memory)
         XCTAssertEqual(cpu.state, "newState")
         
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "newState")
         
         NewStart.alternativeNextState = true
         NewStart.resetNextState = false
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "anotherState")
         
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "newState")
         
         NewStart.alternativeNextState = true
         NewStart.resetNextState = true
-        try? cpu.executeNextStep()
+        try cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "newState")
     }
     

@@ -23,11 +23,11 @@ class CreateOperatorCodeTests: XCTestCase {
         XCTAssertEqual(HOLDOperator.operatorCode, 0x63)
     }
     
-    func testOwnOperatorCode() {
+    func testOwnOperatorCode() throws {
         CPUStandardVars.operators.append(OwnOperator.init)
         memory.write(UInt16(OwnOperator.operatorCode), address: 0)
         
-        try? cpu.endInstruction()
+        try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0xAB)
         XCTAssertEqual(cpu.operatorString, "OWN")
     }
