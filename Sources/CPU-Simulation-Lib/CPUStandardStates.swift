@@ -39,7 +39,11 @@ public class FetchedState: CPUState {
     public var instructionEnded: Bool { false }
     
     public func operate(cpu: CPU) -> NewCPUVars {
-        return NewCPUVars()
+        var result = NewCPUVars()
+        
+        resetBusses(dest: &result)
+        
+        return result
     }
     
     public init() {}

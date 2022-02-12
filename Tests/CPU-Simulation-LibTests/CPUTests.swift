@@ -101,7 +101,26 @@ class CPUTests: XCTestCase {
         cpu.executeNextStep()
         XCTAssertEqual(cpu.opcode, 5)
         XCTAssertEqual(cpu.referencedAddress, 6)
-        cpu.endInstruction()
+    }
+    
+    func testFetchDataBus() {
+        memory.write(0x1000, address: 1)
+        let cpu = CPU(memory: memory)
+        
+        XCTAssertEqual(cpu.dataBus, 0)
+        XCTAssertEqual(cpu.addressBus, 0)
+        
+        cpu.executeNextStep()
+        XCTAssertEqual(cpu.opcode, 0)
+        XCTAssertEqual(cpu.referencedAddress, 0x1000)
+        XCTAssertEqual(cpu.addressBus, 1)
+        XCTAssertEqual(cpu.dataBus, 0x1000)
+        
+        cpu.executeNextStep()
+        XCTAssertEqual(cpu.opcode, 0)
+        XCTAssertEqual(cpu.referencedAddress, 0x1000)
+        XCTAssertEqual(cpu.addressBus, 0)
+        XCTAssertEqual(cpu.dataBus, 0)
     }
     
     func testVarsAtStart() {
