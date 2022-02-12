@@ -8,12 +8,12 @@
 import Foundation
 
 public protocol CPUState {
-    var state: String { get }
+    static var state: String { get }
     static var standardNextStateProvider: StandardNextStateProvider { get }
     var nextStateProvider: SingleNextStateProvider { get }
-    var instructionEnded: Bool { get }
+    static var instructionEnded: Bool { get }
     
-    func operate(cpu: CPU) -> NewCPUVars
+    func operate(cpu: CPU) throws -> NewCPUVars
 }
 
 extension CPUState {
@@ -31,6 +31,9 @@ extension CPUState {
     public static func resetStandardNextState() {
         standardNextStateProvider.resetStandardNextState()
     }
+    
+    public var state: String { Self.state }
+    public var instructionEnded: Bool { Self.instructionEnded }
 }
 
 public class StandardNextStateProvider {

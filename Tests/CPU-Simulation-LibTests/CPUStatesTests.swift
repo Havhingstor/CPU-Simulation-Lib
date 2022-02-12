@@ -19,11 +19,11 @@ class CPUStatesTests: XCTestCase {
         let cpu = CPU(memory: memory, startingPoint: 0x1b)
         XCTAssertEqual(cpu.state, "newState")
         
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "newState")
         XCTAssertEqual(cpu.programCounter, 0x19)
         
-        cpu.endInstruction()
+        try? cpu.endInstruction()
         XCTAssertEqual(cpu.state, "newState")
         XCTAssertEqual(cpu.programCounter, 0x17)
     }
@@ -35,14 +35,14 @@ class CPUStatesTests: XCTestCase {
         
         NewStart.standardNextState = StateBuilder(AnotherState.init)
         XCTAssertEqual(NewStart.standardNextState, StateBuilder(AnotherState.init))
-        cpu.endInstruction()
+        try? cpu.endInstruction()
         XCTAssertEqual(cpu.state, "anotherState")
         
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "newState")
         
         NewStart.resetStandardNextState()
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "newState")
     }
     
@@ -51,20 +51,20 @@ class CPUStatesTests: XCTestCase {
         let cpu = CPU(memory: memory)
         XCTAssertEqual(cpu.state, "newState")
         
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "newState")
         
         NewStart.alternativeNextState = true
         NewStart.resetNextState = false
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "anotherState")
         
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "newState")
         
         NewStart.alternativeNextState = true
         NewStart.resetNextState = true
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "newState")
     }
     
@@ -74,14 +74,14 @@ class CPUStatesTests: XCTestCase {
     
 }
 
-private class NewStart: CPUState {
+fileprivate class NewStart: CPUState {
     static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(NewStart.init))
     
     var nextStateProvider: SingleNextStateProvider = NewStart.standardNextStateProvider.getNewSingleNextStateProvider()
     
-    var instructionEnded: Bool {true}
+    class var instructionEnded: Bool {true}
     
-    var state: String {"newState"}
+    class var state: String {"newState"}
     
     public static var alternativeNextState = false
     public static var resetNextState = false
@@ -106,14 +106,14 @@ private class NewStart: CPUState {
     }
 }
     
-private class AnotherState: CPUState {
-    var state: String {"anotherState"}
+fileprivate class AnotherState: CPUState {
+    class var state: String {"anotherState"}
     
     static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(NewStart.init))
     
     var nextStateProvider: SingleNextStateProvider = AnotherState.standardNextStateProvider.getNewSingleNextStateProvider()
     
-    var instructionEnded: Bool {true}
+    class var instructionEnded: Bool {true}
     
     func operate(cpu: CPU) -> NewCPUVars {
         NewCPUVars()

@@ -17,7 +17,7 @@ class CPUVarsChangedTest: XCTestCase {
     func testChangingVars() {
         let memory = Memory()
         let cpu = CPU(memory: memory)
-        cpu.endInstruction()
+        try? cpu.endInstruction()
         
         XCTAssertEqual(cpu.state, "newState")
         XCTAssertEqual(cpu.programCounter, 1)
@@ -35,7 +35,7 @@ class CPUVarsChangedTest: XCTestCase {
         let cpu = CPU(memory: memory)
         NewStart.standardNextState = StateBuilder(ExecutedToFetchState.init)
         
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "executed")
         
         cpu.reset()
@@ -55,14 +55,14 @@ class CPUVarsChangedTest: XCTestCase {
     }
 }
 
-private class NewStart: CPUState {
+fileprivate class NewStart: CPUState {
     static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(NewStart.init))
     
     var nextStateProvider: SingleNextStateProvider = NewStart.standardNextStateProvider.getNewSingleNextStateProvider()
     
-    var instructionEnded: Bool {true}
+    class var instructionEnded: Bool {true}
     
-    var state: String {"newState"}
+    class var state: String {"newState"}
     
     public init() {}
     

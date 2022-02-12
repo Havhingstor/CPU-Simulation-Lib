@@ -1,8 +1,8 @@
 //
-//  CPUInternal.swift
+//  CPUFetch.swift
 //  
 //
-//  Created by Paul on 10.02.22.
+//  Created by Paul on 12.02.22.
 //
 
 import Foundation
@@ -18,19 +18,6 @@ public func fetchInstruction(cpu: CPU) -> NewCPUVars {
     setDataBus(dest: &result)
     
     return result
-}
-
-public func resetBusses(dest: inout NewCPUVars) {
-    resetAddressBus(dest: &dest)
-    resetDataBus(dest: &dest)
-}
-
-private func resetAddressBus(dest: inout NewCPUVars) {
-    dest.addressBus = 0
-}
-
-private func resetDataBus(dest: inout NewCPUVars) {
-    dest.dataBus = 0
 }
 
 private func readOpcode(dest: inout NewCPUVars, programCounter: UInt16, memory: Memory) {

@@ -7,15 +7,15 @@
 
 import Foundation
 
-public class ExecutedToFetchState: CPUState {
+open class ExecutedToFetchState: CPUState {
     public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(FetchedToDecodeState.init))
     
     public var nextStateProvider: SingleNextStateProvider = ExecutedToFetchState.standardNextStateProvider.getNewSingleNextStateProvider()
     
-    public var state: String { "executed" }
-    public var instructionEnded: Bool { true }
+    open class var state: String { "executed" }
+    open class var instructionEnded: Bool { true }
     
-    public func operate(cpu: CPU) -> NewCPUVars {
+    open func operate(cpu: CPU) -> NewCPUVars {
         let result = fetchInstruction(cpu: cpu)
         
         result.programCounter = cpu.programCounter &+ 2
@@ -26,38 +26,34 @@ public class ExecutedToFetchState: CPUState {
     public init() {}
 }
 
-public class HoldToFetchState: ExecutedToFetchState {
-    public override var state: String { "hold" }
+open class HoldToFetchState: ExecutedToFetchState {
+    open class override var state: String { "hold" }
 }
 
-public class FetchedToDecodeState: CPUState {
+open class FetchedToDecodeState: CPUState {
     public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(DecodedToExecuteState.init))
     
     public var nextStateProvider: SingleNextStateProvider = FetchedToDecodeState.standardNextStateProvider.getNewSingleNextStateProvider()
     
-    public var state: String { "fetched" }
-    public var instructionEnded: Bool { false }
+    open class var state: String { "fetched" }
+    open class var instructionEnded: Bool { false }
     
-    public func operate(cpu: CPU) -> NewCPUVars {
-        var result = NewCPUVars()
-        
-        resetBusses(dest: &result)
-        
-        return result
+    open func operate(cpu: CPU) throws -> NewCPUVars {
+        try decodeInstruction(cpu: cpu)
     }
     
     public init() {}
 }
 
-public class DecodedToExecuteState: CPUState {
+open class DecodedToExecuteState: CPUState {
     public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(ExecutedToFetchState.init))
     
     public var nextStateProvider: SingleNextStateProvider = DecodedToExecuteState.standardNextStateProvider.getNewSingleNextStateProvider()
     
-    public var state: String {"decoded"}
-    public var instructionEnded: Bool { false }
+    open class var state: String {"decoded"}
+    open class var instructionEnded: Bool { false }
     
-    public func operate(cpu: CPU) -> NewCPUVars {
+    open func operate(cpu: CPU) -> NewCPUVars {
         return NewCPUVars()
     }
     

@@ -29,17 +29,20 @@ public class CPU {
     public var dataBus: UInt16 { internalVars.dataBus }
     public var addressBus: UInt16 { internalVars.addressBus }
     public var lastMemoryInteraction: UInt16 { internalVars.lastMemoryInteraction }
+    public var operatorString: String { currentOperator.stringRepresentation }
+    public var currentOperator: Operator { execution.currentOperator }
+    public var lastProgramCounter: UInt16 { execution.lastProgramCounter }
     
-    public func executeNextStep() {
-        let result = execution.executeNextStep(parent: self)
+    public func executeNextStep() throws {
+        let result = try execution.executeNextStep(parent: self)
         
         execution.applyNewCPUVars(vars: result)
         internalVars.applyNewCPUVars(vars: result)
     }
     
-    public func endInstruction() {
+    public func endInstruction() throws {
         repeat {
-            executeNextStep()
+            try executeNextStep()
         } while !execution.state.instructionEnded
     }
     
@@ -61,6 +64,7 @@ public class NewCPUVars {
     private var _dataBus: UInt16? = nil
     private var _addressBus: UInt16? = nil
     private var _lastMemoryInteraction: UInt16? = nil
+    private var _operator: Operator? = nil
     
     public init() {}
     
@@ -110,6 +114,12 @@ public class NewCPUVars {
         get {_lastMemoryInteraction}
         set(lastMemoryInteraction) { if lastMemoryInteraction != nil
             { _lastMemoryInteraction = lastMemoryInteraction}
+        }
+    }
+    public var currentOperator: Operator? {
+        get {_operator}
+        set(currentOperator) { if currentOperator != nil
+            { _operator = currentOperator }
         }
     }
 }

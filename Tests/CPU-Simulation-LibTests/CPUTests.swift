@@ -20,16 +20,16 @@ class CPUTests: XCTestCase {
         let cpu = CPU(memory: memory)
         XCTAssertEqual(cpu.programCounter, 0)
         
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.programCounter, 2)
         
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.programCounter, 2)
         
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.programCounter, 2)
         
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.programCounter, 4)
     }
     
@@ -37,14 +37,14 @@ class CPUTests: XCTestCase {
         let cpu = CPU(memory: memory, startingPoint: 10)
         XCTAssertEqual(cpu.programCounter, 10)
         
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.programCounter, 12)
     }
     
     func testNextStepOverflow() {
         let cpu = CPU(memory: memory, startingPoint: 0xfffe)
         
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.programCounter, 0)
     }
     
@@ -52,16 +52,16 @@ class CPUTests: XCTestCase {
         let cpu = CPU(memory: memory)
         XCTAssertEqual(cpu.state, "hold")
         
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "fetched")
         
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "decoded")
         
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "executed")
         
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "fetched")
     }
     
@@ -69,38 +69,40 @@ class CPUTests: XCTestCase {
         let cpu = CPU(memory: memory)
         XCTAssertEqual(cpu.state, "hold")
         
-        cpu.endInstruction()
+        try? cpu.endInstruction()
         XCTAssertEqual(cpu.state, "executed")
         
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "fetched")
         
-        cpu.endInstruction()
+        try? cpu.endInstruction()
         XCTAssertEqual(cpu.state, "executed")
     }
     
     func testFetchInstructions() {
+        ExecutedToFetchState.standardNextState = StateBuilder(OwnDecode.init)
         try? memory.writeValues(values: [1,2,3,4,5,6])
 
         let cpu = CPU(memory: memory)
         XCTAssertEqual(cpu.opcode, 0)
         XCTAssertEqual(cpu.referencedAddress, 0)
 
-        cpu.endInstruction()
+        try? cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 1)
         XCTAssertEqual(cpu.referencedAddress, 2)
 
-        cpu.endInstruction()
+        try? cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 3)
         XCTAssertEqual(cpu.referencedAddress, 4)
 
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.opcode, 5)
         XCTAssertEqual(cpu.referencedAddress, 6)
 
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.opcode, 5)
         XCTAssertEqual(cpu.referencedAddress, 6)
+        ExecutedToFetchState.resetStandardNextState()
     }
     
     func testFetchDataBus() {
@@ -110,13 +112,13 @@ class CPUTests: XCTestCase {
         XCTAssertEqual(cpu.dataBus, 0)
         XCTAssertEqual(cpu.addressBus, 0)
         
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.opcode, 0)
         XCTAssertEqual(cpu.referencedAddress, 0x1000)
         XCTAssertEqual(cpu.addressBus, 1)
         XCTAssertEqual(cpu.dataBus, 0x1000)
         
-        cpu.executeNextStep()
+        try? cpu.executeNextStep()
         XCTAssertEqual(cpu.opcode, 0)
         XCTAssertEqual(cpu.referencedAddress, 0x1000)
         XCTAssertEqual(cpu.addressBus, 0)
