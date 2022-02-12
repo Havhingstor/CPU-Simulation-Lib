@@ -22,14 +22,14 @@ class CPUExecution {
     }
     
     func applyNewCPUVars(vars: NewCPUVars) {
-        applyProgramCounter(pc: vars.programCounter)
+        applyProgramCounter(programCounter: vars.programCounter)
         applyOpcode(opcode: vars.opcode)
         applyReferencedAddress(referencedAddress: vars.referencedAddress)
     }
     
-    private func applyProgramCounter(pc: UInt16?) {
-        if let pc = pc {
-            programCounter = pc
+    private func applyProgramCounter(programCounter: UInt16?) {
+        if let programCounter = programCounter {
+            self.programCounter = programCounter
         }
     }
     
