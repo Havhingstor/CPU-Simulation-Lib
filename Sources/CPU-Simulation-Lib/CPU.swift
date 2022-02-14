@@ -20,17 +20,24 @@ public class CPU {
     }
     
     public var memory: Memory { _memory }
+    
     public var programCounter: UInt16 { execution.programCounter }
     public var state: String { execution.state.state }
     public var opcode: UInt16 { execution.opcode }
     public var referencedAddress: UInt16 { execution.referencedAddress }
     public var stackpointer: UInt16 { internalVars.stackpointer }
+    
     public var accumulator: UInt16 { internalVars.accumulator }
     public var dataBus: UInt16 { internalVars.dataBus }
     public var addressBus: UInt16 { internalVars.addressBus }
     public var lastMemoryInteraction: UInt16 { internalVars.lastMemoryInteraction }
+    
     public var operatorString: String { currentOperator.stringRepresentation }
     public var currentOperator: Operator { execution.currentOperator }
+    
+    public var addressCode: UInt8 { execution.addressType.addressCode }
+    public var addressType: AddressType { execution.addressType }
+    
     public var lastProgramCounter: UInt16 { execution.lastProgramCounter }
     
     public func executeNextStep() throws {
@@ -65,6 +72,7 @@ public class NewCPUVars {
     private var _addressBus: UInt16? = nil
     private var _lastMemoryInteraction: UInt16? = nil
     private var _operator: Operator? = nil
+    private var _addressType: AddressType? = nil
     
     public init() {}
     
@@ -120,6 +128,12 @@ public class NewCPUVars {
         get {_operator}
         set(currentOperator) { if currentOperator != nil
             { _operator = currentOperator }
+        }
+    }
+    public var addressType: AddressType? {
+        get {_addressType}
+        set(addressType) { if addressType != nil
+            { _addressType = addressType }
         }
     }
 }

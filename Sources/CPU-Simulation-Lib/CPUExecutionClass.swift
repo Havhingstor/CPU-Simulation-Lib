@@ -14,6 +14,7 @@ class CPUExecution {
     var referencedAddress: UInt16 = 0
     var currentOperator: Operator = NOOPOperator()
     var lastProgramCounter: UInt16 = 0
+    var addressType: AddressType = NoAddressType()
     
     func executeNextStep(parent: CPU) throws -> NewCPUVars {
         let newVars = try state.operate(cpu: parent)
@@ -28,6 +29,7 @@ class CPUExecution {
         applyOpcode(opcode: vars.opcode)
         applyReferencedAddress(referencedAddress: vars.referencedAddress)
         applyOperator(currentOperator: vars.currentOperator)
+        applyAddressType(addressType: vars.addressType)
     }
     
     private func applyProgramCounter(programCounter: UInt16?) {
@@ -51,6 +53,11 @@ class CPUExecution {
     private func applyOperator(currentOperator: Operator?) {
         if let currentOperator = currentOperator {
             self.currentOperator = currentOperator
+        }
+    }
+    private func applyAddressType(addressType: AddressType?) {
+        if let addressType = addressType {
+            self.addressType = addressType
         }
     }
 }

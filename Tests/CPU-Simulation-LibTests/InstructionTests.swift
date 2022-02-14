@@ -197,7 +197,7 @@ class InstructionTests: XCTestCase {
     }
     
     func testDecodingOfOperatorCodeWhenInputWithAddressCode() throws {
-        try memory.writeValues(values: [0x100, 0, 0xAB14, 0, 0xFF0E])
+        try memory.writeValues(values: [0x100, 0, 0x614, 0, 0x40E])
         XCTAssertEqual(cpu.opcode, 0)
         XCTAssertEqual(cpu.operatorString, "NOOP")
         
@@ -207,12 +207,12 @@ class InstructionTests: XCTestCase {
         XCTAssertEqual(cpu.operatorString, "NOOP")
         
         try cpu.endInstruction()
-        XCTAssertEqual(cpu.opcode, 0xAB14)
+        XCTAssertEqual(cpu.opcode, 0x614)
         XCTAssertEqual(cpu.currentOperator.operatorCode, 0x14)
         XCTAssertEqual(cpu.operatorString, "LOAD")
         
         try cpu.endInstruction()
-        XCTAssertEqual(cpu.opcode, 0xFF0E)
+        XCTAssertEqual(cpu.opcode, 0x40E)
         XCTAssertEqual(cpu.currentOperator.operatorCode, 0xE)
         XCTAssertEqual(cpu.operatorString, "MOD")
     }

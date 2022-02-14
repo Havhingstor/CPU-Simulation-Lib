@@ -34,4 +34,25 @@ public class CPUStandardVars {
         let op = operatorGenerator()
         dict.updateValue(operatorGenerator, forKey: op.operatorCode)
     }
+    
+    public typealias AddressTypeInit = () -> AddressType
+    public static var addressTypes: [AddressTypeInit] = standardAddressTypes
+    public static func resetAddressTypes() {
+        addressTypes = standardAddressTypes
+    }
+    
+    public static func getAddressTypeAssignment() -> [UInt8 : AddressTypeInit] {
+        var result: [UInt8 : AddressTypeInit] = [:]
+        
+        for addressTypeGenerator in addressTypes {
+            addAddressTypeToAssignment(addressTypeGenerator: addressTypeGenerator, dict: &result)
+        }
+        
+        return result
+    }
+    
+    private static func addAddressTypeToAssignment(addressTypeGenerator: @escaping AddressTypeInit, dict: inout [UInt8 : AddressTypeInit]) {
+        let addressType = addressTypeGenerator()
+        dict.updateValue(addressTypeGenerator, forKey: addressType.addressCode)
+    }
 }

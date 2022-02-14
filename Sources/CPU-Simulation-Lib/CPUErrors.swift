@@ -9,4 +9,5 @@ import Foundation
 
 public enum CPUErrors: Error, Equatable {
     case OperatorCodeNotDecodable(address: UInt16, operatorCode: UInt8)
+    case AddressCodeNotDecodable(address: UInt16, addressCode: UInt8)
 }
