@@ -27,7 +27,7 @@ class CPUVarsChangedTest: XCTestCase {
         XCTAssertEqual(cpu.addressBus, 5)
         XCTAssertEqual(cpu.dataBus, 6)
         XCTAssertEqual(cpu.opcode, 7)
-        XCTAssertEqual(cpu.referencedAddress, 8)
+        XCTAssertEqual(cpu.operand, 8)
     }
     
     func testReset() throws {
@@ -47,7 +47,7 @@ class CPUVarsChangedTest: XCTestCase {
         XCTAssertEqual(cpu.addressBus, 0)
         XCTAssertEqual(cpu.dataBus, 0)
         XCTAssertEqual(cpu.opcode, 0)
-        XCTAssertEqual(cpu.referencedAddress, 0)
+        XCTAssertEqual(cpu.operand, 0)
     }
 
     override func tearDown() {
@@ -76,7 +76,7 @@ fileprivate class NewStart: CPUState {
         result.addressBus = 5
         result.dataBus = 6
         result.opcode = 7
-        result.referencedAddress = 8
+        result.operand = 8
         
         return result
     }

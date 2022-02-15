@@ -13,17 +13,17 @@ public func decodeInstruction(cpu: CPU) throws -> NewCPUVars {
     resetBusses(dest: &result)
     
     let operatorCode = getOperatorCodeFromOpcode(opcode: cpu.opcode)
-    let addressCode = getAddressCodeFromOpcode(opcode: cpu.opcode)
+    let operandCode = getOperandCodeFromOpcode(opcode: cpu.opcode)
     
     let op = getOperator(operatorCode: operatorCode)
-    let addressType = getAddressType(addressCode: addressCode)
+    let operandType = getOperandType(operandCode: operandCode)
     
     if let op = op  {
-        if let addressType = addressType {
+        if let operandType = operandType {
             result.currentOperator = op
-            result.addressType = addressType
+            result.operandType = operandType
         } else {
-            throw CPUErrors.AddressCodeNotDecodable(address: cpu.lastProgramCounter, addressCode: addressCode)
+            throw CPUErrors.OperandCodeNotDecodable(address: cpu.lastProgramCounter, operandCode: operandCode)
         }
     } else {
         throw CPUErrors.OperatorCodeNotDecodable(address: cpu.lastProgramCounter, operatorCode: operatorCode)
@@ -38,13 +38,13 @@ public func getOperator(operatorCode: UInt8) -> Operator? {
     return assignment[operatorCode]?()
 }
 
-public func getAddressType(addressCode: UInt8) -> AddressType? {
-    let assignment = CPUStandardVars.getAddressTypeAssignment()
+public func getOperandType(operandCode: UInt8) -> OperandType? {
+    let assignment = CPUStandardVars.getOperandTypeAssignment()
     
-    return assignment[addressCode]?()
+    return assignment[operandCode]?()
 }
 
-private func getAddressCodeFromOpcode(opcode: UInt16) -> UInt8 {
+private func getOperandCodeFromOpcode(opcode: UInt16) -> UInt8 {
     UInt8( opcode >> 8)
 }
 

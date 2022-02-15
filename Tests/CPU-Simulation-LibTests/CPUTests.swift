@@ -85,23 +85,23 @@ class CPUTests: XCTestCase {
 
         let cpu = CPU(memory: memory)
         XCTAssertEqual(cpu.opcode, 0)
-        XCTAssertEqual(cpu.referencedAddress, 0)
+        XCTAssertEqual(cpu.operand, 0)
 
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 1)
-        XCTAssertEqual(cpu.referencedAddress, 2)
+        XCTAssertEqual(cpu.operand, 2)
 
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 3)
-        XCTAssertEqual(cpu.referencedAddress, 4)
+        XCTAssertEqual(cpu.operand, 4)
 
         try cpu.executeNextStep()
         XCTAssertEqual(cpu.opcode, 5)
-        XCTAssertEqual(cpu.referencedAddress, 6)
+        XCTAssertEqual(cpu.operand, 6)
 
         try cpu.executeNextStep()
         XCTAssertEqual(cpu.opcode, 5)
-        XCTAssertEqual(cpu.referencedAddress, 6)
+        XCTAssertEqual(cpu.operand, 6)
         ExecutedToFetchState.resetStandardNextState()
     }
     
@@ -114,13 +114,13 @@ class CPUTests: XCTestCase {
         
         try cpu.executeNextStep()
         XCTAssertEqual(cpu.opcode, 0)
-        XCTAssertEqual(cpu.referencedAddress, 0x1000)
+        XCTAssertEqual(cpu.operand, 0x1000)
         XCTAssertEqual(cpu.addressBus, 1)
         XCTAssertEqual(cpu.dataBus, 0x1000)
         
         try cpu.executeNextStep()
         XCTAssertEqual(cpu.opcode, 0)
-        XCTAssertEqual(cpu.referencedAddress, 0x1000)
+        XCTAssertEqual(cpu.operand, 0x1000)
         XCTAssertEqual(cpu.addressBus, 0)
         XCTAssertEqual(cpu.dataBus, 0)
     }

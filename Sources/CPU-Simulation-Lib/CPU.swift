@@ -24,7 +24,7 @@ public class CPU {
     public var programCounter: UInt16 { execution.programCounter }
     public var state: String { execution.state.state }
     public var opcode: UInt16 { execution.opcode }
-    public var referencedAddress: UInt16 { execution.referencedAddress }
+    public var operand: UInt16 { execution.operand }
     public var stackpointer: UInt16 { internalVars.stackpointer }
     
     public var accumulator: UInt16 { internalVars.accumulator }
@@ -35,8 +35,8 @@ public class CPU {
     public var operatorString: String { currentOperator.stringRepresentation }
     public var currentOperator: Operator { execution.currentOperator }
     
-    public var addressCode: UInt8 { execution.addressType.addressCode }
-    public var addressType: AddressType { execution.addressType }
+    public var operandCode: UInt8 { execution.operandType.operandCode }
+    public var operandType: OperandType { execution.operandType }
     
     public var lastProgramCounter: UInt16 { execution.lastProgramCounter }
     
@@ -65,14 +65,14 @@ public class CPU {
 public class NewCPUVars {
     private var _programCounter: UInt16? = nil
     private var _opcode: UInt16? = nil
-    private var _referencedAddress: UInt16? = nil
+    private var _operand: UInt16? = nil
     private var _stackpointer: UInt16? = nil
     private var _accumulator: UInt16? = nil
     private var _dataBus: UInt16? = nil
     private var _addressBus: UInt16? = nil
     private var _lastMemoryInteraction: UInt16? = nil
     private var _operator: Operator? = nil
-    private var _addressType: AddressType? = nil
+    private var _operandType: OperandType? = nil
     
     public init() {}
     
@@ -88,10 +88,10 @@ public class NewCPUVars {
             {_opcode = opcode}
         }
     }
-    public var referencedAddress: UInt16? {
-        get {_referencedAddress}
-        set(referencedAddress) { if referencedAddress != nil
-            { _referencedAddress = referencedAddress}
+    public var operand: UInt16? {
+        get {_operand}
+        set(operand) { if operand != nil
+            { _operand = operand}
         }
     }
     public var stackpointer: UInt16? {
@@ -130,10 +130,10 @@ public class NewCPUVars {
             { _operator = currentOperator }
         }
     }
-    public var addressType: AddressType? {
-        get {_addressType}
-        set(addressType) { if addressType != nil
-            { _addressType = addressType }
+    public var operandType: OperandType? {
+        get {_operandType}
+        set(operandType) { if operandType != nil
+            { _operandType = operandType }
         }
     }
 }

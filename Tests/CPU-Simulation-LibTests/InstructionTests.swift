@@ -24,167 +24,167 @@ class InstructionTests: XCTestCase {
                                          0x1A, 0x100])
         
         XCTAssertEqual(cpu.opcode, 0)
-        XCTAssertEqual(cpu.referencedAddress, 0)
+        XCTAssertEqual(cpu.operand, 0)
         XCTAssertEqual(cpu.operatorString, "NOOP")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x14)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "LOAD")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x15)
-        XCTAssertEqual(cpu.referencedAddress, 0x200)
+        XCTAssertEqual(cpu.operand, 0x200)
         XCTAssertEqual(cpu.operatorString, "STORE")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0xA)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "ADD")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0xB)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "SUB")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0xC)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "MUL")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0xD)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "DIV")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0xE)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "MOD")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0xF)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "CMP")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x28)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "AND")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x29)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "OR")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x2A)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "XOR")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x2B)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "SHL")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x2C)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "SHR")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x2D)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "SHRA")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x1E)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "JMPP")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x1F)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "JMPNN")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x20)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "JMPN")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x21)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "JMPNP")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x22)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "JMPZ")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x23)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "JMPNZ")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x25)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "JMPV")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x24)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "JMP")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x5)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "JSR")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x7)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "RSV")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x8)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "REL")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x0)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "NOOP")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x63)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "HOLD")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x1)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "RESET")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x2E)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "NOT")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x6)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "RTS")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x19)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "PUSH")
         
         try cpu.endInstruction()
         XCTAssertEqual(cpu.opcode, 0x1A)
-        XCTAssertEqual(cpu.referencedAddress, 0x100)
+        XCTAssertEqual(cpu.operand, 0x100)
         XCTAssertEqual(cpu.operatorString, "POP")
     }
     
@@ -196,7 +196,7 @@ class InstructionTests: XCTestCase {
         }
     }
     
-    func testDecodingOfOperatorCodeWhenInputWithAddressCode() throws {
+    func testDecodingOfOperatorCodeWhenInputWithOperandCode() throws {
         try memory.writeValues(values: [0x100, 0, 0x614, 0, 0x40E])
         XCTAssertEqual(cpu.opcode, 0)
         XCTAssertEqual(cpu.operatorString, "NOOP")
