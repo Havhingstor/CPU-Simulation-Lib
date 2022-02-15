@@ -33,7 +33,7 @@ class CPUVarsChangedTest: XCTestCase {
     func testReset() throws {
         let memory = Memory()
         let cpu = CPU(memory: memory)
-        NewStart.standardNextState = StateBuilder(ExecutedToFetchState.init)
+        NewStart.standardNextState = StateBuilder(ExecutedToFetchOperatorState.init)
         
         try cpu.executeNextStep()
         XCTAssertEqual(cpu.state, "executed")

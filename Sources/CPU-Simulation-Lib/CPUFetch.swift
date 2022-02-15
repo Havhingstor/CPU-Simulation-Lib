@@ -7,15 +7,26 @@
 
 import Foundation
 
-public func fetchInstruction(cpu: CPU) -> NewCPUVars {
+public func fetchOperator(cpu: CPU) -> NewCPUVars {
     let memory = cpu.memory
     var result = NewCPUVars()
     
     readOpcode(dest: &result, programCounter: cpu.programCounter, memory: memory)
+    
+    setAddressBus(dest: &result, programCounter: cpu.programCounter)
+    setDataBusOperator(dest: &result)
+    
+    return result
+}
+
+public func fetchOperand(cpu: CPU) -> NewCPUVars {
+    let memory = cpu.memory
+    var result = NewCPUVars()
+    
     readOperand(dest: &result, programCounter: cpu.programCounter, memory: memory)
     
     setAddressBus(dest: &result, programCounter: cpu.programCounter)
-    setDataBus(dest: &result)
+    setDataBusOperand(dest: &result)
     
     return result
 }
@@ -25,17 +36,17 @@ private func readOpcode(dest: inout NewCPUVars, programCounter: UInt16, memory: 
 }
 
 private func readOperand(dest: inout NewCPUVars, programCounter: UInt16, memory: Memory) {
-    dest.operand = memory.read(address: getAddressOfOperand(programCounter: programCounter))
+    dest.operand = memory.read(address: programCounter)
 }
 
 private func setAddressBus(dest: inout NewCPUVars, programCounter: UInt16) {
-    dest.addressBus = getAddressOfOperand(programCounter: programCounter)
+    dest.addressBus = programCounter
 }
 
-private func setDataBus(dest: inout NewCPUVars) {
+private func setDataBusOperator(dest: inout NewCPUVars) {
+    dest.dataBus = dest.opcode
+}
+
+private func setDataBusOperand(dest: inout NewCPUVars) {
     dest.dataBus = dest.operand
-}
-
-private func getAddressOfOperand(programCounter: UInt16) -> UInt16 {
-    programCounter &+ 1
 }

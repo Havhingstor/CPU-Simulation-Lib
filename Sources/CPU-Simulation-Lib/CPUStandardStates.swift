@@ -7,18 +7,18 @@
 
 import Foundation
 
-open class ExecutedToFetchState: CPUState {
-    public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(FetchedToDecodeState.init))
+open class ExecutedToFetchOperatorState: CPUState {
+    public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(FetchedOperatorToDecodeState.init))
     
-    public var nextStateProvider: SingleNextStateProvider = ExecutedToFetchState.standardNextStateProvider.getNewSingleNextStateProvider()
+    public var nextStateProvider: SingleNextStateProvider = ExecutedToFetchOperatorState.standardNextStateProvider.getNewSingleNextStateProvider()
     
     open class var state: String { "executed" }
     open class var instructionEnded: Bool { true }
     
     open func operate(cpu: CPU) -> NewCPUVars {
-        let result = fetchInstruction(cpu: cpu)
+        let result = fetchOperator(cpu: cpu)
         
-        result.programCounter = cpu.programCounter &+ 2
+        result.programCounter = cpu.programCounter &+ 1
         
         return result
     }
@@ -26,16 +26,16 @@ open class ExecutedToFetchState: CPUState {
     public init() {}
 }
 
-open class HoldToFetchState: ExecutedToFetchState {
+open class HoldToFetchOperatorState: ExecutedToFetchOperatorState {
     open class override var state: String { "hold" }
 }
 
-open class FetchedToDecodeState: CPUState {
-    public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(DecodedToExecuteState.init))
+open class FetchedOperatorToDecodeState: CPUState {
+    public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(DecodedToFetchOperandState.init))
     
-    public var nextStateProvider: SingleNextStateProvider = FetchedToDecodeState.standardNextStateProvider.getNewSingleNextStateProvider()
+    public var nextStateProvider: SingleNextStateProvider = FetchedOperatorToDecodeState.standardNextStateProvider.getNewSingleNextStateProvider()
     
-    open class var state: String { "fetched" }
+    open class var state: String { "operator-fetched" }
     open class var instructionEnded: Bool { false }
     
     open func operate(cpu: CPU) throws -> NewCPUVars {
@@ -45,12 +45,31 @@ open class FetchedToDecodeState: CPUState {
     public init() {}
 }
 
-open class DecodedToExecuteState: CPUState {
-    public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(ExecutedToFetchState.init))
+open class DecodedToFetchOperandState: CPUState {
+    public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(FetchedOperandToExecuteState.init))
     
-    public var nextStateProvider: SingleNextStateProvider = DecodedToExecuteState.standardNextStateProvider.getNewSingleNextStateProvider()
+    public var nextStateProvider: SingleNextStateProvider = DecodedToFetchOperandState.standardNextStateProvider.getNewSingleNextStateProvider()
     
-    open class var state: String {"decoded"}
+    open class var state: String { "decoded" }
+    open class var instructionEnded: Bool { false }
+    
+    open func operate(cpu: CPU) -> NewCPUVars {
+        let result = fetchOperand(cpu: cpu)
+        
+        result.programCounter = cpu.programCounter &+ 1
+        
+        return result
+    }
+    
+    public init() {}
+}
+
+open class FetchedOperandToExecuteState: CPUState {
+    public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(ExecutedToFetchOperatorState.init))
+    
+    public var nextStateProvider: SingleNextStateProvider = FetchedOperandToExecuteState.standardNextStateProvider.getNewSingleNextStateProvider()
+    
+    open class var state: String {"operand-fetched"}
     open class var instructionEnded: Bool { false }
     
     open func operate(cpu: CPU) -> NewCPUVars {

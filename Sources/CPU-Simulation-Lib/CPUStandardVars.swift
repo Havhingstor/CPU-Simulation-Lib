@@ -9,7 +9,7 @@ import Foundation
 
 public class CPUStandardVars {
     public static var startingState: StateBuilder = originalStartingState
-    public static let originalStartingState: StateBuilder = StateBuilder(HoldToFetchState.init)
+    public static let originalStartingState: StateBuilder = StateBuilder(HoldToFetchOperatorState.init)
     public static func resetStartingState() {
         startingState = originalStartingState
     }
