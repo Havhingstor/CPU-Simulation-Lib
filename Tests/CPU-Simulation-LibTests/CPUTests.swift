@@ -16,7 +16,7 @@ class CPUTests: XCTestCase {
         XCTAssertEqual(cpu.memory.internalArray, memory.internalArray)
     }
     
-    func testprogramCounterAndNextStep() {
+    func testProgramCounterAndNextStep() {
         let cpu = CPU(memory: memory)
         XCTAssertEqual(cpu.programCounter, 0)
         
@@ -144,5 +144,8 @@ class CPUTests: XCTestCase {
         XCTAssertEqual(cpu.addressBus, 0)
         XCTAssertEqual(cpu.dataBus, 0)
         XCTAssertEqual(cpu.lastMemoryInteraction, 0)
+        XCTAssertTrue(!cpu.nFlag)
+        XCTAssertTrue(!cpu.zFlag)
+        XCTAssertTrue(!cpu.vFlag)
     }
 }

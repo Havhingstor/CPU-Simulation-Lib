@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CPU_Simulation_Utilities
 
 class InternalCPUVars {
     var stackpointer: UInt16 = 0xfffe
@@ -13,6 +14,11 @@ class InternalCPUVars {
     var dataBus: UInt16 = 0
     var addressBus: UInt16 = 0
     var lastMemoryInteraction: UInt16 = 0
+    var nFlag = false
+    var _zFlag: Bool?
+    var vFlag = false
+    
+    var zFlag: Bool { _zFlag ?? false }
     
     func applyNewCPUVars(vars: NewCPUVars) {
         applyStackpointer(vars.stackpointer)
@@ -20,6 +26,31 @@ class InternalCPUVars {
         applyDataBus(vars.dataBus)
         applyAddressBus(vars.addressBus)
         applyLastMemoryInteraction(vars.lastMemoryInteraction)
+        applyVFlag(vars.vFlag)
+        applyZFlag(accumulator: accumulator)
+        applyNFlag(accumulator: accumulator)
+    }
+    
+    private func applyVFlag(_ newVFlag: Bool?) {
+        if let newVFlag = newVFlag {
+            vFlag = newVFlag
+        }
+    }
+    
+    private func applyZFlag(accumulator: UInt16) {
+        if accumulator != 0 {
+            _zFlag = false
+        }
+        
+        if _zFlag != nil {
+            _zFlag = true
+        }
+    }
+    
+    private func applyNFlag(accumulator: UInt16) {
+        if unsignedToSigned(accumulator) < 0 {
+            nFlag = true
+        }
     }
     
     private func applyStackpointer(_ newStackpointer: UInt16?) {

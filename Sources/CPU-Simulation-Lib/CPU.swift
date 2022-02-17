@@ -31,6 +31,9 @@ public class CPU {
     public var dataBus: UInt16 { internalVars.dataBus }
     public var addressBus: UInt16 { internalVars.addressBus }
     public var lastMemoryInteraction: UInt16 { internalVars.lastMemoryInteraction }
+    public var nFlag: Bool { internalVars.nFlag }
+    public var zFlag: Bool { internalVars.zFlag }
+    public var vFlag: Bool { internalVars.vFlag }
     
     public var operatorString: String { currentOperator?.stringRepresentation ?? CPUStandardVars.startingOperatorString }
     public var currentOperator: Operator? { execution.currentOperator }
@@ -73,6 +76,7 @@ public class NewCPUVars {
     private var _lastMemoryInteraction: UInt16? = nil
     private var _operator: Operator? = nil
     private var _operandType: OperandType? = nil
+    private var _vFlag: Bool? = nil
     
     public init() {}
     
@@ -134,6 +138,12 @@ public class NewCPUVars {
         get {_operandType}
         set(operandType) { if operandType != nil
             { _operandType = operandType }
+        }
+    }
+    public var vFlag: Bool? {
+        get { _vFlag }
+        set (vFlag) { if vFlag != nil
+            { _vFlag = vFlag }
         }
     }
 }

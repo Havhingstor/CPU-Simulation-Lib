@@ -28,6 +28,7 @@ class CPUVarsChangedTest: XCTestCase {
         XCTAssertEqual(cpu.dataBus, 6)
         XCTAssertEqual(cpu.opcode, 7)
         XCTAssertEqual(cpu.operand, 8)
+        XCTAssertTrue(cpu.vFlag)
     }
     
     func testReset() {
@@ -89,6 +90,7 @@ fileprivate class NewStart: CPUState {
         result.dataBus = 6
         result.opcode = 7
         result.operand = 8
+        result.vFlag = true
         
         return result
     }
