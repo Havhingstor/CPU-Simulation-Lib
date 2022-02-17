@@ -12,9 +12,9 @@ class CPUExecution {
     var state: CPUState = CPUStandardVars.startingState.generate()
     var opcode: UInt16 = 0
     var operand: UInt16 = 0
-    var currentOperator: Operator = NOOPOperator()
+    var currentOperator: Operator?
     var operatorProgramCounter: UInt16 = 0
-    var operandType: OperandType = NoneOperandType()
+    var operandType: OperandType?
     
     func executeNextStep(parent: CPU) throws -> NewCPUVars {
         let newVars = try state.operate(cpu: parent)

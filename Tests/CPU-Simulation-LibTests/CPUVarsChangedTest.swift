@@ -50,6 +50,18 @@ class CPUVarsChangedTest: XCTestCase {
         XCTAssertEqual(cpu.operand, 0)
     }
 
+    func testStartingOperatorString() {
+        let memory = Memory()
+        let cpu = CPU(memory: memory)
+        XCTAssertEqual(cpu.operatorString, "NOOP")
+        
+        CPUStandardVars.startingOperatorString = "START"
+        XCTAssertEqual(cpu.operatorString, "START")
+        
+        CPUStandardVars.resetStartingOperatorString()
+        XCTAssertEqual(cpu.operatorString, "NOOP")
+    }
+    
     override func tearDown() {
         CPUStandardVars.resetStartingState()
     }

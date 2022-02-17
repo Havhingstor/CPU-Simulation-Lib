@@ -55,4 +55,10 @@ public class CPUStandardVars {
         let operandType = operandTypeGenerator()
         dict.updateValue(operandTypeGenerator, forKey: operandType.operandTypeCode)
     }
+    
+    public static var startingOperatorString: String = originalStartingOperatorString
+    public static let originalStartingOperatorString: String = "NOOP"
+    public static func resetStartingOperatorString() {
+        startingOperatorString = originalStartingOperatorString
+    }
 }

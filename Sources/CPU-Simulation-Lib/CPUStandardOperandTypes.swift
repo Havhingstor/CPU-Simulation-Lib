@@ -67,7 +67,7 @@ open class LiteralStackOperandType: OperandType {
     public required init() {}
 }
 
-open class NoneOperandType: OperandType {
+open class NonexistingOperandType: OperandType {
     public static var providesAddressOrWriteAccess: Bool { false }
     
     public static var readAccess: ReadAccess { .none }
@@ -85,6 +85,6 @@ extension CPUStandardVars {
         StackOperandType.init,
         IndirectStackOperandType.init,
         LiteralStackOperandType.init,
-        NoneOperandType.init,
+        NonexistingOperandType.init,
     ]}
 }

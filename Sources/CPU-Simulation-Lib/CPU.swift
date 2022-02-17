@@ -32,11 +32,11 @@ public class CPU {
     public var addressBus: UInt16 { internalVars.addressBus }
     public var lastMemoryInteraction: UInt16 { internalVars.lastMemoryInteraction }
     
-    public var operatorString: String { currentOperator.stringRepresentation }
-    public var currentOperator: Operator { execution.currentOperator }
+    public var operatorString: String { currentOperator?.stringRepresentation ?? CPUStandardVars.startingOperatorString }
+    public var currentOperator: Operator? { execution.currentOperator }
     
-    public var operandTypeCode: UInt8 { execution.operandType.operandTypeCode }
-    public var operandType: OperandType { execution.operandType }
+    public var operandTypeCode: UInt8 { execution.operandType?.operandTypeCode ?? 0 }
+    public var operandType: OperandType? { execution.operandType }
     
     public var operatorProgramCounter: UInt16 { execution.operatorProgramCounter }
     
