@@ -35,10 +35,10 @@ public class CPU {
     public var operatorString: String { currentOperator.stringRepresentation }
     public var currentOperator: Operator { execution.currentOperator }
     
-    public var operandCode: UInt8 { execution.operandType.operandCode }
+    public var operandTypeCode: UInt8 { execution.operandType.operandTypeCode }
     public var operandType: OperandType { execution.operandType }
     
-    public var lastProgramCounter: UInt16 { execution.lastProgramCounter }
+    public var operatorProgramCounter: UInt16 { execution.operatorProgramCounter }
     
     public func executeNextStep() throws {
         let result = try execution.executeNextStep(parent: self)

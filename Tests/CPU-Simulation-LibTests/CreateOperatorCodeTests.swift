@@ -23,11 +23,11 @@ class CreateOperatorCodeTests: XCTestCase {
         XCTAssertEqual(HOLDOperator.operatorCode, 0x63)
     }
     
-    func testOwnOperatorCode() throws {
+    func testOwnOperatorCode() {
         CPUStandardVars.operators.append(OwnOperator.init)
         memory.write(UInt16(OwnOperator.operatorCode), address: 0)
         
-        try cpu.endInstruction()
+        XCTAssertNoThrow(try cpu.endInstruction())
         XCTAssertEqual(cpu.opcode, 0xAB)
         XCTAssertEqual(cpu.operatorString, "OWN")
     }
@@ -37,6 +37,10 @@ fileprivate class OwnOperator: Operator {
     static var operatorCode: UInt8 { 0xAB }
     
     static var stringRepresentation: String { "OWN" }
+    
+    public class var requiresLiteralReadAccess: Bool { false }
+    public class var requiresAddressOrWriteAccess: Bool { false }
+    public class var dontAllowOperandIfPossible: Bool { true }
     
     required public init() {}
 }

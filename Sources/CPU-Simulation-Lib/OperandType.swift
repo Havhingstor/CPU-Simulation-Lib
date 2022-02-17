@@ -8,19 +8,19 @@
 import Foundation
 
 public protocol OperandType {
-    static var operandCode: UInt8 { get }
-    static var providesWriteAccess: Bool { get }
+    static var operandTypeCode: UInt8 { get }
+    static var providesAddressOrWriteAccess: Bool { get }
     static var readAccess: ReadAccess { get }
     
     init()
 }
 
 extension OperandType {
-    public var operandCode: UInt8 { Self.operandCode }
-    public var operandCodePreparedForOpcode: UInt16 { UInt16(operandCode) << 8}
-    public var isNothing: Bool { !providesWriteAccess && Self.readAccess == .none}
+    public var operandTypeCode: UInt8 { Self.operandTypeCode }
+    public var operandTypeCodePreparedForOpcode: UInt16 { UInt16(operandTypeCode) << 8}
+    public var isNothing: Bool { !providesAddressOrWriteAccess && Self.readAccess == .none}
     public var providesInstantLiteral: Bool { Self.readAccess == .instantLiteralRead }
-    public var providesWriteAccess: Bool { Self.providesWriteAccess }
+    public var providesAddressOrWriteAccess: Bool { Self.providesAddressOrWriteAccess }
 }
 
 public enum ReadAccess {

@@ -16,93 +16,93 @@ class AddressAccessTest: XCTestCase {
         cpu = CPU(memory: memory)
     }
     
-    func testDecodeOperandCode() throws {
-        try memory.writeValues(values: [0x63, 0x100, 0x163, 0x100, 0x263, 0x100, 0x363, 0x100, 0x463, 0x100, 0x563, 0x100, 0x663, 0x100])
+    func testDecodeOperandTypeCode() {
+        XCTAssertNoThrow(try memory.writeValues(values: [0x63, 0x100, 0x10B, 0x100, 0x20B, 0x100, 0x30B, 0x100, 0x40B, 0x100, 0x50B, 0x100, 0x60B, 0x100]))
         
-        try cpu.endInstruction()
-        XCTAssertEqual(cpu.operandCode, 0)
-        XCTAssertEqual(cpu.operandType.operandCode, cpu.operandCode)
-        XCTAssertEqual(cpu.operandType.operandCodePreparedForOpcode, UInt16(cpu.operandCode) * 0x100)
+        XCTAssertNoThrow(try cpu.endInstruction())
+        XCTAssertEqual(cpu.operandTypeCode, 0)
+        XCTAssertEqual(cpu.operandType.operandTypeCode, cpu.operandTypeCode)
+        XCTAssertEqual(cpu.operandType.operandTypeCodePreparedForOpcode, UInt16(cpu.operandTypeCode) * 0x100)
         XCTAssertTrue(!cpu.operandType.providesInstantLiteral)
-        XCTAssertTrue(!cpu.operandType.providesWriteAccess)
+        XCTAssertTrue(!cpu.operandType.providesAddressOrWriteAccess)
         XCTAssertTrue(cpu.operandType.isNothing)
         
-        try cpu.endInstruction()
-        XCTAssertEqual(cpu.operandCode, 1)
-        XCTAssertEqual(cpu.operandType.operandCode, cpu.operandCode)
-        XCTAssertEqual(cpu.operandType.operandCodePreparedForOpcode, UInt16(cpu.operandCode) * 0x100)
+        XCTAssertNoThrow(try cpu.endInstruction())
+        XCTAssertEqual(cpu.operandTypeCode, 1)
+        XCTAssertEqual(cpu.operandType.operandTypeCode, cpu.operandTypeCode)
+        XCTAssertEqual(cpu.operandType.operandTypeCodePreparedForOpcode, UInt16(cpu.operandTypeCode) * 0x100)
         XCTAssertTrue(!cpu.operandType.providesInstantLiteral)
-        XCTAssertTrue(cpu.operandType.providesWriteAccess)
+        XCTAssertTrue(cpu.operandType.providesAddressOrWriteAccess)
         XCTAssertTrue(!cpu.operandType.isNothing)
         
-        try cpu.endInstruction()
-        XCTAssertEqual(cpu.operandCode, 2)
-        XCTAssertEqual(cpu.operandType.operandCode, cpu.operandCode)
-        XCTAssertEqual(cpu.operandType.operandCodePreparedForOpcode, UInt16(cpu.operandCode) * 0x100)
+        XCTAssertNoThrow(try cpu.endInstruction())
+        XCTAssertEqual(cpu.operandTypeCode, 2)
+        XCTAssertEqual(cpu.operandType.operandTypeCode, cpu.operandTypeCode)
+        XCTAssertEqual(cpu.operandType.operandTypeCodePreparedForOpcode, UInt16(cpu.operandTypeCode) * 0x100)
         XCTAssertTrue(cpu.operandType.providesInstantLiteral)
-        XCTAssertTrue(!cpu.operandType.providesWriteAccess)
+        XCTAssertTrue(!cpu.operandType.providesAddressOrWriteAccess)
         XCTAssertTrue(!cpu.operandType.isNothing)
         
-        try cpu.endInstruction()
-        XCTAssertEqual(cpu.operandCode, 3)
-        XCTAssertEqual(cpu.operandType.operandCode, cpu.operandCode)
-        XCTAssertEqual(cpu.operandType.operandCodePreparedForOpcode, UInt16(cpu.operandCode) * 0x100)
+        XCTAssertNoThrow(try cpu.endInstruction())
+        XCTAssertEqual(cpu.operandTypeCode, 3)
+        XCTAssertEqual(cpu.operandType.operandTypeCode, cpu.operandTypeCode)
+        XCTAssertEqual(cpu.operandType.operandTypeCodePreparedForOpcode, UInt16(cpu.operandTypeCode) * 0x100)
         XCTAssertTrue(!cpu.operandType.providesInstantLiteral)
-        XCTAssertTrue(cpu.operandType.providesWriteAccess)
+        XCTAssertTrue(cpu.operandType.providesAddressOrWriteAccess)
         XCTAssertTrue(!cpu.operandType.isNothing)
         
-        try cpu.endInstruction()
-        XCTAssertEqual(cpu.operandCode, 4)
-        XCTAssertEqual(cpu.operandType.operandCode, cpu.operandCode)
-        XCTAssertEqual(cpu.operandType.operandCodePreparedForOpcode, UInt16(cpu.operandCode) * 0x100)
+        XCTAssertNoThrow(try cpu.endInstruction())
+        XCTAssertEqual(cpu.operandTypeCode, 4)
+        XCTAssertEqual(cpu.operandType.operandTypeCode, cpu.operandTypeCode)
+        XCTAssertEqual(cpu.operandType.operandTypeCodePreparedForOpcode, UInt16(cpu.operandTypeCode) * 0x100)
         XCTAssertTrue(!cpu.operandType.providesInstantLiteral)
-        XCTAssertTrue(cpu.operandType.providesWriteAccess)
+        XCTAssertTrue(cpu.operandType.providesAddressOrWriteAccess)
         XCTAssertTrue(!cpu.operandType.isNothing)
         
-        try cpu.endInstruction()
-        XCTAssertEqual(cpu.operandCode, 5)
-        XCTAssertEqual(cpu.operandType.operandCode, cpu.operandCode)
-        XCTAssertEqual(cpu.operandType.operandCodePreparedForOpcode, UInt16(cpu.operandCode) * 0x100)
+        XCTAssertNoThrow(try cpu.endInstruction())
+        XCTAssertEqual(cpu.operandTypeCode, 5)
+        XCTAssertEqual(cpu.operandType.operandTypeCode, cpu.operandTypeCode)
+        XCTAssertEqual(cpu.operandType.operandTypeCodePreparedForOpcode, UInt16(cpu.operandTypeCode) * 0x100)
         XCTAssertTrue(!cpu.operandType.providesInstantLiteral)
-        XCTAssertTrue(cpu.operandType.providesWriteAccess)
+        XCTAssertTrue(cpu.operandType.providesAddressOrWriteAccess)
         XCTAssertTrue(!cpu.operandType.isNothing)
         
-        try cpu.endInstruction()
-        XCTAssertEqual(cpu.operandCode, 6)
-        XCTAssertEqual(cpu.operandType.operandCode, cpu.operandCode)
-        XCTAssertEqual(cpu.operandType.operandCodePreparedForOpcode, UInt16(cpu.operandCode) * 0x100)
+        XCTAssertNoThrow(try cpu.endInstruction())
+        XCTAssertEqual(cpu.operandTypeCode, 6)
+        XCTAssertEqual(cpu.operandType.operandTypeCode, cpu.operandTypeCode)
+        XCTAssertEqual(cpu.operandType.operandTypeCodePreparedForOpcode, UInt16(cpu.operandTypeCode) * 0x100)
         XCTAssertTrue(!cpu.operandType.providesInstantLiteral)
-        XCTAssertTrue(!cpu.operandType.providesWriteAccess)
+        XCTAssertTrue(!cpu.operandType.providesAddressOrWriteAccess)
         XCTAssertTrue(!cpu.operandType.isNothing)
     }
 
-    func testOwnOperandType() throws {
+    func testOwnOperandType() {
         CPUStandardVars.operandTypes.append(OwnOperandType.init)
         
-        memory.write(0xff63, address: 0)
+        memory.write(0xff0B, address: 0)
         
-        try cpu.endInstruction()
-        XCTAssertEqual(cpu.operandType.operandCode, 0xff)
+        XCTAssertNoThrow(try cpu.endInstruction())
+        XCTAssertEqual(cpu.operandType.operandTypeCode, 0xff)
         XCTAssertTrue(cpu.operandType.providesInstantLiteral)
-        XCTAssertTrue(cpu.operandType.providesWriteAccess)
+        XCTAssertTrue(cpu.operandType.providesAddressOrWriteAccess)
         XCTAssertTrue(!cpu.operandType.isNothing)
         
         cpu.reset()
         CPUStandardVars.resetOperandTypes()
         
         XCTAssertThrowsError(try cpu.endInstruction()) { err in
-            XCTAssertEqual(err as? CPUErrors, CPUErrors.OperandCodeNotDecodable(address: 0, operandCode: 0xff))
+            XCTAssertEqual(err as? CPUErrors, CPUErrors.OperandTypeCodeNotDecodable(address: 0, operandTypeCode: 0xff))
         }
     }
     
 }
 
 fileprivate class OwnOperandType: OperandType {
-    public static var providesWriteAccess: Bool { true }
+    public static var providesAddressOrWriteAccess: Bool { true }
     
     public static var readAccess: ReadAccess { .instantLiteralRead }
     
-    static var operandCode: UInt8 { 0xff }
+    static var operandTypeCode: UInt8 { 0xff }
     
     public required init() {}
 }

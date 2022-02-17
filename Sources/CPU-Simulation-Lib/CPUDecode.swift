@@ -8,59 +8,37 @@
 import Foundation
 
 public func decodeInstruction(cpu: CPU) throws -> NewCPUVars {
-    var result = NewCPUVars()
+    var tmpVars = DecodeVars(cpu: cpu)
     
-    resetBusses(dest: &result)
+    tmpVars = resetBusses(dest: tmpVars)
     
-    let operatorCode = getOperatorCodeFromOpcode(opcode: cpu.opcode)
-    let operandCode = getOperandCodeFromOpcode(opcode: cpu.opcode)
+    tmpVars = extractCodes(vars: tmpVars)
     
-    let op = getOperator(operatorCode: operatorCode)
-    let operandType = getOperandType(operandCode: operandCode)
+    tmpVars = try decodeCodes(vars: tmpVars, cpu: cpu)
     
-    if let op = op  {
-        if let operandType = operandType {
-            result.currentOperator = op
-            result.operandType = operandType
-        } else {
-            throw CPUErrors.OperandCodeNotDecodable(address: cpu.lastProgramCounter, operandCode: operandCode)
-        }
-    } else {
-        throw CPUErrors.OperatorCodeNotDecodable(address: cpu.lastProgramCounter, operatorCode: operatorCode)
-    }
+    tmpVars = applyDecodedValsToNewCPUVars(vars: tmpVars)
     
-    return result
+    try handleOperatorRequirements(vars: tmpVars)
+    
+    return tmpVars.result
 }
 
-public func getOperator(operatorCode: UInt8) -> Operator? {
+public func getOperatorOrThrowError(operatorCode: UInt8, address: UInt16) throws -> Operator {
     let assignment = CPUStandardVars.getOperatorAssignment()
     
-    return assignment[operatorCode]?()
+    if !codeIsInAssignment(code: operatorCode, assignment: assignment) {
+        throw CPUErrors.OperatorCodeNotDecodable(address: address, operatorCode: operatorCode)
+    }
+    
+    return assignment[operatorCode]!()
 }
 
-public func getOperandType(operandCode: UInt8) -> OperandType? {
+public func getOperandTypeOrThrowError(operandTypeCode: UInt8, address: UInt16) throws -> OperandType {
     let assignment = CPUStandardVars.getOperandTypeAssignment()
     
-    return assignment[operandCode]?()
-}
-
-private func getOperandCodeFromOpcode(opcode: UInt16) -> UInt8 {
-    UInt8( opcode >> 8)
-}
-
-private func getOperatorCodeFromOpcode(opcode: UInt16) -> UInt8 {
-    UInt8(0xff & opcode)
-}
-
-private func resetBusses(dest: inout NewCPUVars) {
-    resetAddressBus(dest: &dest)
-    resetDataBus(dest: &dest)
-}
-
-private func resetAddressBus(dest: inout NewCPUVars) {
-    dest.addressBus = 0
-}
-
-private func resetDataBus(dest: inout NewCPUVars) {
-    dest.dataBus = 0
+    if !codeIsInAssignment(code: operandTypeCode, assignment: assignment) {
+        throw CPUErrors.OperandTypeCodeNotDecodable(address: address, operandTypeCode: operandTypeCode)
+    }
+    
+    return assignment[operandTypeCode]!()
 }

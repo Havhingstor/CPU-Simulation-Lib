@@ -13,7 +13,7 @@ class CPUExecution {
     var opcode: UInt16 = 0
     var operand: UInt16 = 0
     var currentOperator: Operator = NOOPOperator()
-    var lastProgramCounter: UInt16 = 0
+    var operatorProgramCounter: UInt16 = 0
     var operandType: OperandType = NoneOperandType()
     
     func executeNextStep(parent: CPU) throws -> NewCPUVars {
@@ -25,6 +25,7 @@ class CPUExecution {
     }
     
     func applyNewCPUVars(vars: NewCPUVars) {
+        saveProgramCounterIfUsedForOperator(opcode: vars.opcode)
         applyProgramCounter(programCounter: vars.programCounter)
         applyOpcode(opcode: vars.opcode)
         applyOperand(operand: vars.operand)
@@ -32,9 +33,14 @@ class CPUExecution {
         applyOperandType(operandType: vars.operandType)
     }
     
+    private func saveProgramCounterIfUsedForOperator(opcode: UInt16?) {
+        if opcode != nil {
+            operatorProgramCounter = programCounter
+        }
+    }
+    
     private func applyProgramCounter(programCounter: UInt16?) {
         if let programCounter = programCounter {
-            lastProgramCounter = self.programCounter
             self.programCounter = programCounter
         }
     }

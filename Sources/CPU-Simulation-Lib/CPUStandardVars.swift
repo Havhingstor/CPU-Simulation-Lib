@@ -53,6 +53,6 @@ public class CPUStandardVars {
     
     private static func addOperandTypeToAssignment(operandTypeGenerator: @escaping operandTypeInit, dict: inout [UInt8 : operandTypeInit]) {
         let operandType = operandTypeGenerator()
-        dict.updateValue(operandTypeGenerator, forKey: operandType.operandCode)
+        dict.updateValue(operandTypeGenerator, forKey: operandType.operandTypeCode)
     }
 }
