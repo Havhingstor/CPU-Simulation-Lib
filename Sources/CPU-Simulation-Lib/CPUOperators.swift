@@ -14,6 +14,8 @@ public protocol Operator {
     static var requiresAddressOrWriteAccess: Bool { get }
     static var dontAllowOperandIfPossible: Bool { get }
     
+    func operate(input: CPUExecutionInput)
+    
     init()
 }
 

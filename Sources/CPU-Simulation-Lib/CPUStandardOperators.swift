@@ -7,7 +7,12 @@
 
 import Foundation
 
-open class LOADOperator: Operator {open class var stringRepresentation: String {"LOAD"}
+public class LOADOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
+    open class var stringRepresentation: String {"LOAD"}
     open class var operatorCode: UInt8 {0x14}
     
     public class var requiresLiteralReadAccess: Bool { false }
@@ -18,6 +23,10 @@ open class LOADOperator: Operator {open class var stringRepresentation: String {
 }
 
 public class STOREOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"STORE"}
     open class var operatorCode: UInt8 {0x15}
     
@@ -29,6 +38,10 @@ public class STOREOperator: Operator {
 }
 
 public class ADDOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"ADD"}
     open class var operatorCode: UInt8 {0xA}
     
@@ -40,6 +53,10 @@ public class ADDOperator: Operator {
 }
 
 public class SUBOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"SUB"}
     open class var operatorCode: UInt8 {0xB}
     
@@ -51,6 +68,10 @@ public class SUBOperator: Operator {
 }
 
 public class MULOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"MUL"}
     open class var operatorCode: UInt8 {0xC}
     
@@ -62,6 +83,10 @@ public class MULOperator: Operator {
 }
 
 public class DIVOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"DIV"}
     open class var operatorCode: UInt8 {0xD}
     
@@ -73,6 +98,10 @@ public class DIVOperator: Operator {
 }
 
 public class MODOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"MOD"}
     open class var operatorCode: UInt8 {0xE}
     
@@ -84,6 +113,10 @@ public class MODOperator: Operator {
 }
 
 public class CMPOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"CMP"}
     open class var operatorCode: UInt8 {0xF}
     
@@ -95,6 +128,10 @@ public class CMPOperator: Operator {
 }
 
 public class ANDOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"AND"}
     open class var operatorCode: UInt8 {0x28}
     
@@ -106,6 +143,10 @@ public class ANDOperator: Operator {
 }
 
 public class OROperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"OR"}
     open class var operatorCode: UInt8 {0x29}
     
@@ -117,6 +158,10 @@ public class OROperator: Operator {
 }
 
 public class XOROperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"XOR"}
     open class var operatorCode: UInt8 {0x2A}
     
@@ -128,6 +173,10 @@ public class XOROperator: Operator {
 }
 
 public class SHLOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"SHL"}
     open class var operatorCode: UInt8 {0x2B}
     
@@ -139,6 +188,10 @@ public class SHLOperator: Operator {
 }
 
 public class SHROperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"SHR"}
     open class var operatorCode: UInt8 {0x2C}
     
@@ -150,6 +203,10 @@ public class SHROperator: Operator {
 }
 
 public class SHRAOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"SHRA"}
     open class var operatorCode: UInt8 {0x2D}
     
@@ -161,6 +218,10 @@ public class SHRAOperator: Operator {
 }
 
 public class JMPPOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"JMPP"}
     open class var operatorCode: UInt8 {0x1E}
     
@@ -172,6 +233,10 @@ public class JMPPOperator: Operator {
 }
 
 public class JMPNNOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"JMPNN"}
     open class var operatorCode: UInt8 {0x1F}
     
@@ -183,6 +248,10 @@ public class JMPNNOperator: Operator {
 }
 
 public class JMPNOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"JMPN"}
     open class var operatorCode: UInt8 {0x20}
     
@@ -194,6 +263,10 @@ public class JMPNOperator: Operator {
 }
 
 public class JMPNPOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"JMPNP"}
     open class var operatorCode: UInt8 {0x21}
     
@@ -205,6 +278,10 @@ public class JMPNPOperator: Operator {
 }
 
 public class JMPZOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"JMPZ"}
     open class var operatorCode: UInt8 {0x22}
     
@@ -216,6 +293,10 @@ public class JMPZOperator: Operator {
 }
 
 public class JMPNZOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"JMPNZ"}
     open class var operatorCode: UInt8 {0x23}
     
@@ -227,6 +308,10 @@ public class JMPNZOperator: Operator {
 }
 
 public class JMPVOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"JMPV"}
     open class var operatorCode: UInt8 {0x25}
     
@@ -238,6 +323,10 @@ public class JMPVOperator: Operator {
 }
 
 public class JMPOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"JMP"}
     open class var operatorCode: UInt8 {0x24}
     
@@ -249,6 +338,10 @@ public class JMPOperator: Operator {
 }
 
 public class JSROperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"JSR"}
     open class var operatorCode: UInt8 {0x5}
     
@@ -260,6 +353,10 @@ public class JSROperator: Operator {
 }
 
 public class RSVOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"RSV"}
     open class var operatorCode: UInt8 {0x7}
     
@@ -271,6 +368,10 @@ public class RSVOperator: Operator {
 }
 
 public class RELOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"REL"}
     open class var operatorCode: UInt8 {0x8}
     
@@ -282,6 +383,10 @@ public class RELOperator: Operator {
 }
 
 public class NOOPOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"NOOP"}
     open class var operatorCode: UInt8 {0x0}
     
@@ -293,6 +398,10 @@ public class NOOPOperator: Operator {
 }
 
 public class HOLDOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"HOLD"}
     open class var operatorCode: UInt8 {0x63}
     
@@ -304,6 +413,10 @@ public class HOLDOperator: Operator {
 }
 
 public class RESETOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"RESET"}
     open class var operatorCode: UInt8 {0x1}
     
@@ -315,6 +428,10 @@ public class RESETOperator: Operator {
 }
 
 public class NOTOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"NOT"}
     open class var operatorCode: UInt8 {0x2E}
     
@@ -326,6 +443,10 @@ public class NOTOperator: Operator {
 }
 
 public class RTSOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"RTS"}
     open class var operatorCode: UInt8 {0x6}
     
@@ -337,6 +458,10 @@ public class RTSOperator: Operator {
 }
 
 public class PUSHOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"PUSH"}
     open class var operatorCode: UInt8 {0x19}
     
@@ -348,6 +473,10 @@ public class PUSHOperator: Operator {
 }
 
 public class POPOperator: Operator {
+    public func operate(input: CPUExecutionInput) {
+        
+    }
+    
     open class var stringRepresentation: String {"POP"}
     open class var operatorCode: UInt8 {0x1A}
     

@@ -7,10 +7,16 @@
 
 import Foundation
 
+private typealias Intern = OperandTypesInternal
+
 open class AddressOperandType: OperandType {
-    public static var providesAddressOrWriteAccess: Bool { true }
+    open func getOperandValue(cpu: CPU) -> UInt16? {
+        Intern.getOperandValueAddress(cpu: cpu)
+    }
     
-    public static var readAccess: ReadAccess { .read }
+    open class var providesAddressOrWriteAccess: Bool { true }
+    
+    open class var readAccess: ReadAccess { .read }
     
     open class var operandTypeCode: UInt8 { 1 }
     
@@ -18,9 +24,13 @@ open class AddressOperandType: OperandType {
 }
 
 open class LiteralOperandType: OperandType {
-    public static var providesAddressOrWriteAccess: Bool { false }
+    open func getOperandValue(cpu: CPU) -> UInt16? {
+        cpu.operand
+    }
     
-    public static var readAccess: ReadAccess { .instantLiteralRead }
+    open class var providesAddressOrWriteAccess: Bool { false }
+    
+    open class var readAccess: ReadAccess { .instantLiteralRead }
     
     open class var operandTypeCode: UInt8 { 2 }
     
@@ -28,9 +38,13 @@ open class LiteralOperandType: OperandType {
 }
 
 open class IndirectAddressOperandType: OperandType {
-    public static var providesAddressOrWriteAccess: Bool { true }
+    open func getOperandValue(cpu: CPU) -> UInt16? {
+        Intern.getIndirectOperandValueAddress(cpu: cpu)
+    }
     
-    public static var readAccess: ReadAccess { .read }
+    open class var providesAddressOrWriteAccess: Bool { true }
+    
+    open class var readAccess: ReadAccess { .read }
     
     open class var operandTypeCode: UInt8 { 3 }
     
@@ -38,9 +52,13 @@ open class IndirectAddressOperandType: OperandType {
 }
 
 open class StackOperandType: OperandType {
-    public static var providesAddressOrWriteAccess: Bool { true }
+    open func getOperandValue(cpu: CPU) -> UInt16? {
+        Intern.getOperandValueRelToStackpointer(cpu: cpu)
+    }
     
-    public static var readAccess: ReadAccess { .read }
+    open class var providesAddressOrWriteAccess: Bool { true }
+    
+    open class var readAccess: ReadAccess { .read }
     
     open class var operandTypeCode: UInt8 { 4 }
     
@@ -48,9 +66,13 @@ open class StackOperandType: OperandType {
 }
 
 open class IndirectStackOperandType: OperandType {
-    public static var providesAddressOrWriteAccess: Bool { true }
+    open func getOperandValue(cpu: CPU) -> UInt16? {
+        Intern.getIndirectOperandValueRelToStackpointer(cpu: cpu)
+    }
     
-    public static var readAccess: ReadAccess { .read }
+    open class var providesAddressOrWriteAccess: Bool { true }
+    
+    open class var readAccess: ReadAccess { .read }
     
     open class var operandTypeCode: UInt8 { 5 }
     
@@ -58,9 +80,13 @@ open class IndirectStackOperandType: OperandType {
 }
 
 open class LiteralStackOperandType: OperandType {
-    public static var providesAddressOrWriteAccess: Bool { false }
+    open func getOperandValue(cpu: CPU) -> UInt16? {
+        Intern.getOperandInRelationToStackpointer(cpu: cpu)
+    }
     
-    public static var readAccess: ReadAccess { .read }
+    open class var providesAddressOrWriteAccess: Bool { false }
+    
+    open class var readAccess: ReadAccess { .read }
     
     open class var operandTypeCode: UInt8 { 6 }
     
@@ -68,9 +94,13 @@ open class LiteralStackOperandType: OperandType {
 }
 
 open class NonexistingOperandType: OperandType {
-    public static var providesAddressOrWriteAccess: Bool { false }
+    open func getOperandValue(cpu: CPU) -> UInt16? {
+        nil
+    }
     
-    public static var readAccess: ReadAccess { .none }
+    open class var providesAddressOrWriteAccess: Bool { false }
+    
+    open class var readAccess: ReadAccess { .none }
     
     open class var operandTypeCode: UInt8 { 0 }
     

@@ -1,5 +1,5 @@
 //
-//  CPUExecutionClass.swift
+//  CPUExecutor.swift
 //  
 //
 //  Created by Paul on 10.02.22.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class CPUExecution {
+class CPUExecutor {
     var programCounter: UInt16 = 0
     var state: CPUState = CPUStandardVars.startingState.generate()
     var opcode: UInt16 = 0

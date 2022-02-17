@@ -12,6 +12,8 @@ public protocol OperandType {
     static var providesAddressOrWriteAccess: Bool { get }
     static var readAccess: ReadAccess { get }
     
+    func getOperandValue(cpu: CPU) -> UInt16?
+    
     init()
 }
 

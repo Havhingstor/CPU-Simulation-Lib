@@ -10,7 +10,7 @@ import Foundation
 open class ExecutedToFetchOperatorState: CPUState {
     public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(FetchedOperatorToDecodeState.init))
     
-    public var nextStateProvider: SingleNextStateProvider = ExecutedToFetchOperatorState.standardNextStateProvider.getNewSingleNextStateProvider()
+    public let nextStateProvider: SingleNextStateProvider = ExecutedToFetchOperatorState.standardNextStateProvider.getNewSingleNextStateProvider()
     
     open class var state: String { "executed" }
     open class var instructionEnded: Bool { true }
@@ -33,7 +33,7 @@ open class HoldToFetchOperatorState: ExecutedToFetchOperatorState {
 open class FetchedOperatorToDecodeState: CPUState {
     public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(DecodedToFetchOperandState.init))
     
-    public var nextStateProvider: SingleNextStateProvider = FetchedOperatorToDecodeState.standardNextStateProvider.getNewSingleNextStateProvider()
+    public let nextStateProvider: SingleNextStateProvider = FetchedOperatorToDecodeState.standardNextStateProvider.getNewSingleNextStateProvider()
     
     open class var state: String { "operator-fetched" }
     open class var instructionEnded: Bool { false }
@@ -48,7 +48,7 @@ open class FetchedOperatorToDecodeState: CPUState {
 open class DecodedToFetchOperandState: CPUState {
     public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(FetchedOperandToExecuteState.init))
     
-    public var nextStateProvider: SingleNextStateProvider = DecodedToFetchOperandState.standardNextStateProvider.getNewSingleNextStateProvider()
+    public let nextStateProvider: SingleNextStateProvider = DecodedToFetchOperandState.standardNextStateProvider.getNewSingleNextStateProvider()
     
     open class var state: String { "decoded" }
     open class var instructionEnded: Bool { false }
@@ -67,13 +67,13 @@ open class DecodedToFetchOperandState: CPUState {
 open class FetchedOperandToExecuteState: CPUState {
     public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(ExecutedToFetchOperatorState.init))
     
-    public var nextStateProvider: SingleNextStateProvider = FetchedOperandToExecuteState.standardNextStateProvider.getNewSingleNextStateProvider()
+    public let nextStateProvider: SingleNextStateProvider = FetchedOperandToExecuteState.standardNextStateProvider.getNewSingleNextStateProvider()
     
     open class var state: String {"operand-fetched"}
     open class var instructionEnded: Bool { false }
     
     open func operate(cpu: CPU) -> NewCPUVars {
-        return NewCPUVars()
+        return executeInstruction(cpu: cpu)
     }
     
     public init() {}

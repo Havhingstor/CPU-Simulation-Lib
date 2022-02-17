@@ -99,6 +99,10 @@ class AddressAccessTest: XCTestCase {
 }
 
 fileprivate class OwnOperandType: OperandType {
+    func getOperandValue(cpu: CPU) -> UInt16? {
+        50
+    }
+    
     public static var providesAddressOrWriteAccess: Bool { true }
     
     public static var readAccess: ReadAccess { .instantLiteralRead }

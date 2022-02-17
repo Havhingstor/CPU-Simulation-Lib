@@ -333,6 +333,10 @@ class InstructionTests: XCTestCase {
 }
 
 fileprivate class OwnOperator: Operator {
+    func operate(input: CPUExecutionInput) {
+    
+    }
+    
     static var operatorCode: UInt8 { 0xff }
     
     static var stringRepresentation: String {"OWN"}

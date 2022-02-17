@@ -40,9 +40,7 @@ class InternalCPUVars {
     private func applyZFlag(accumulator: UInt16) {
         if accumulator != 0 {
             _zFlag = false
-        }
-        
-        if _zFlag != nil {
+        }else if _zFlag != nil {
             _zFlag = true
         }
     }

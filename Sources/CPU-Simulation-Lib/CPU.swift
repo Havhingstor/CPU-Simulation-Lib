@@ -9,22 +9,22 @@ import Foundation
 
 public class CPU {
     private var _memory: Memory
-    private var execution: CPUExecution
+    private var executor: CPUExecutor
     private var internalVars: InternalCPUVars
     
     public init(memory: Memory, startingPoint: UInt16 = 0) {
         _memory = memory
-        execution = CPUExecution()
+        executor = CPUExecutor()
         internalVars = InternalCPUVars()
-        execution.programCounter = startingPoint
+        executor.programCounter = startingPoint
     }
     
     public var memory: Memory { _memory }
     
-    public var programCounter: UInt16 { execution.programCounter }
-    public var state: String { execution.state.state }
-    public var opcode: UInt16 { execution.opcode }
-    public var operand: UInt16 { execution.operand }
+    public var programCounter: UInt16 { executor.programCounter }
+    public var state: String { executor.state.state }
+    public var opcode: UInt16 { executor.opcode }
+    public var operand: UInt16 { executor.operand }
     public var stackpointer: UInt16 { internalVars.stackpointer }
     
     public var accumulator: UInt16 { internalVars.accumulator }
@@ -36,30 +36,30 @@ public class CPU {
     public var vFlag: Bool { internalVars.vFlag }
     
     public var operatorString: String { currentOperator?.stringRepresentation ?? CPUStandardVars.startingOperatorString }
-    public var currentOperator: Operator? { execution.currentOperator }
+    public var currentOperator: Operator? { executor.currentOperator }
     
-    public var operandTypeCode: UInt8 { execution.operandType?.operandTypeCode ?? 0 }
-    public var operandType: OperandType? { execution.operandType }
+    public var operandTypeCode: UInt8 { executor.operandType?.operandTypeCode ?? 0 }
+    public var operandType: OperandType? { executor.operandType }
     
-    public var operatorProgramCounter: UInt16 { execution.operatorProgramCounter }
+    public var operatorProgramCounter: UInt16 { executor.operatorProgramCounter }
     
     public func executeNextStep() throws {
-        let result = try execution.executeNextStep(parent: self)
+        let result = try executor.executeNextStep(parent: self)
         
-        execution.applyNewCPUVars(vars: result)
+        executor.applyNewCPUVars(vars: result)
         internalVars.applyNewCPUVars(vars: result)
     }
     
     public func endInstruction() throws {
         repeat {
             try executeNextStep()
-        } while !execution.state.instructionEnded
+        } while !executor.state.instructionEnded
     }
     
     public func reset(startingPoint: UInt16 = 0) {
-        execution = CPUExecution()
+        executor = CPUExecutor()
         internalVars = InternalCPUVars()
-        execution.programCounter = startingPoint
+        executor.programCounter = startingPoint
     }
 }
 
