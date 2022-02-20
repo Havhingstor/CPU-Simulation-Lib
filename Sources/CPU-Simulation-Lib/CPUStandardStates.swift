@@ -13,7 +13,7 @@ open class ExecutedToFetchOperatorState: CPUState {
     public let nextStateProvider: SingleNextStateProvider = ExecutedToFetchOperatorState.standardNextStateProvider.getNewSingleNextStateProvider()
     
     open class var state: String { "executed" }
-    open class var instructionEnded: Bool { true }
+    public static var instructionEnded: Bool { true }
     
     open func operate(cpu: CPU) -> NewCPUVars {
         let result = fetchOperator(cpu: cpu)
@@ -36,7 +36,7 @@ open class FetchedOperatorToDecodeState: CPUState {
     public let nextStateProvider: SingleNextStateProvider = FetchedOperatorToDecodeState.standardNextStateProvider.getNewSingleNextStateProvider()
     
     open class var state: String { "operator-fetched" }
-    open class var instructionEnded: Bool { false }
+    public static var instructionEnded: Bool { false }
     
     open func operate(cpu: CPU) throws -> NewCPUVars {
         try decodeInstruction(cpu: cpu)
@@ -51,7 +51,7 @@ open class DecodedToFetchOperandState: CPUState {
     public let nextStateProvider: SingleNextStateProvider = DecodedToFetchOperandState.standardNextStateProvider.getNewSingleNextStateProvider()
     
     open class var state: String { "decoded" }
-    open class var instructionEnded: Bool { false }
+    public static var instructionEnded: Bool { false }
     
     open func operate(cpu: CPU) -> NewCPUVars {
         let result = fetchOperand(cpu: cpu)
@@ -70,7 +70,7 @@ open class FetchedOperandToExecuteState: CPUState {
     public let nextStateProvider: SingleNextStateProvider = FetchedOperandToExecuteState.standardNextStateProvider.getNewSingleNextStateProvider()
     
     open class var state: String {"operand-fetched"}
-    open class var instructionEnded: Bool { false }
+    public static var instructionEnded: Bool { false }
     
     open func operate(cpu: CPU) -> NewCPUVars {
         return executeInstruction(cpu: cpu)
