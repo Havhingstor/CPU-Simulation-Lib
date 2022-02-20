@@ -7,35 +7,53 @@
 
 import Foundation
 
-public struct CPUExecutionInput {
+public class CPUExecutionInput {
     public var accumulator: UInt16
     public var nFlag: Bool
     public var zFlag: Bool
     public var vFlag: Bool
-    public var operandValue: UInt16?
     public var stackpointer: StackpointerHandler
+    
+    private var _operandValue: UInt16?
+    public var operandValue: UInt16? {
+        _operandRead = true
+        return _operandValue
+    }
+    private var _operandRead = false
+    public var operandRead: Bool {
+        _operandRead
+    }
+    
+    public init(accumulator: UInt16, nFlag: Bool, zFlag: Bool, vFlag: Bool, stackpointer: StackpointerHandler, operandValue: UInt16?) {
+        self.accumulator = accumulator
+        self.nFlag = nFlag
+        self.zFlag = zFlag
+        self.vFlag = vFlag
+        self.stackpointer = stackpointer
+        self._operandValue = operandValue
+    }
 }
 
-public struct StackpointerHandler {
+public class StackpointerHandler {
     private var cpu: CPU
-    private var stackpointer: StackpointerHolder
+    fileprivate var stackpointer: UInt16
     private var memory: Memory { cpu.memory }
     
     public var underlyingValue: UInt16 {
-        return memory.read(address: stackpointer.stackpointer)
+        return memory.read(address: stackpointer)
     }
     
     public static postfix func ++(handler: inout StackpointerHandler) {
-        handler.stackpointer.stackpointer &+= 1
+        handler.stackpointer &+= 1
     }
     
     public static postfix func --(handler: inout StackpointerHandler) {
-        handler.stackpointer.stackpointer &-= 1
+        handler.stackpointer &-= 1
     }
     
-    fileprivate init(cpu: CPU, stackpointer: StackpointerHolder) {
+    fileprivate init(cpu: CPU) {
         self.cpu = cpu
-        self.stackpointer = stackpointer
+        self.stackpointer = cpu.stackpointer
     }
 }
 
@@ -48,35 +66,27 @@ public func executeInstruction(cpu: CPU) -> NewCPUVars {
 }
 
 private func operate(cpu: CPU) -> NewCPUVars {
-    let stackpointer = StackpointerHolder(cpu: cpu)
+    let result = NewCPUVars()
+    
+    let stackpointer = StackpointerHandler(cpu: cpu)
     let input = createInput(cpu: cpu, stackpointer: stackpointer)
     
     cpu.currentOperator!.operate(input: input)
     
-    let result = NewCPUVars()
     result.stackpointer = stackpointer.stackpointer
+    
+    if input.operandRead && cpu.operandType!.providesAddressOrWriteAccess {
+        result.addressBus = cpu.operandType!.getOperandAddress(cpu: cpu)
+        result.dataBus = input.operandValue!
+    }
     
     return result
 }
 
-private func createInput(cpu: CPU, stackpointer: StackpointerHolder) -> CPUExecutionInput {
-    CPUExecutionInput(accumulator: cpu.accumulator,
-                      nFlag: cpu.nFlag,
-                      zFlag: cpu.zFlag,
-                      vFlag: cpu.vFlag,
-                      operandValue: cpu.operandType!.getOperandValue(cpu: cpu),
-                      stackpointer: StackpointerHandler(cpu: cpu, stackpointer: stackpointer))
+private func createInput(cpu: CPU, stackpointer: StackpointerHandler) -> CPUExecutionInput {
+    CPUExecutionInput(accumulator: cpu.accumulator, nFlag: cpu.nFlag, zFlag: cpu.zFlag, vFlag: cpu.vFlag, stackpointer: stackpointer, operandValue: cpu.operandType?.getOperandValue(cpu: cpu))
 }
 
 private func testIfNoDecodeHappend(cpu: CPU) -> Bool {
     cpu.currentOperator == nil || cpu.operandType == nil
 }
-
-private class StackpointerHolder {
-    fileprivate var stackpointer: UInt16
-    
-    fileprivate init(cpu: CPU) {
-        stackpointer = cpu.stackpointer
-    }
-}
-

@@ -103,6 +103,10 @@ fileprivate class OwnOperandType: OperandType {
         50
     }
     
+    open func getOperandAddress(cpu: CPU) -> UInt16? {
+        nil
+    }
+    
     public static var providesAddressOrWriteAccess: Bool { true }
     
     public static var readAccess: ReadAccess { .instantLiteralRead }

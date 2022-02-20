@@ -14,6 +14,10 @@ open class AddressOperandType: OperandType {
         Intern.getOperandValueAddress(cpu: cpu)
     }
     
+    open func getOperandAddress(cpu: CPU) -> UInt16? {
+        cpu.operand
+    }
+    
     open class var providesAddressOrWriteAccess: Bool { true }
     
     open class var readAccess: ReadAccess { .read }
@@ -26,6 +30,10 @@ open class AddressOperandType: OperandType {
 open class LiteralOperandType: OperandType {
     open func getOperandValue(cpu: CPU) -> UInt16? {
         cpu.operand
+    }
+    
+    open func getOperandAddress(cpu: CPU) -> UInt16? {
+        nil
     }
     
     open class var providesAddressOrWriteAccess: Bool { false }
@@ -42,6 +50,10 @@ open class IndirectAddressOperandType: OperandType {
         Intern.getIndirectOperandValueAddress(cpu: cpu)
     }
     
+    open func getOperandAddress(cpu: CPU) -> UInt16? {
+        cpu.memory.read(address: cpu.operand)
+    }
+    
     open class var providesAddressOrWriteAccess: Bool { true }
     
     open class var readAccess: ReadAccess { .read }
@@ -54,6 +66,10 @@ open class IndirectAddressOperandType: OperandType {
 open class StackOperandType: OperandType {
     open func getOperandValue(cpu: CPU) -> UInt16? {
         Intern.getOperandValueRelToStackpointer(cpu: cpu)
+    }
+    
+    open func getOperandAddress(cpu: CPU) -> UInt16? {
+        cpu.stackpointer &+ cpu.operand
     }
     
     open class var providesAddressOrWriteAccess: Bool { true }
@@ -70,6 +86,10 @@ open class IndirectStackOperandType: OperandType {
         Intern.getIndirectOperandValueRelToStackpointer(cpu: cpu)
     }
     
+    open func getOperandAddress(cpu: CPU) -> UInt16? {
+        cpu.memory.read(address: cpu.stackpointer &+ cpu.operand)
+    }
+    
     open class var providesAddressOrWriteAccess: Bool { true }
     
     open class var readAccess: ReadAccess { .read }
@@ -84,6 +104,10 @@ open class LiteralStackOperandType: OperandType {
         Intern.getOperandInRelationToStackpointer(cpu: cpu)
     }
     
+    open func getOperandAddress(cpu: CPU) -> UInt16? {
+        nil
+    }
+    
     open class var providesAddressOrWriteAccess: Bool { false }
     
     open class var readAccess: ReadAccess { .read }
@@ -95,6 +119,10 @@ open class LiteralStackOperandType: OperandType {
 
 open class NonexistingOperandType: OperandType {
     open func getOperandValue(cpu: CPU) -> UInt16? {
+        nil
+    }
+    
+    open func getOperandAddress(cpu: CPU) -> UInt16? {
         nil
     }
     

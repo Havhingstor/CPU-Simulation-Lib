@@ -66,12 +66,16 @@ class InternalCPUVars {
     private func applyDataBus(_ newDataBus: UInt16?) {
         if let newDataBus = newDataBus {
             dataBus = newDataBus
+        } else {
+            dataBus = 0
         }
     }
     
     private func applyAddressBus(_ newAddressBus: UInt16?) {
         if let newAddressBus = newAddressBus {
             addressBus = newAddressBus
+        } else {
+            addressBus = 0
         }
     }
     

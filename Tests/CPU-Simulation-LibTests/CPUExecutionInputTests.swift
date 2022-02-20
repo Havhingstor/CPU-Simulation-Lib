@@ -16,6 +16,7 @@ class CPUExecutionInputTests: XCTestCase {
     override func setUp() {
         DecodedToFetchOperandState.standardNextState = StateBuilder(OwnExecutionState.init)
         CPUStandardVars.operators.append(OwnReadingOperator.init)
+        CPUStandardVars.operators.append(OwnValueReadingOperator.init)
         CPUStandardVars.operators.append(OwnNothingOperator.init)
     }
     
@@ -23,10 +24,10 @@ class CPUExecutionInputTests: XCTestCase {
         let memory = Memory()
         let cpu = CPU(memory: memory)
         
-        XCTAssertNoThrow(try memory.writeValues(values: [0x1ff,0x100,0xfe]))
+        XCTAssertNoThrow(try memory.writeValues(values: [0x1ff,0x100,0x1fe,0x100,0xfd]))
         memory.write(0x555, address: 0x100)
         
-        XCTAssertNoThrow(try! cpu.endInstruction())
+        XCTAssertNoThrow(try cpu.endInstruction())
         XCTAssertEqual(cpu.operatorString, "READING")
         XCTAssertEqual(Self.executionInput.accumulator, signedToUnsigned(-50))
         XCTAssertTrue(Self.executionInput.nFlag)
@@ -35,6 +36,21 @@ class CPUExecutionInputTests: XCTestCase {
         XCTAssertEqual(Self.executionInput.operandValue!, 0x555)
         XCTAssertEqual(Self.underStackpointer, 0)
         XCTAssertEqual(cpu.stackpointer, 0xfffd)
+        XCTAssertEqual(cpu.addressBus, 0)
+        XCTAssertEqual(cpu.dataBus, 0)
+        
+        XCTAssertNoThrow(try cpu.endInstruction())
+        XCTAssertEqual(cpu.operatorString, "VALUE-READING")
+        XCTAssertEqual(Self.executionInput.accumulator, signedToUnsigned(-50))
+        XCTAssertTrue(Self.executionInput.nFlag)
+        XCTAssertTrue(!Self.executionInput.zFlag)
+        XCTAssertTrue(!Self.executionInput.vFlag)
+        XCTAssertEqual(Self.executionInput.operandValue!, 0x555)
+        XCTAssertEqual(Self.underStackpointer, 0)
+        XCTAssertEqual(cpu.stackpointer, 0xfffc)
+        XCTAssertEqual(cpu.addressBus, 0x100)
+        XCTAssertEqual(cpu.dataBus, 0x555)
+        
         
         XCTAssertNoThrow(try cpu.endInstruction())
         XCTAssertEqual(cpu.operatorString, "NOTHING")
@@ -43,8 +59,42 @@ class CPUExecutionInputTests: XCTestCase {
         XCTAssertTrue(!Self.executionInput.zFlag)
         XCTAssertTrue(!Self.executionInput.vFlag)
         XCTAssertEqual(Self.executionInput.operandValue, nil)
-        XCTAssertEqual(Self.underStackpointer, 0xffff)
-        XCTAssertEqual(cpu.stackpointer, 0xfffe)
+        XCTAssertEqual(Self.underStackpointer, 0)
+        XCTAssertEqual(cpu.stackpointer, 0xfffd)
+    }
+    
+    func testBussesAfterIndirect() {
+        let memory = Memory()
+        let cpu = CPU(memory: memory)
+        
+        XCTAssertNoThrow(try memory.writeValues(values: [0x1fe,0x100,0x2fe,0x100,0x3fe,0x100,0x4fe,0x100,0x5fe,0x100,0x6fe,0x100]))
+        memory.write(0x555, address: 0x100)
+        
+        XCTAssertNoThrow(try cpu.endInstruction())
+        XCTAssertEqual(cpu.addressBus, 0x100)
+        XCTAssertEqual(cpu.dataBus, 0x555)
+        
+        try! cpu.endInstruction()
+        XCTAssertEqual(cpu.addressBus, 0)
+        XCTAssertEqual(cpu.dataBus, 0)
+        
+        XCTAssertNoThrow(try cpu.endInstruction())
+        XCTAssertEqual(cpu.addressBus, 0x555)
+        XCTAssertEqual(cpu.dataBus, 0)
+        
+        var stackpointer = cpu.stackpointer
+        XCTAssertNoThrow(try cpu.endInstruction())
+        XCTAssertEqual(cpu.addressBus, stackpointer &+ 0x100)
+        XCTAssertEqual(cpu.dataBus, 0)
+        
+        stackpointer = cpu.stackpointer
+        XCTAssertNoThrow(try cpu.endInstruction())
+        XCTAssertEqual(cpu.addressBus, 0)
+        XCTAssertEqual(cpu.dataBus, 0x1fe)
+        
+        XCTAssertNoThrow(try cpu.endInstruction())
+        XCTAssertEqual(cpu.addressBus, 0)
+        XCTAssertEqual(cpu.dataBus, 0)
     }
     
     override class func tearDown() {
@@ -75,6 +125,29 @@ private class OwnReadingOperator: Operator {
     
 }
 
+private class OwnValueReadingOperator: Operator {
+    static var requiresAddressOrWriteAccess: Bool {false}
+    
+    static var requiresLiteralReadAccess: Bool {false}
+    
+    static var operatorCode: UInt8 {0xfe}
+    
+    static var stringRepresentation: String {"VALUE-READING"}
+    
+    static var dontAllowOperandIfPossible: Bool {false}
+    
+    func operate(input: CPUExecutionInput) {
+        CPUExecutionInputTests.executionInput = input
+        _ = input.operandValue!
+        var stackpointer = input.stackpointer
+        stackpointer--
+        CPUExecutionInputTests.underStackpointer = stackpointer.underlyingValue
+    }
+    
+    public required init() {}
+    
+}
+
 private class OwnNothingOperator: Operator {
     func operate(input: CPUExecutionInput) {
         CPUExecutionInputTests.executionInput = input
@@ -87,7 +160,7 @@ private class OwnNothingOperator: Operator {
     
     static var requiresLiteralReadAccess: Bool {false}
     
-    static var operatorCode: UInt8 {0xfe}
+    static var operatorCode: UInt8 {0xfd}
     
     static var stringRepresentation: String {"NOTHING"}
     
