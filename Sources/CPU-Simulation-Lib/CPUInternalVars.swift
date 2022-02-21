@@ -11,8 +11,8 @@ import CPU_Simulation_Utilities
 class InternalCPUVars {
     var stackpointer: UInt16 = 0xfffe
     var accumulator: UInt16 = 0
-    var dataBus: UInt16 = 0
-    var addressBus: UInt16 = 0
+    var dataBus: UInt16?
+    var addressBus: UInt16?
     var lastMemoryInteraction: UInt16 = 0
     var nFlag = false
     var _zFlag: Bool?
@@ -67,7 +67,7 @@ class InternalCPUVars {
         if let newDataBus = newDataBus {
             dataBus = newDataBus
         } else {
-            dataBus = 0
+            dataBus = nil
         }
     }
     
@@ -75,7 +75,7 @@ class InternalCPUVars {
         if let newAddressBus = newAddressBus {
             addressBus = newAddressBus
         } else {
-            addressBus = 0
+            addressBus = nil
         }
     }
     

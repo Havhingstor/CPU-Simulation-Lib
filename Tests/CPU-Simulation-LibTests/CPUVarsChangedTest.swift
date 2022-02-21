@@ -45,8 +45,8 @@ class CPUVarsChangedTest: XCTestCase {
         XCTAssertEqual(cpu.accumulator, 0)
         XCTAssertEqual(cpu.stackpointer, 0xfffe)
         XCTAssertEqual(cpu.lastMemoryInteraction, 0)
-        XCTAssertEqual(cpu.addressBus, 0)
-        XCTAssertEqual(cpu.dataBus, 0)
+        XCTAssertEqual(cpu.addressBus, nil)
+        XCTAssertEqual(cpu.dataBus, nil)
         XCTAssertEqual(cpu.opcode, 0)
         XCTAssertEqual(cpu.operand, 0)
     }

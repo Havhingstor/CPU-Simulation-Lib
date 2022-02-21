@@ -123,8 +123,8 @@ class CPUTests: XCTestCase {
         memory.write(0x129, address: 0)
         let cpu = CPU(memory: memory)
         
-        XCTAssertEqual(cpu.dataBus, 0)
-        XCTAssertEqual(cpu.addressBus, 0)
+        XCTAssertEqual(cpu.dataBus, nil)
+        XCTAssertEqual(cpu.addressBus, nil)
         
         XCTAssertNoThrow(try cpu.executeNextStep())
         XCTAssertEqual(cpu.opcode, 0x129)
@@ -133,16 +133,16 @@ class CPUTests: XCTestCase {
         
         XCTAssertNoThrow(try cpu.executeNextStep())
         XCTAssertEqual(cpu.opcode, 0x129)
-        XCTAssertEqual(cpu.addressBus, 0)
-        XCTAssertEqual(cpu.dataBus, 0)
+        XCTAssertEqual(cpu.addressBus, nil)
+        XCTAssertEqual(cpu.dataBus, nil)
     }
     
     func testVarsAtStart() {
         let cpu = CPU(memory: memory)
         XCTAssertEqual(cpu.stackpointer, 0xfffe)
         XCTAssertEqual(cpu.accumulator, 0)
-        XCTAssertEqual(cpu.addressBus, 0)
-        XCTAssertEqual(cpu.dataBus, 0)
+        XCTAssertEqual(cpu.addressBus, nil)
+        XCTAssertEqual(cpu.dataBus, nil)
         XCTAssertEqual(cpu.lastMemoryInteraction, 0)
         XCTAssertTrue(!cpu.nFlag)
         XCTAssertTrue(!cpu.zFlag)

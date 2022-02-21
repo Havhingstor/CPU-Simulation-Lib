@@ -28,8 +28,8 @@ public class CPU {
     public var stackpointer: UInt16 { internalVars.stackpointer }
     
     public var accumulator: UInt16 { internalVars.accumulator }
-    public var dataBus: UInt16 { internalVars.dataBus }
-    public var addressBus: UInt16 { internalVars.addressBus }
+    public var dataBus: UInt16? { internalVars.dataBus }
+    public var addressBus: UInt16? { internalVars.addressBus }
     public var lastMemoryInteraction: UInt16 { internalVars.lastMemoryInteraction }
     public var nFlag: Bool { internalVars.nFlag }
     public var zFlag: Bool { internalVars.zFlag }

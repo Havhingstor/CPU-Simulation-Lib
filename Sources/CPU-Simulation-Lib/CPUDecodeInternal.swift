@@ -57,21 +57,3 @@ func getOperandTypeCodeFromOpcode(opcode: UInt16) -> UInt8 {
 func getOperatorCodeFromOpcode(opcode: UInt16) -> UInt8 {
     UInt8(0xff & opcode)
 }
-
-func resetBusses(dest: DecodeVars) -> DecodeVars {
-    var result = dest
-    
-    resetAddressBus(dest: &result.result)
-    resetDataBus(dest: &result.result)
-    
-    return result
-}
-
-func resetAddressBus(dest: inout NewCPUVars) {
-    dest.addressBus = 0
-}
-
-func resetDataBus(dest: inout NewCPUVars) {
-    dest.dataBus = 0
-}
-

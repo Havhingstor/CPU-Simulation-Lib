@@ -10,8 +10,6 @@ import Foundation
 public func decodeInstruction(cpu: CPU) throws -> NewCPUVars {
     var tmpVars = DecodeVars(cpu: cpu)
     
-    tmpVars = resetBusses(dest: tmpVars)
-    
     tmpVars = extractCodes(vars: tmpVars)
     
     tmpVars = try decodeCodes(vars: tmpVars, cpu: cpu)
