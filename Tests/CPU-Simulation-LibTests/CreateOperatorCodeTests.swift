@@ -24,7 +24,7 @@ class CreateOperatorCodeTests: XCTestCase {
     }
     
     func testOwnOperatorCode() {
-        CPUStandardVars.operators.append(OwnOperator.init)
+        StandardOperators.operators.append(OwnOperator.init)
         memory.write(UInt16(OwnOperator.operatorCode), address: 0)
         
         XCTAssertNoThrow(try cpu.endInstruction())

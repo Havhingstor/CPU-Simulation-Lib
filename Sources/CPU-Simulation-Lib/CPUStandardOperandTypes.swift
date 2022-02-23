@@ -7,6 +7,41 @@
 
 import Foundation
 
+public class StandardOperandTypes {
+    public typealias operandTypeInit = () -> AccessibleOperandType
+    public static var operandTypes: [operandTypeInit] = standardOperandTypes
+    public static func resetOperandTypes() {
+        operandTypes = standardOperandTypes
+    }
+    
+    public static func getOperandTypeAssignment() -> [UInt8 : operandTypeInit] {
+        var result: [UInt8 : operandTypeInit] = [:]
+        
+        for operandTypeGenerator in operandTypes {
+            addOperandTypeToAssignment(operandTypeGenerator: operandTypeGenerator, dict: &result)
+        }
+        
+        return result
+    }
+    
+    private static func addOperandTypeToAssignment(operandTypeGenerator: @escaping operandTypeInit, dict: inout [UInt8 : operandTypeInit]) {
+        let operandType = operandTypeGenerator()
+        dict.updateValue(operandTypeGenerator, forKey: operandType.operandTypeCode)
+    }
+    
+    public static var standardOperandTypes: [operandTypeInit] { [
+        AddressOperandType.init,
+        InstantLiteralOperandType.init,
+        IndirectAddressOperandType.init,
+        StackOperandType.init,
+        IndirectStackOperandType.init,
+        LiteralStackOperandType.init,
+        NonexistingOperandType.init,
+    ]}
+}
+
+
+
 private typealias Intern = OperandTypesInternal
 
 open class AddressOperandType: CoreOperandType {
@@ -117,16 +152,4 @@ open class NonexistingOperandType: CoreOperandType {
     open class var operandTypeCode: UInt8 { 0 }
     
     public required init() {}
-}
-
-extension CPUStandardVars {
-    public static var standardOperandTypes: [operandTypeInit] { [
-        AddressOperandType.init,
-        InstantLiteralOperandType.init,
-        IndirectAddressOperandType.init,
-        StackOperandType.init,
-        IndirectStackOperandType.init,
-        LiteralStackOperandType.init,
-        NonexistingOperandType.init,
-    ]}
 }

@@ -11,7 +11,7 @@ import CPU_Simulation_Lib
 class CPUStatesTests: XCTestCase {
     
     override func setUp() {
-        CPUStandardVars.startingState = StateBuilder(NewStart.init)
+        StandardStates.startingState = StateBuilder(NewStart.init)
     }
     
     func testNewExternalState() {
@@ -69,7 +69,7 @@ class CPUStatesTests: XCTestCase {
     }
     
     override class func tearDown() {
-        CPUStandardVars.resetStartingState()
+        StandardStates.resetStartingState()
     }
     
 }

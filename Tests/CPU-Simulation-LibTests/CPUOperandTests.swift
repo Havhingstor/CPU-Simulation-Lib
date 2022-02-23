@@ -78,7 +78,7 @@ class CPUOperandTests: XCTestCase {
     }
 
     func testOwnOperandType() {
-        CPUStandardVars.operandTypes.append(OwnOperandType.init)
+        StandardOperandTypes.operandTypes.append(OwnOperandType.init)
         
         memory.write(0xff0B, address: 0)
         
@@ -89,7 +89,7 @@ class CPUOperandTests: XCTestCase {
         XCTAssertTrue(!cpu.operandType!.isNothing)
         
         cpu.reset()
-        CPUStandardVars.resetOperandTypes()
+        StandardOperandTypes.resetOperandTypes()
         
         XCTAssertThrowsError(try cpu.endInstruction()) { err in
             XCTAssertEqual(err as? CPUErrors, CPUErrors.OperandTypeCodeNotDecodable(address: 0, operandTypeCode: 0xff))

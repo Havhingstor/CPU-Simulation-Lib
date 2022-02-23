@@ -7,6 +7,65 @@
 
 import Foundation
 
+public class StandardOperators {
+    public typealias OperatorInit = () -> Operator
+    public static var operators: [OperatorInit] = standardOperators
+    public static func resetOperators() {
+        operators = standardOperators
+    }
+    
+    public static func getOperatorAssignment() -> [UInt8 : OperatorInit] {
+        var result: [UInt8 : OperatorInit] = [:]
+        
+        for operatorGenerator in operators {
+            addOperatorToAssignment(operatorGenerator: operatorGenerator, dict: &result)
+        }
+        
+        return result
+    }
+    
+    private static func addOperatorToAssignment(operatorGenerator: @escaping OperatorInit, dict: inout [UInt8 : OperatorInit]) {
+        let op = operatorGenerator()
+        dict.updateValue(operatorGenerator, forKey: op.operatorCode)
+    }
+    
+    public static var standardOperators: [OperatorInit] { [
+        LOADOperator.init,
+        STOREOperator.init,
+        ADDOperator.init,
+        SUBOperator.init,
+        MULOperator.init,
+        DIVOperator.init,
+        MODOperator.init,
+        CMPOperator.init,
+        ANDOperator.init,
+        OROperator.init,
+        XOROperator.init,
+        SHLOperator.init,
+        SHROperator.init,
+        SHRAOperator.init,
+        JMPPOperator.init,
+        JMPNNOperator.init,
+        JMPNOperator.init,
+        JMPNPOperator.init,
+        JMPZOperator.init,
+        JMPNZOperator.init,
+        JMPVOperator.init,
+        JMPOperator.init,
+        JSROperator.init,
+        RSVOperator.init,
+        RELOperator.init,
+        NOOPOperator.init,
+        HOLDOperator.init,
+        RESETOperator.init,
+        NOTOperator.init,
+        RTSOperator.init,
+        PUSHOperator.init,
+        POPOperator.init,
+    ] }
+}
+
+
 public class LOADOperator: Operator {
     public func operate(input: CPUExecutionInput) {
         
@@ -485,41 +544,4 @@ public class POPOperator: Operator {
     public static var dontAllowOperandIfPossible: Bool { true }
     
     public required init() {}
-}
-
-extension CPUStandardVars {
-    public static var standardOperators: [OperatorInit] { [
-        LOADOperator.init,
-        STOREOperator.init,
-        ADDOperator.init,
-        SUBOperator.init,
-        MULOperator.init,
-        DIVOperator.init,
-        MODOperator.init,
-        CMPOperator.init,
-        ANDOperator.init,
-        OROperator.init,
-        XOROperator.init,
-        SHLOperator.init,
-        SHROperator.init,
-        SHRAOperator.init,
-        JMPPOperator.init,
-        JMPNNOperator.init,
-        JMPNOperator.init,
-        JMPNPOperator.init,
-        JMPZOperator.init,
-        JMPNZOperator.init,
-        JMPVOperator.init,
-        JMPOperator.init,
-        JSROperator.init,
-        RSVOperator.init,
-        RELOperator.init,
-        NOOPOperator.init,
-        HOLDOperator.init,
-        RESETOperator.init,
-        NOTOperator.init,
-        RTSOperator.init,
-        PUSHOperator.init,
-        POPOperator.init,
-    ] }
 }

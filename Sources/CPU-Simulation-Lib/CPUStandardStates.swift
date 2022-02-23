@@ -7,8 +7,12 @@
 
 import Foundation
 
-fileprivate func increaseProgramCounter(result: NewCPUVars, cpu: CPU) {
-    result.programCounter = cpu.programCounter &+ 1
+public class StandardStates {
+    public static var startingState: StateBuilder = originalStartingState
+    public static var originalStartingState: StateBuilder { StateBuilder(HoldToFetchOperatorState.init) }
+    public static func resetStartingState() {
+        startingState = originalStartingState
+    }
 }
 
 open class ExecutedToFetchOperatorState: CPUState {
@@ -81,4 +85,8 @@ open class FetchedOperandToExecuteState: CPUState {
     }
     
     public init() {}
+}
+
+fileprivate func increaseProgramCounter(result: NewCPUVars, cpu: CPU) {
+    result.programCounter = cpu.programCounter &+ 1
 }

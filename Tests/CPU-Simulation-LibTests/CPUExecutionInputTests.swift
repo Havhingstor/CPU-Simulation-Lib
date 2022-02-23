@@ -15,9 +15,9 @@ class CPUExecutionInputTests: XCTestCase {
     
     override func setUp() {
         DecodedToFetchOperandState.standardNextState = StateBuilder(OwnExecutionState.init)
-        CPUStandardVars.operators.append(OwnReadingOperator.init)
-        CPUStandardVars.operators.append(OwnValueReadingOperator.init)
-        CPUStandardVars.operators.append(OwnNothingOperator.init)
+        StandardOperators.operators.append(OwnReadingOperator.init)
+        StandardOperators.operators.append(OwnValueReadingOperator.init)
+        StandardOperators.operators.append(OwnNothingOperator.init)
     }
     
     func testOperationInput() {
@@ -99,7 +99,7 @@ class CPUExecutionInputTests: XCTestCase {
     
     override class func tearDown() {
         FetchedOperandToExecuteState.resetStandardNextState()
-        CPUStandardVars.resetOperators()
+        StandardOperators.resetOperators()
     }
 }
 

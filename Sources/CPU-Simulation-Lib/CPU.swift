@@ -35,7 +35,7 @@ public class CPU {
     public var zFlag: Bool { internalVars.zFlag }
     public var vFlag: Bool { internalVars.vFlag }
     
-    public var operatorString: String { currentOperator?.stringRepresentation ?? CPUStandardVars.startingOperatorString }
+    public var operatorString: String { currentOperator?.stringRepresentation ?? StandardCPUVars.startingOperatorString }
     public var currentOperator: Operator? { executor.currentOperator }
     
     public var operandTypeCode: UInt8 { operandType?.operandTypeCode ?? 0 }
@@ -65,6 +65,13 @@ public class CPU {
     }
 }
 
+public class StandardCPUVars {
+    public static var startingOperatorString: String = originalStartingOperatorString
+    public static var originalStartingOperatorString: String { "NOOP" }
+    public static func resetStartingOperatorString() {
+        startingOperatorString = originalStartingOperatorString
+    }
+}
 
 
 public class NewCPUVars {

@@ -22,7 +22,7 @@ public func decodeInstruction(cpu: CPU) throws -> NewCPUVars {
 }
 
 public func getOperatorOrThrowError(operatorCode: UInt8, address: UInt16) throws -> Operator {
-    let assignment = CPUStandardVars.getOperatorAssignment()
+    let assignment = StandardOperators.getOperatorAssignment()
     
     if !codeIsInAssignment(code: operatorCode, assignment: assignment) {
         throw CPUErrors.OperatorCodeNotDecodable(address: address, operatorCode: operatorCode)
@@ -32,7 +32,7 @@ public func getOperatorOrThrowError(operatorCode: UInt8, address: UInt16) throws
 }
 
 public func getOperandTypeOrThrowError(operandTypeCode: UInt8, address: UInt16) throws -> AccessibleOperandType {
-    let assignment = CPUStandardVars.getOperandTypeAssignment()
+    let assignment = StandardOperandTypes.getOperandTypeAssignment()
     
     if !codeIsInAssignment(code: operandTypeCode, assignment: assignment) {
         throw CPUErrors.OperandTypeCodeNotDecodable(address: address, operandTypeCode: operandTypeCode)

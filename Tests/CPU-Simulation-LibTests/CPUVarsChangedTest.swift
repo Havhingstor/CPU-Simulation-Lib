@@ -11,7 +11,7 @@ import CPU_Simulation_Lib
 class CPUVarsChangedTest: XCTestCase {
 
     override func setUp() {
-        CPUStandardVars.startingState = StateBuilder(NewStart.init)
+        StandardStates.startingState = StateBuilder(NewStart.init)
     }
     
     func testChangingVars() {
@@ -56,15 +56,15 @@ class CPUVarsChangedTest: XCTestCase {
         let cpu = CPU(memory: memory)
         XCTAssertEqual(cpu.operatorString, "NOOP")
         
-        CPUStandardVars.startingOperatorString = "START"
+        StandardCPUVars.startingOperatorString = "START"
         XCTAssertEqual(cpu.operatorString, "START")
         
-        CPUStandardVars.resetStartingOperatorString()
+        StandardCPUVars.resetStartingOperatorString()
         XCTAssertEqual(cpu.operatorString, "NOOP")
     }
     
     override func tearDown() {
-        CPUStandardVars.resetStartingState()
+        StandardStates.resetStartingState()
     }
 }
 

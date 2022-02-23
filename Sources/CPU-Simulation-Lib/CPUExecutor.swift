@@ -9,7 +9,7 @@ import Foundation
 
 class CPUExecutor {
     var programCounter: UInt16 = 0
-    var state: CPUState = CPUStandardVars.startingState.generate()
+    var state: CPUState = StandardStates.startingState.generate()
     var opcode: UInt16 = 0
     var operand: UInt16 = 0
     var currentOperator: Operator?

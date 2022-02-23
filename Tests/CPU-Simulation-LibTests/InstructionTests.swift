@@ -314,7 +314,7 @@ class InstructionTests: XCTestCase {
     }
     
     func testOwnInstruction() {
-        CPUStandardVars.operators.append(OwnOperator.init)
+        StandardOperators.operators.append(OwnOperator.init)
         memory.write(0xff, address: 0)
         
         XCTAssertNoThrow(try cpu.endInstruction())
@@ -324,7 +324,7 @@ class InstructionTests: XCTestCase {
         XCTAssertTrue(cpu.currentOperator!.allowsNoOperand)
         
         cpu.reset()
-        CPUStandardVars.resetOperators()
+        StandardOperators.resetOperators()
          
         XCTAssertThrowsError(try cpu.endInstruction()) { err in
             XCTAssertEqual(err as? CPUErrors, CPUErrors.OperatorCodeNotDecodable(address: 0, operatorCode: 0xff))
