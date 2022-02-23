@@ -39,19 +39,19 @@ func handleRequiredOperand(vars: DecodeVars) throws {
 }
 
 func testForRequiredLiteral(vars: DecodeVars) -> Bool {
-    vars.currentOperator!.requiresLiteralReadAccess && !vars.operandType!.providesInstantLiteral
+    vars.currentOperator!.requiresLiteralReadAccess && !vars.coreOperandType!.providesInstantLiteral
 }
 
 func testForNoAllowedOperand(vars: DecodeVars) -> Bool {
-    vars.currentOperator!.allowsNoOperand && !vars.operandType!.isNothing
+    vars.currentOperator!.allowsNoOperand && !vars.coreOperandType!.isNothing
 }
 
 func testForRequiredAddressOrWriteAccess(vars: DecodeVars) -> Bool {
-    vars.currentOperator!.requiresAddressOrWriteAccess && !vars.operandType!.providesAddressOrWriteAccess
+    vars.currentOperator!.requiresAddressOrWriteAccess && !vars.coreOperandType!.providesAddressOrWriteAccess
 }
 
 func testForNeededOperand(vars: DecodeVars) -> Bool {
-    !vars.currentOperator!.allowsNoOperand && vars.operandType!.isNothing
+    !vars.currentOperator!.allowsNoOperand && vars.coreOperandType!.isNothing
 }
 
 func throwLiteralRequiredError(vars: DecodeVars) throws {

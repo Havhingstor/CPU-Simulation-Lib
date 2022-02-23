@@ -23,10 +23,9 @@ public func fetchOperand(cpu: CPU) -> NewCPUVars {
     let memory = cpu.memory
     var result = NewCPUVars()
     
-    readOperand(dest: &result, programCounter: cpu.programCounter, memory: memory)
+    let operand = readOperand(dest: &result, programCounter: cpu.programCounter, memory: memory)
     
-    setAddressBus(dest: &result, programCounter: cpu.programCounter)
-    setDataBusOperand(dest: &result)
+    resolveOperand(result: &result, cpu: cpu, operand: operand)
     
     return result
 }
@@ -35,8 +34,8 @@ private func readOpcode(dest: inout NewCPUVars, programCounter: UInt16, memory: 
     dest.opcode = memory.read(address: programCounter)
 }
 
-private func readOperand(dest: inout NewCPUVars, programCounter: UInt16, memory: Memory) {
-    dest.operand = memory.read(address: programCounter)
+private func readOperand(dest: inout NewCPUVars, programCounter: UInt16, memory: Memory) -> UInt16{
+    memory.read(address: programCounter)
 }
 
 private func setAddressBus(dest: inout NewCPUVars, programCounter: UInt16) {
@@ -45,8 +44,4 @@ private func setAddressBus(dest: inout NewCPUVars, programCounter: UInt16) {
 
 private func setDataBusOperator(dest: inout NewCPUVars) {
     dest.dataBus = dest.opcode
-}
-
-private func setDataBusOperand(dest: inout NewCPUVars) {
-    dest.dataBus = dest.operand
 }

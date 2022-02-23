@@ -14,7 +14,8 @@ class CPUExecutor {
     var operand: UInt16 = 0
     var currentOperator: Operator?
     var operatorProgramCounter: UInt16 = 0
-    var operandType: OperandType?
+    var realOperandType: AccessibleOperandType?
+    var operandType: CoreOperandType? { realOperandType?.coreOperandType }
     
     func executeNextStep(parent: CPU) throws -> NewCPUVars {
         let newVars = try state.operate(cpu: parent)
@@ -61,9 +62,9 @@ class CPUExecutor {
             self.currentOperator = currentOperator
         }
     }
-    private func applyOperandType(operandType: OperandType?) {
+    private func applyOperandType(operandType: AccessibleOperandType?) {
         if let operandType = operandType {
-            self.operandType = operandType
+            self.realOperandType = operandType
         }
     }
 }

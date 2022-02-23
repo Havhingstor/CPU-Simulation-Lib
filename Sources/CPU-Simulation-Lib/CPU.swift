@@ -38,8 +38,10 @@ public class CPU {
     public var operatorString: String { currentOperator?.stringRepresentation ?? CPUStandardVars.startingOperatorString }
     public var currentOperator: Operator? { executor.currentOperator }
     
-    public var operandTypeCode: UInt8 { executor.operandType?.operandTypeCode ?? 0 }
-    public var operandType: OperandType? { executor.operandType }
+    public var operandTypeCode: UInt8 { operandType?.operandTypeCode ?? 0 }
+    public var operandType: CoreOperandType? { executor.operandType }
+    
+    public var realOperandType: AccessibleOperandType? { executor.realOperandType }
     
     public var operatorProgramCounter: UInt16 { executor.operatorProgramCounter }
     
@@ -75,7 +77,7 @@ public class NewCPUVars {
     private var _addressBus: UInt16? = nil
     private var _lastMemoryInteraction: UInt16? = nil
     private var _operator: Operator? = nil
-    private var _operandType: OperandType? = nil
+    private var _operandType: AccessibleOperandType? = nil
     private var _vFlag: Bool? = nil
     
     public init() {}
@@ -134,7 +136,7 @@ public class NewCPUVars {
             { _operator = currentOperator }
         }
     }
-    public var operandType: OperandType? {
+    public var operandType: AccessibleOperandType? {
         get {_operandType}
         set(operandType) { if operandType != nil
             { _operandType = operandType }

@@ -7,6 +7,10 @@
 
 import Foundation
 
+fileprivate func increaseProgramCounter(result: NewCPUVars, cpu: CPU) {
+    result.programCounter = cpu.programCounter &+ 1
+}
+
 open class ExecutedToFetchOperatorState: CPUState {
     public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(FetchedOperatorToDecodeState.init))
     
@@ -18,7 +22,7 @@ open class ExecutedToFetchOperatorState: CPUState {
     open func operate(cpu: CPU) -> NewCPUVars {
         let result = fetchOperator(cpu: cpu)
         
-        result.programCounter = cpu.programCounter &+ 1
+        increaseProgramCounter(result: result,cpu: cpu)
         
         return result
     }
@@ -56,7 +60,7 @@ open class DecodedToFetchOperandState: CPUState {
     open func operate(cpu: CPU) -> NewCPUVars {
         let result = fetchOperand(cpu: cpu)
         
-        result.programCounter = cpu.programCounter &+ 1
+        increaseProgramCounter(result: result, cpu: cpu)
         
         return result
     }

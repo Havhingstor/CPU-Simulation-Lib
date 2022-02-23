@@ -9,13 +9,14 @@ import Foundation
 
 private typealias Intern = OperandTypesInternal
 
-open class AddressOperandType: OperandType {
-    open func getOperandValue(cpu: CPU) -> UInt16? {
-        Intern.getOperandValueAddress(cpu: cpu)
+open class AddressOperandType: CoreOperandType {
+    
+    open func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
+        Intern.getStandardOperandResolutionResult(operand: oldOperand, cpu: cpu)
     }
     
-    open func getOperandAddress(cpu: CPU) -> UInt16? {
-        cpu.operand
+    open func getOperandValue(cpu: CPU) -> UInt16? {
+        Intern.getOperandValueAddress(cpu: cpu)
     }
     
     open class var providesAddressOrWriteAccess: Bool { true }
@@ -27,13 +28,13 @@ open class AddressOperandType: OperandType {
     public required init() {}
 }
 
-open class LiteralOperandType: OperandType {
-    open func getOperandValue(cpu: CPU) -> UInt16? {
-        cpu.operand
+open class InstantLiteralOperandType: CoreOperandType {
+    open func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
+        Intern.getStandardOperandResolutionResult(operand: oldOperand, cpu: cpu)
     }
     
-    open func getOperandAddress(cpu: CPU) -> UInt16? {
-        nil
+    open func getOperandValue(cpu: CPU) -> UInt16? {
+        cpu.operand
     }
     
     open class var providesAddressOrWriteAccess: Bool { false }
@@ -45,84 +46,67 @@ open class LiteralOperandType: OperandType {
     public required init() {}
 }
 
-open class IndirectAddressOperandType: OperandType {
-    open func getOperandValue(cpu: CPU) -> UInt16? {
-        Intern.getIndirectOperandValueAddress(cpu: cpu)
+open class IndirectLiteralOperandType: InstantLiteralOperandType {
+    override open class var readAccess: ReadAccess { .read }
+    
+    public required init() {}
+}
+
+open class IndirectAddressOperandType: AccessibleOperandType {
+    public var coreOperandType: CoreOperandType { AddressOperandType() }
+    
+    open func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
+        Intern.getIndirectOperandResolutionResult(oldOperand: oldOperand, cpu: cpu)
     }
-    
-    open func getOperandAddress(cpu: CPU) -> UInt16? {
-        cpu.memory.read(address: cpu.operand)
-    }
-    
-    open class var providesAddressOrWriteAccess: Bool { true }
-    
-    open class var readAccess: ReadAccess { .read }
     
     open class var operandTypeCode: UInt8 { 3 }
     
     public required init() {}
 }
 
-open class StackOperandType: OperandType {
-    open func getOperandValue(cpu: CPU) -> UInt16? {
-        Intern.getOperandValueRelToStackpointer(cpu: cpu)
+open class StackOperandType: AccessibleOperandType {
+    public var coreOperandType: CoreOperandType { AddressOperandType() }
+    
+    open func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
+        Intern.getStackOperandResolutionResult(oldOperand: oldOperand, cpu: cpu)
     }
-    
-    open func getOperandAddress(cpu: CPU) -> UInt16? {
-        cpu.stackpointer &+ cpu.operand
-    }
-    
-    open class var providesAddressOrWriteAccess: Bool { true }
-    
-    open class var readAccess: ReadAccess { .read }
     
     open class var operandTypeCode: UInt8 { 4 }
     
     public required init() {}
 }
 
-open class IndirectStackOperandType: OperandType {
-    open func getOperandValue(cpu: CPU) -> UInt16? {
-        Intern.getIndirectOperandValueRelToStackpointer(cpu: cpu)
+open class IndirectStackOperandType: AccessibleOperandType {
+    public var coreOperandType: CoreOperandType { AddressOperandType() }
+    
+    open func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
+        Intern.getIndirectStackOperandResolutionResult(oldOperand: oldOperand, cpu: cpu)
     }
-    
-    open func getOperandAddress(cpu: CPU) -> UInt16? {
-        cpu.memory.read(address: cpu.stackpointer &+ cpu.operand)
-    }
-    
-    open class var providesAddressOrWriteAccess: Bool { true }
-    
-    open class var readAccess: ReadAccess { .read }
     
     open class var operandTypeCode: UInt8 { 5 }
     
     public required init() {}
 }
 
-open class LiteralStackOperandType: OperandType {
-    open func getOperandValue(cpu: CPU) -> UInt16? {
-        Intern.getOperandInRelationToStackpointer(cpu: cpu)
+open class LiteralStackOperandType: AccessibleOperandType {
+    public var coreOperandType: CoreOperandType { IndirectLiteralOperandType() }
+    
+    open func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
+        Intern.getLiteralStackOperandResolutionResult(oldOperand: oldOperand, cpu: cpu)
     }
-    
-    open func getOperandAddress(cpu: CPU) -> UInt16? {
-        nil
-    }
-    
-    open class var providesAddressOrWriteAccess: Bool { false }
-    
-    open class var readAccess: ReadAccess { .read }
     
     open class var operandTypeCode: UInt8 { 6 }
     
     public required init() {}
 }
 
-open class NonexistingOperandType: OperandType {
-    open func getOperandValue(cpu: CPU) -> UInt16? {
-        nil
+open class NonexistingOperandType: CoreOperandType {
+    
+    open func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
+        OperandResolutionResult(operand: nil, addressBus: nil, dataBus: nil)
     }
     
-    open func getOperandAddress(cpu: CPU) -> UInt16? {
+    open func getOperandValue(cpu: CPU) -> UInt16? {
         nil
     }
     
@@ -138,7 +122,7 @@ open class NonexistingOperandType: OperandType {
 extension CPUStandardVars {
     public static var standardOperandTypes: [operandTypeInit] { [
         AddressOperandType.init,
-        LiteralOperandType.init,
+        InstantLiteralOperandType.init,
         IndirectAddressOperandType.init,
         StackOperandType.init,
         IndirectStackOperandType.init,

@@ -35,7 +35,7 @@ public class CPUStandardVars {
         dict.updateValue(operatorGenerator, forKey: op.operatorCode)
     }
     
-    public typealias operandTypeInit = () -> OperandType
+    public typealias operandTypeInit = () -> AccessibleOperandType
     public static var operandTypes: [operandTypeInit] = standardOperandTypes
     public static func resetOperandTypes() {
         operandTypes = standardOperandTypes

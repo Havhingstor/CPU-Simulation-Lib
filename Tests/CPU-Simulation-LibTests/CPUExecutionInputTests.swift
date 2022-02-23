@@ -74,7 +74,7 @@ class CPUExecutionInputTests: XCTestCase {
         XCTAssertEqual(cpu.addressBus, 0x100)
         XCTAssertEqual(cpu.dataBus, 0x555)
         
-        try! cpu.endInstruction()
+        XCTAssertNoThrow(try cpu.endInstruction())
         XCTAssertEqual(cpu.addressBus, nil)
         XCTAssertEqual(cpu.dataBus, nil)
         

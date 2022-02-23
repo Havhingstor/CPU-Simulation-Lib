@@ -14,34 +14,23 @@ struct DecodeVars {
     var operatorCode: UInt8 = 0
     var operandTypeCode: UInt8 = 0
     var currentOperator: Operator?
-    var operandType: OperandType?
+    var operandType: AccessibleOperandType?
+    var coreOperandType: CoreOperandType? { operandType?.coreOperandType }
 }
 
-func decodeCodes(vars: DecodeVars, cpu: CPU) throws -> DecodeVars {
-    var result = vars
-    
-    result.currentOperator = try getOperatorOrThrowError(operatorCode: result.operatorCode, address: cpu.operatorProgramCounter)
-    result.operandType = try getOperandTypeOrThrowError(operandTypeCode: result.operandTypeCode, address: cpu.operatorProgramCounter)
-    
-    return result
+func decodeCodes(vars: inout DecodeVars, cpu: CPU) throws {
+    vars.currentOperator = try getOperatorOrThrowError(operatorCode: vars.operatorCode, address: cpu.operatorProgramCounter)
+    vars.operandType = try getOperandTypeOrThrowError(operandTypeCode: vars.operandTypeCode, address: cpu.operatorProgramCounter)
 }
 
-func extractCodes(vars: DecodeVars) -> DecodeVars {
-    var result = vars
-    
-    result.operatorCode = getOperatorCodeFromOpcode(opcode: vars.opcode)
-    result.operandTypeCode = getOperandTypeCodeFromOpcode(opcode: vars.opcode)
-    
-    return result
+func extractCodes(vars: inout DecodeVars) {
+    vars.operatorCode = getOperatorCodeFromOpcode(opcode: vars.opcode)
+    vars.operandTypeCode = getOperandTypeCodeFromOpcode(opcode: vars.opcode)
 }
 
-func applyDecodedValsToNewCPUVars(vars: DecodeVars) -> DecodeVars {
-    let result = vars
-    
-    result.result.currentOperator = result.currentOperator
-    result.result.operandType = result.operandType
-    
-    return result
+func applyDecodedValsToNewCPUVars(vars: inout DecodeVars) {
+    vars.result.currentOperator = vars.currentOperator
+    vars.result.operandType = vars.operandType
 }
 
 func codeIsInAssignment<T>(code: UInt8, assignment: [UInt8 : T]) -> Bool {

@@ -15,28 +15,37 @@ class OperandTypesInternal {
         return memory.read(address: operand)
     }
     
-    static func getIndirectOperandValueAddress(cpu: CPU) -> UInt16 {
-        let memory = cpu.memory
-        
-        return memory.read(address: getOperandValueAddress(cpu: cpu))
+    static func getStandardOperandResolutionResult(operand: UInt16, cpu: CPU) -> OperandResolutionResult {
+        OperandResolutionResult(operand: operand, addressBus: cpu.programCounter, dataBus: operand)
     }
     
-    static func getOperandValueRelToStackpointer(cpu: CPU) -> UInt16 {
+    static func getIndirectOperandResolutionResult(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
         let memory = cpu.memory
+        let newOperand = memory.read(address: oldOperand)
         
-        return memory.read(address: getOperandInRelationToStackpointer(cpu: cpu))
+        return OperandResolutionResult(operand: newOperand, addressBus: oldOperand, dataBus: newOperand)
     }
     
-    static func getIndirectOperandValueRelToStackpointer(cpu: CPU) -> UInt16 {
-        let memory = cpu.memory
+    static func getStackOperandResolutionResult(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
+        let newOperand = getOperandRelativeToStack(oldOperand: oldOperand, cpu: cpu)
         
-        return memory.read(address: getOperandValueRelToStackpointer(cpu: cpu))
+        return OperandResolutionResult(operand: newOperand, addressBus: cpu.programCounter, dataBus: oldOperand)
     }
     
-    static func getOperandInRelationToStackpointer(cpu: CPU) -> UInt16 {
+    static func getIndirectStackOperandResolutionResult(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
+        let tmpOperandRelToStack = getOperandRelativeToStack(oldOperand: oldOperand, cpu: cpu)
+        
+        return getIndirectOperandResolutionResult(oldOperand: tmpOperandRelToStack, cpu: cpu)
+    }
+    
+    static func getLiteralStackOperandResolutionResult(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
+        let tmpOperandRelToStack = getOperandRelativeToStack(oldOperand: oldOperand, cpu: cpu)
+        
+        return getStandardOperandResolutionResult(operand: tmpOperandRelToStack, cpu: cpu)
+    }
+    
+    private static func getOperandRelativeToStack(oldOperand: UInt16, cpu: CPU) -> UInt16 {
         let stackpointer = cpu.stackpointer
-        let operand = cpu.operand
-        
-        return stackpointer &+ operand
+        return stackpointer &+ oldOperand
     }
 }

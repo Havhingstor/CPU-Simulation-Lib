@@ -62,10 +62,10 @@ public func executeInstruction(cpu: CPU) -> NewCPUVars {
         return NewCPUVars()
     }
     
-    return operate(cpu: cpu)
+    return executeWithAssumptionOfDecoding(cpu: cpu)
 }
 
-private func operate(cpu: CPU) -> NewCPUVars {
+private func executeWithAssumptionOfDecoding(cpu: CPU) -> NewCPUVars {
     let result = NewCPUVars()
     
     let stackpointer = StackpointerHandler(cpu: cpu)
@@ -73,14 +73,26 @@ private func operate(cpu: CPU) -> NewCPUVars {
     
     cpu.currentOperator!.operate(input: input)
     
-    result.stackpointer = stackpointer.stackpointer
+    applyStackpointer(result: result, stackpointer: stackpointer)
     
-    if input.operandRead && cpu.operandType!.providesAddressOrWriteAccess {
-        result.addressBus = cpu.operandType!.getOperandAddress(cpu: cpu)
-        result.dataBus = input.operandValue!
+    if testForMemoryUseOfInstruction(input: input, cpu: cpu) {
+        setBusses(result: result, cpu: cpu, input: input)
     }
     
     return result
+}
+
+private func applyStackpointer(result: NewCPUVars, stackpointer: StackpointerHandler) {
+    result.stackpointer = stackpointer.stackpointer
+}
+
+private func testForMemoryUseOfInstruction(input: CPUExecutionInput, cpu: CPU) -> Bool {
+    input.operandRead && cpu.operandType!.providesAddressOrWriteAccess
+}
+
+private func setBusses(result: NewCPUVars, cpu: CPU, input: CPUExecutionInput) {
+    result.addressBus = cpu.operand
+    result.dataBus = input.operandValue!
 }
 
 private func createInput(cpu: CPU, stackpointer: StackpointerHandler) -> CPUExecutionInput {

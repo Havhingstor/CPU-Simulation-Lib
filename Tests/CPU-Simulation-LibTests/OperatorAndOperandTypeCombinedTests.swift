@@ -72,18 +72,22 @@ class OperatorAndOperandTypeCombinedTests: XCTestCase {
     
     func testForIndirect() {
         XCTAssertNoThrow(try memory.writeValues(values: [ 0x314, 0x100, 0x30E, 0x100, 0x31E, 0x100, 0x307, 0x100]))
+        memory.write(0x555, address: 0x100)
         
         XCTAssertNoThrow(try cpu.endInstruction())
         XCTAssertEqual(cpu.operatorString, "LOAD")
-        XCTAssertEqual(cpu.operandTypeCode, 3)
+        XCTAssertEqual(cpu.operandTypeCode, 1)
+        XCTAssertEqual(cpu.operand, 0x555)
         
         XCTAssertNoThrow(try cpu.endInstruction())
         XCTAssertEqual(cpu.operatorString, "MOD")
-        XCTAssertEqual(cpu.operandTypeCode, 3)
+        XCTAssertEqual(cpu.operandTypeCode, 1)
+        XCTAssertEqual(cpu.operand, 0x555)
         
         XCTAssertNoThrow(try cpu.endInstruction())
         XCTAssertEqual(cpu.operatorString, "JMPP")
-        XCTAssertEqual(cpu.operandTypeCode, 3)
+        XCTAssertEqual(cpu.operandTypeCode, 1)
+        XCTAssertEqual(cpu.operand, 0x555)
         
         XCTAssertThrowsError(try cpu.endInstruction()) { err in
             XCTAssertEqual(err as? CPUErrors, CPUErrors.OperatorRequiresInstantLiteralOperandAccess(address: 6, operatorCode: 7, operandTypeCode: 3))

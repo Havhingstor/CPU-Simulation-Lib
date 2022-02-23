@@ -116,6 +116,7 @@ class CPUTests: XCTestCase {
         XCTAssertNoThrow(try cpu.executeNextStep())
         XCTAssertEqual(cpu.opcode, 5)
         XCTAssertEqual(cpu.operand, 6)
+        
         ExecutedToFetchOperatorState.resetStandardNextState()
     }
     

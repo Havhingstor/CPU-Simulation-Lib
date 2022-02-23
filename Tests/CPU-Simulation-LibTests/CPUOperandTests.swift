@@ -1,5 +1,5 @@
 //
-//  AddressAccessTest.swift
+//  CPUOperandTests.swift
 //  
 //
 //  Created by Paul on 14.02.22.
@@ -8,7 +8,7 @@
 import XCTest
 import CPU_Simulation_Lib
 
-class AddressAccessTest: XCTestCase {
+class CPUOperandTests: XCTestCase {
     var memory = Memory()
     var cpu: CPU!
     
@@ -45,7 +45,7 @@ class AddressAccessTest: XCTestCase {
         XCTAssertTrue(!cpu.operandType!.isNothing)
         
         XCTAssertNoThrow(try cpu.endInstruction())
-        XCTAssertEqual(cpu.operandTypeCode, 3)
+        XCTAssertEqual(cpu.operandTypeCode, 1)
         XCTAssertEqual(cpu.operandType!.operandTypeCode, cpu.operandTypeCode)
         XCTAssertEqual(cpu.operandType!.operandTypeCodePreparedForOpcode, UInt16(cpu.operandTypeCode) * 0x100)
         XCTAssertTrue(!cpu.operandType!.providesInstantLiteral)
@@ -53,7 +53,7 @@ class AddressAccessTest: XCTestCase {
         XCTAssertTrue(!cpu.operandType!.isNothing)
         
         XCTAssertNoThrow(try cpu.endInstruction())
-        XCTAssertEqual(cpu.operandTypeCode, 4)
+        XCTAssertEqual(cpu.operandTypeCode, 1)
         XCTAssertEqual(cpu.operandType!.operandTypeCode, cpu.operandTypeCode)
         XCTAssertEqual(cpu.operandType!.operandTypeCodePreparedForOpcode, UInt16(cpu.operandTypeCode) * 0x100)
         XCTAssertTrue(!cpu.operandType!.providesInstantLiteral)
@@ -61,7 +61,7 @@ class AddressAccessTest: XCTestCase {
         XCTAssertTrue(!cpu.operandType!.isNothing)
         
         XCTAssertNoThrow(try cpu.endInstruction())
-        XCTAssertEqual(cpu.operandTypeCode, 5)
+        XCTAssertEqual(cpu.operandTypeCode, 1)
         XCTAssertEqual(cpu.operandType!.operandTypeCode, cpu.operandTypeCode)
         XCTAssertEqual(cpu.operandType!.operandTypeCodePreparedForOpcode, UInt16(cpu.operandTypeCode) * 0x100)
         XCTAssertTrue(!cpu.operandType!.providesInstantLiteral)
@@ -69,7 +69,7 @@ class AddressAccessTest: XCTestCase {
         XCTAssertTrue(!cpu.operandType!.isNothing)
         
         XCTAssertNoThrow(try cpu.endInstruction())
-        XCTAssertEqual(cpu.operandTypeCode, 6)
+        XCTAssertEqual(cpu.operandTypeCode, 2)
         XCTAssertEqual(cpu.operandType!.operandTypeCode, cpu.operandTypeCode)
         XCTAssertEqual(cpu.operandType!.operandTypeCodePreparedForOpcode, UInt16(cpu.operandTypeCode) * 0x100)
         XCTAssertTrue(!cpu.operandType!.providesInstantLiteral)
@@ -98,20 +98,14 @@ class AddressAccessTest: XCTestCase {
     
 }
 
-fileprivate class OwnOperandType: OperandType {
-    func getOperandValue(cpu: CPU) -> UInt16? {
+fileprivate class OwnOperandType: AddressOperandType {
+    override func getOperandValue(cpu: CPU) -> UInt16? {
         50
     }
     
-    open func getOperandAddress(cpu: CPU) -> UInt16? {
-        nil
-    }
+    override public static var providesAddressOrWriteAccess: Bool { true }
     
-    public static var providesAddressOrWriteAccess: Bool { true }
+    override public static var readAccess: ReadAccess { .instantLiteralRead }
     
-    public static var readAccess: ReadAccess { .instantLiteralRead }
-    
-    static var operandTypeCode: UInt8 { 0xff }
-    
-    public required init() {}
+    override static var operandTypeCode: UInt8 { 0xff }
 }

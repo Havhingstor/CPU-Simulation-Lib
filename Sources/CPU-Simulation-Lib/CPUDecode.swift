@@ -10,11 +10,11 @@ import Foundation
 public func decodeInstruction(cpu: CPU) throws -> NewCPUVars {
     var tmpVars = DecodeVars(cpu: cpu)
     
-    tmpVars = extractCodes(vars: tmpVars)
+    extractCodes(vars: &tmpVars)
     
-    tmpVars = try decodeCodes(vars: tmpVars, cpu: cpu)
+    try decodeCodes(vars: &tmpVars, cpu: cpu)
     
-    tmpVars = applyDecodedValsToNewCPUVars(vars: tmpVars)
+    applyDecodedValsToNewCPUVars(vars: &tmpVars)
     
     try handleOperatorRequirements(vars: tmpVars)
     
@@ -31,7 +31,7 @@ public func getOperatorOrThrowError(operatorCode: UInt8, address: UInt16) throws
     return assignment[operatorCode]!()
 }
 
-public func getOperandTypeOrThrowError(operandTypeCode: UInt8, address: UInt16) throws -> OperandType {
+public func getOperandTypeOrThrowError(operandTypeCode: UInt8, address: UInt16) throws -> AccessibleOperandType {
     let assignment = CPUStandardVars.getOperandTypeAssignment()
     
     if !codeIsInAssignment(code: operandTypeCode, assignment: assignment) {
@@ -39,4 +39,41 @@ public func getOperandTypeOrThrowError(operandTypeCode: UInt8, address: UInt16) 
     }
     
     return assignment[operandTypeCode]!()
+}
+
+public func resolveOperand(result: inout NewCPUVars, cpu: CPU, operand: UInt16) {
+        
+    if let operandType = getOperandType(result: result, cpu: cpu) {
+        let changes = operandType.resolveOperand(oldOperand: operand, cpu: cpu)
+        
+        applyOperandChanges(result: &result, changes: changes, operandType: operandType)
+        applyBusChanges(result: &result, changes: changes)
+        
+        return
+    }
+    
+    result.operand = operand
+    return
+}
+
+private func applyOperandChanges(result: inout NewCPUVars, changes: OperandResolutionResult, operandType: AccessibleOperandType) {
+    let result = result
+    
+    result.operandType = operandType
+    result.operand = changes.operand
+}
+
+private func applyBusChanges(result: inout NewCPUVars, changes: OperandResolutionResult) {
+    let result = result
+    
+    result.addressBus = changes.addressBus
+    result.dataBus = changes.dataBus
+}
+
+private func getOperandType(result: NewCPUVars, cpu: CPU) -> AccessibleOperandType? {
+    if let operandType = result.operandType {
+        return operandType
+    }
+    
+    return cpu.realOperandType
 }
