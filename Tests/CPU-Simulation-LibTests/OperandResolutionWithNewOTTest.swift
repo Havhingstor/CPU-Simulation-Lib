@@ -39,12 +39,12 @@ class OperandResolutionWithNewOTTest: XCTestCase {
 
 private class OwnFetchOperandState: DecodedToFetchOperandState {
     override func operate(cpu: CPU) -> NewCPUVars {
-        var result = NewCPUVars()
+        let result = NewCPUVars()
         result.operand = cpu.memory.read(address: cpu.programCounter)
         
         result.operandType = LiteralStackOperandType()
         
-        resolveOperand(result: &result, cpu: cpu, operand: cpu.memory.read(address: cpu.programCounter))
+        resolveOperand(result: result, cpu: cpu, operand: cpu.memory.read(address: cpu.programCounter))
         
         result.programCounter = cpu.programCounter &+ 1
         

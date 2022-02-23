@@ -116,7 +116,7 @@ private class OwnReadingOperator: Operator {
     
     func operate(input: CPUExecutionInput) {
         CPUExecutionInputTests.executionInput = input
-        var stackpointer = input.stackpointer
+        let stackpointer = input.stackpointer
         stackpointer--
         CPUExecutionInputTests.underStackpointer = stackpointer.underlyingValue
     }
@@ -139,7 +139,7 @@ private class OwnValueReadingOperator: Operator {
     func operate(input: CPUExecutionInput) {
         CPUExecutionInputTests.executionInput = input
         _ = input.operandValue!
-        var stackpointer = input.stackpointer
+        let stackpointer = input.stackpointer
         stackpointer--
         CPUExecutionInputTests.underStackpointer = stackpointer.underlyingValue
     }
@@ -151,7 +151,7 @@ private class OwnValueReadingOperator: Operator {
 private class OwnNothingOperator: Operator {
     func operate(input: CPUExecutionInput) {
         CPUExecutionInputTests.executionInput = input
-        var stackpointer = input.stackpointer
+        let stackpointer = input.stackpointer
         stackpointer++
         CPUExecutionInputTests.underStackpointer = stackpointer.underlyingValue
     }

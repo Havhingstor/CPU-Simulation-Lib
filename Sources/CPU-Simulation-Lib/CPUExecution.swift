@@ -43,11 +43,11 @@ public class StackpointerHandler {
         return memory.read(address: stackpointer)
     }
     
-    public static postfix func ++(handler: inout StackpointerHandler) {
+    public static postfix func ++(handler: StackpointerHandler) {
         handler.stackpointer &+= 1
     }
     
-    public static postfix func --(handler: inout StackpointerHandler) {
+    public static postfix func --(handler: StackpointerHandler) {
         handler.stackpointer &-= 1
     }
     

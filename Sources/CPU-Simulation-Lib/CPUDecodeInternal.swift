@@ -28,7 +28,7 @@ func extractCodes(vars: inout DecodeVars) {
     vars.operandTypeCode = getOperandTypeCodeFromOpcode(opcode: vars.opcode)
 }
 
-func applyDecodedValsToNewCPUVars(vars: inout DecodeVars) {
+func applyDecodedValsToNewCPUVars(vars: DecodeVars) {
     vars.result.currentOperator = vars.currentOperator
     vars.result.operandType = vars.operandType
 }

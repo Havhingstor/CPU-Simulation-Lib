@@ -14,7 +14,7 @@ public func decodeInstruction(cpu: CPU) throws -> NewCPUVars {
     
     try decodeCodes(vars: &tmpVars, cpu: cpu)
     
-    applyDecodedValsToNewCPUVars(vars: &tmpVars)
+    applyDecodedValsToNewCPUVars(vars: tmpVars)
     
     try handleOperatorRequirements(vars: tmpVars)
     
@@ -41,13 +41,13 @@ public func getOperandTypeOrThrowError(operandTypeCode: UInt8, address: UInt16) 
     return assignment[operandTypeCode]!()
 }
 
-public func resolveOperand(result: inout NewCPUVars, cpu: CPU, operand: UInt16) {
+public func resolveOperand(result: NewCPUVars, cpu: CPU, operand: UInt16) {
         
     if let operandType = getOperandType(result: result, cpu: cpu) {
         let changes = operandType.resolveOperand(oldOperand: operand, cpu: cpu)
         
-        applyOperandChanges(result: &result, changes: changes, operandType: operandType)
-        applyBusChanges(result: &result, changes: changes)
+        applyOperandChanges(result: result, changes: changes, operandType: operandType)
+        applyBusChanges(result: result, changes: changes)
         
         return
     }
@@ -56,14 +56,14 @@ public func resolveOperand(result: inout NewCPUVars, cpu: CPU, operand: UInt16) 
     return
 }
 
-private func applyOperandChanges(result: inout NewCPUVars, changes: OperandResolutionResult, operandType: AccessibleOperandType) {
+private func applyOperandChanges(result: NewCPUVars, changes: OperandResolutionResult, operandType: AccessibleOperandType) {
     let result = result
     
     result.operandType = operandType
     result.operand = changes.operand
 }
 
-private func applyBusChanges(result: inout NewCPUVars, changes: OperandResolutionResult) {
+private func applyBusChanges(result: NewCPUVars, changes: OperandResolutionResult) {
     let result = result
     
     result.addressBus = changes.addressBus
