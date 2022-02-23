@@ -8,7 +8,7 @@
 import Foundation
 
 public class CPU {
-    private var _memory: Memory
+    private let _memory: Memory
     private var executor: CPUExecutor
     private var internalVars: InternalCPUVars
     

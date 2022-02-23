@@ -8,8 +8,8 @@
 import Foundation
 
 struct DecodeVars {
-    var result = NewCPUVars()
-    var cpu: CPU
+    let result = NewCPUVars()
+    let cpu: CPU
     var opcode: UInt16 { cpu.opcode }
     var operatorCode: UInt8 = 0
     var operandTypeCode: UInt8 = 0

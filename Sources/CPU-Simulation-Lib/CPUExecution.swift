@@ -8,11 +8,11 @@
 import Foundation
 
 public class CPUExecutionInput {
-    public var accumulator: UInt16
-    public var nFlag: Bool
-    public var zFlag: Bool
-    public var vFlag: Bool
-    public var stackpointer: StackpointerHandler
+    public let accumulator: UInt16
+    public let nFlag: Bool
+    public let zFlag: Bool
+    public let vFlag: Bool
+    public let stackpointer: StackpointerHandler
     
     private var _operandValue: UInt16?
     public var operandValue: UInt16? {
@@ -35,7 +35,7 @@ public class CPUExecutionInput {
 }
 
 public class StackpointerHandler {
-    private var cpu: CPU
+    private let cpu: CPU
     fileprivate var stackpointer: UInt16
     private var memory: Memory { cpu.memory }
     

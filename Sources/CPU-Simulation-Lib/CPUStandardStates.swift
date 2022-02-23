@@ -12,7 +12,7 @@ fileprivate func increaseProgramCounter(result: NewCPUVars, cpu: CPU) {
 }
 
 open class ExecutedToFetchOperatorState: CPUState {
-    public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(FetchedOperatorToDecodeState.init))
+    public static let standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(FetchedOperatorToDecodeState.init))
     
     public let nextStateProvider: SingleNextStateProvider = ExecutedToFetchOperatorState.standardNextStateProvider.getNewSingleNextStateProvider()
     
@@ -35,7 +35,7 @@ open class HoldToFetchOperatorState: ExecutedToFetchOperatorState {
 }
 
 open class FetchedOperatorToDecodeState: CPUState {
-    public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(DecodedToFetchOperandState.init))
+    public static let standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(DecodedToFetchOperandState.init))
     
     public let nextStateProvider: SingleNextStateProvider = FetchedOperatorToDecodeState.standardNextStateProvider.getNewSingleNextStateProvider()
     
@@ -50,7 +50,7 @@ open class FetchedOperatorToDecodeState: CPUState {
 }
 
 open class DecodedToFetchOperandState: CPUState {
-    public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(FetchedOperandToExecuteState.init))
+    public static let standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(FetchedOperandToExecuteState.init))
     
     public let nextStateProvider: SingleNextStateProvider = DecodedToFetchOperandState.standardNextStateProvider.getNewSingleNextStateProvider()
     
@@ -69,7 +69,7 @@ open class DecodedToFetchOperandState: CPUState {
 }
 
 open class FetchedOperandToExecuteState: CPUState {
-    public static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(ExecutedToFetchOperatorState.init))
+    public static let standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(ExecutedToFetchOperatorState.init))
     
     public let nextStateProvider: SingleNextStateProvider = FetchedOperandToExecuteState.standardNextStateProvider.getNewSingleNextStateProvider()
     

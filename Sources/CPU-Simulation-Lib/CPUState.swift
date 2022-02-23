@@ -38,7 +38,7 @@ extension CPUState {
 
 public class StandardNextStateProvider {
     
-    private var _originalStandardNextState: StateBuilder
+    private let _originalStandardNextState: StateBuilder
     private var _standardNextState: StateBuilder?
     
     public init(original: StateBuilder) {
@@ -70,7 +70,7 @@ public class StandardNextStateProvider {
 public class SingleNextStateProvider {
     
     private var _nextState: StateBuilder?
-    private var parent: StandardNextStateProvider
+    private let parent: StandardNextStateProvider
     
     fileprivate init(_ parent: StandardNextStateProvider) {
         self.parent = parent
@@ -98,7 +98,7 @@ public class StateBuilder: Equatable {
         lhs.function().state == rhs.function().state
     }
     
-    private var function: () -> CPUState
+    private let function: () -> CPUState
     
     public init(_ function: @escaping () -> CPUState) {
         self.function = function

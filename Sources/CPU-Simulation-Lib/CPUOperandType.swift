@@ -43,9 +43,9 @@ public enum ReadAccess {
 }
 
 public struct OperandResolutionResult {
-    var operand: UInt16?
-    var addressBus: UInt16?
-    var dataBus: UInt16?
+    let operand: UInt16?
+    let addressBus: UInt16?
+    let dataBus: UInt16?
     
     public init(operand: UInt16?, addressBus: UInt16?, dataBus: UInt16?) {
         self.operand = operand
