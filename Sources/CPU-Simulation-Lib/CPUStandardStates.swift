@@ -6,19 +6,23 @@
 //
 
 import Foundation
+import CPU_Simulation_Utilities
 
 public class StandardStates {
-    public static var startingState: StateBuilder = originalStartingState
-    public static var originalStartingState: StateBuilder { StateBuilder(HoldToFetchOperatorState.init) }
+    public typealias Builder = CPUState.Builder
+    
+    public static var startingState: Builder = originalStartingState
+    public static var originalStartingState: Builder { HoldToFetchOperatorState.init }
     public static func resetStartingState() {
         startingState = originalStartingState
     }
 }
 
 open class ExecutedToFetchOperatorState: CPUState {
-    public static let standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(FetchedOperatorToDecodeState.init))
+    public let id: UUID = UUID()
     
-    public let nextStateProvider: SingleNextStateProvider = ExecutedToFetchOperatorState.standardNextStateProvider.getNewSingleNextStateProvider()
+    public static let standardNextStateProvider: StandardNextValueProvider<CPUState> = StandardNextValueProvider(builder: FetchedOperatorToDecodeState.init)
+    
     
     open class var state: String { "executed" }
     public static var instructionEnded: Bool { true }
@@ -39,9 +43,9 @@ open class HoldToFetchOperatorState: ExecutedToFetchOperatorState {
 }
 
 open class FetchedOperatorToDecodeState: CPUState {
-    public static let standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(DecodedToFetchOperandState.init))
+    public let id: UUID = UUID()
     
-    public let nextStateProvider: SingleNextStateProvider = FetchedOperatorToDecodeState.standardNextStateProvider.getNewSingleNextStateProvider()
+    public static let standardNextStateProvider: StandardNextValueProvider<CPUState> = StandardNextValueProvider(builder: DecodedToFetchOperandState.init)
     
     open class var state: String { "operator-fetched" }
     public static var instructionEnded: Bool { false }
@@ -54,9 +58,9 @@ open class FetchedOperatorToDecodeState: CPUState {
 }
 
 open class DecodedToFetchOperandState: CPUState {
-    public static let standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(FetchedOperandToExecuteState.init))
+    public let id: UUID = UUID()
     
-    public let nextStateProvider: SingleNextStateProvider = DecodedToFetchOperandState.standardNextStateProvider.getNewSingleNextStateProvider()
+    public static let standardNextStateProvider: StandardNextValueProvider<CPUState> = StandardNextValueProvider(builder: FetchedOperandToExecuteState.init)
     
     open class var state: String { "decoded" }
     public static var instructionEnded: Bool { false }
@@ -73,9 +77,9 @@ open class DecodedToFetchOperandState: CPUState {
 }
 
 open class FetchedOperandToExecuteState: CPUState {
-    public static let standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(ExecutedToFetchOperatorState.init))
+    public let id: UUID = UUID()
     
-    public let nextStateProvider: SingleNextStateProvider = FetchedOperandToExecuteState.standardNextStateProvider.getNewSingleNextStateProvider()
+    public static let standardNextStateProvider: StandardNextValueProvider<CPUState> = StandardNextValueProvider(builder: ExecutedToFetchOperatorState.init)
     
     open class var state: String {"operand-fetched"}
     public static var instructionEnded: Bool { false }

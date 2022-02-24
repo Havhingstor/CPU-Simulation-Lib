@@ -14,7 +14,7 @@ class CPUExecutionInputTests: XCTestCase {
     static var underStackpointer: UInt16 = 0
     
     override func setUp() {
-        DecodedToFetchOperandState.standardNextState = StateBuilder(OwnExecutionState.init)
+        DecodedToFetchOperandState.standardNextState = OwnExecutionState.init
         StandardOperators.operators.append(OwnReadingOperator.init)
         StandardOperators.operators.append(OwnValueReadingOperator.init)
         StandardOperators.operators.append(OwnNothingOperator.init)
@@ -173,9 +173,9 @@ private class OwnNothingOperator: Operator {
 private class OwnExecutionState: CPUState {
     static var state: String {"OWN-EXECUTION"}
     
-    static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(FetchedOperandToExecuteState.init))
+    public let id: UUID = UUID()
     
-    var nextStateProvider: SingleNextStateProvider {Self.standardNextStateProvider.getNewSingleNextStateProvider()}
+    public static let standardNextStateProvider: StandardNextValueProvider<CPUState> = StandardNextValueProvider(builder: FetchedOperandToExecuteState.init)
     
     func operate(cpu: CPU) -> NewCPUVars {
         let result = NewCPUVars()

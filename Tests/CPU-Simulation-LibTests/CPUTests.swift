@@ -86,7 +86,7 @@ class CPUTests: XCTestCase {
     }
     
     func testFetchInstructions() {
-        ExecutedToFetchOperatorState.standardNextState = StateBuilder(OwnDecode.init)
+        ExecutedToFetchOperatorState.standardNextState = OwnDecode.init
         XCTAssertNoThrow(try memory.writeValues(values: [1,2,3,4,5,6]))
 
         let cpu = CPU(memory: memory)

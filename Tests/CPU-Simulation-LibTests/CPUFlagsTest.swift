@@ -19,7 +19,7 @@ class CPUFlagsTest: XCTestCase {
     }
     
     func testZFlag() {
-        DecodedToFetchOperandState.standardNextState = StateBuilder(ZTestState.init)
+        DecodedToFetchOperandState.standardNextState = ZTestState.init
         
         XCTAssertNoThrow(try cpu.endInstruction())
         XCTAssertEqual(cpu.accumulator, 1)
@@ -32,7 +32,7 @@ class CPUFlagsTest: XCTestCase {
     }
     
     func testZFlagAtStart() {
-        DecodedToFetchOperandState.standardNextState = StateBuilder(ZTestNothingDoingState.init)
+        DecodedToFetchOperandState.standardNextState = ZTestNothingDoingState.init
         
         XCTAssertTrue(!cpu.zFlag)
         
@@ -45,7 +45,7 @@ class CPUFlagsTest: XCTestCase {
         XCTAssertNoThrow(try cpu.endInstruction())
         XCTAssertTrue(!cpu.zFlag)
         
-        DecodedToFetchOperandState.standardNextState = StateBuilder(ZTestState.init)
+        DecodedToFetchOperandState.standardNextState = ZTestState.init
         
         XCTAssertNoThrow(try cpu.endInstruction())
         
@@ -57,7 +57,7 @@ class CPUFlagsTest: XCTestCase {
     }
     
     func testNFlag() {
-        DecodedToFetchOperandState.standardNextState = StateBuilder(NTestState.init)
+        DecodedToFetchOperandState.standardNextState = NTestState.init
         
         XCTAssertNoThrow(try cpu.endInstruction())
         XCTAssertEqual(cpu.accumulator, signedToUnsigned(-50))

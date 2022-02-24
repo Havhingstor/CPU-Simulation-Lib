@@ -7,11 +7,12 @@
 
 import XCTest
 import CPU_Simulation_Lib
+import CPU_Simulation_Utilities
 
 class CPUVarsChangedTest: XCTestCase {
 
     override func setUp() {
-        StandardStates.startingState = StateBuilder(NewStart.init)
+        StandardStates.startingState = NewStart.init
     }
     
     func testChangingVars() {
@@ -34,7 +35,7 @@ class CPUVarsChangedTest: XCTestCase {
     func testReset() {
         let memory = Memory()
         let cpu = CPU(memory: memory)
-        NewStart.standardNextState = StateBuilder(ExecutedToFetchOperatorState.init)
+        NewStart.standardNextState = ExecutedToFetchOperatorState.init
         
         XCTAssertNoThrow(try cpu.executeNextStep())
         XCTAssertEqual(cpu.state, "executed")
@@ -69,9 +70,11 @@ class CPUVarsChangedTest: XCTestCase {
 }
 
 fileprivate class NewStart: CPUState {
-    static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(NewStart.init))
+    public let id: UUID = UUID()
     
-    var nextStateProvider: SingleNextStateProvider = NewStart.standardNextStateProvider.getNewSingleNextStateProvider()
+    public static let standardNextStateProvider: StandardNextValueProvider<CPUState> = StandardNextValueProvider(builder: NewStart.init)
+    
+    //static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: NewStart.init)
     
     class var instructionEnded: Bool {true}
     

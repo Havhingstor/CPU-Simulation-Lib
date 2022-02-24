@@ -16,7 +16,7 @@ class OperandResolutionWithNewOTTest: XCTestCase {
     
     override func setUp() {
         cpu = CPU(memory: memory)
-        FetchedOperatorToDecodeState.standardNextState = StateBuilder(OwnFetchOperandState.init)
+        FetchedOperatorToDecodeState.standardNextState = OwnFetchOperandState.init
     }
     
     func testOperandResolutionWithNewOperandType() {

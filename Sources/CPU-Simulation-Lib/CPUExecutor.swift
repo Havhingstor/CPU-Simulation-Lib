@@ -9,7 +9,7 @@ import Foundation
 
 class CPUExecutor {
     var programCounter: UInt16 = 0
-    var state: CPUState = StandardStates.startingState.generate()
+    var state: CPUState = StandardStates.startingState()
     var opcode: UInt16 = 0
     var operand: UInt16 = 0
     var currentOperator: Operator?
@@ -20,7 +20,7 @@ class CPUExecutor {
     func executeNextStep(parent: CPU) throws -> NewCPUVars {
         let newVars = try state.operate(cpu: parent)
         
-        state = state.nextState.generate()
+        state = state.nextState()
         
         return newVars
     }

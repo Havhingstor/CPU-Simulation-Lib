@@ -7,11 +7,12 @@
 
 import XCTest
 import CPU_Simulation_Lib
+import CPU_Simulation_Utilities
 
 class CPUStatesTests: XCTestCase {
     
     override func setUp() {
-        StandardStates.startingState = StateBuilder(NewStart.init)
+        StandardStates.startingState = NewStart.init
     }
     
     func testNewExternalState() {
@@ -33,8 +34,8 @@ class CPUStatesTests: XCTestCase {
         let cpu = CPU(memory: memory)
         XCTAssertEqual(cpu.state, "newState")
         
-        NewStart.standardNextState = StateBuilder(AnotherState.init)
-        XCTAssertEqual(NewStart.standardNextState, StateBuilder(AnotherState.init))
+        NewStart.standardNextState = AnotherState.init
+        XCTAssertEqual(NewStart.standardNextState().state, AnotherState.state)
         XCTAssertNoThrow(try cpu.endInstruction())
         XCTAssertEqual(cpu.state, "anotherState")
         
@@ -75,9 +76,11 @@ class CPUStatesTests: XCTestCase {
 }
 
 fileprivate class NewStart: CPUState {
-    static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(NewStart.init))
+    public let id: UUID = UUID()
     
-    var nextStateProvider: SingleNextStateProvider = NewStart.standardNextStateProvider.getNewSingleNextStateProvider()
+    public static let standardNextStateProvider: StandardNextValueProvider<CPUState> = StandardNextValueProvider(builder: NewStart.init)
+    
+    //static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: NewStart.init)
     
     class var instructionEnded: Bool {true}
     
@@ -95,11 +98,11 @@ fileprivate class NewStart: CPUState {
         result.programCounter = cpu.programCounter &- 2
         
         if NewStart.alternativeNextState {
-            nextStateProvider.nextState = StateBuilder(AnotherState.init)
+            Self.standardNextStateProvider.setNextValue(builder: AnotherState.init, uuid: id)
         }
         
         if NewStart.resetNextState {
-            nextStateProvider.resetNextState()
+            Self.standardNextStateProvider.resetNextValue(uuid: id)
         }
         
         return result
@@ -109,9 +112,11 @@ fileprivate class NewStart: CPUState {
 fileprivate class AnotherState: CPUState {
     class var state: String {"anotherState"}
     
-    static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: StateBuilder(NewStart.init))
+    public let id: UUID = UUID()
     
-    var nextStateProvider: SingleNextStateProvider = AnotherState.standardNextStateProvider.getNewSingleNextStateProvider()
+    public static let standardNextStateProvider: StandardNextValueProvider<CPUState> = StandardNextValueProvider(builder: NewStart.init)
+    
+    //static var standardNextStateProvider: StandardNextStateProvider = StandardNextStateProvider(original: NewStart.init)
     
     class var instructionEnded: Bool {true}
     
