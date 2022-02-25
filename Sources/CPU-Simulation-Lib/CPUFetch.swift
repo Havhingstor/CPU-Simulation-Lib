@@ -7,7 +7,7 @@
 
 import Foundation
 
-public func fetchOperator(cpu: CPU) -> NewCPUVars {
+public func fetchOpcode(cpu: CPU) -> NewCPUVars {
     let memory = cpu.memory
     let result = NewCPUVars()
     

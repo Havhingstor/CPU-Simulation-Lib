@@ -28,7 +28,7 @@ open class ExecutedToFetchOperatorState: CPUState {
     public static var instructionEnded: Bool { true }
     
     open func operate(cpu: CPU) -> NewCPUVars {
-        let result = fetchOperator(cpu: cpu)
+        let result = fetchOpcode(cpu: cpu)
         
         increaseProgramCounter(result: result,cpu: cpu)
         
