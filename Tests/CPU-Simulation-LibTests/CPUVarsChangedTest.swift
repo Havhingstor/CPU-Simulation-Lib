@@ -82,7 +82,7 @@ fileprivate class NewStart: CPUState {
     
     public init() {}
     
-    public func operate(cpu: CPU) -> NewCPUVars {
+    public func operate(cpu: CPUCopy) -> NewCPUVars {
         let result = NewCPUVars()
         
         result.programCounter = 1

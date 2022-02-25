@@ -41,12 +41,10 @@ public class CPU {
     public var operandTypeCode: UInt8 { operandType?.operandTypeCode ?? 0 }
     public var operandType: CoreOperandType? { executor.operandType }
     
-    public var realOperandType: AccessibleOperandType? { executor.realOperandType }
-    
     public var operatorProgramCounter: UInt16 { executor.operatorProgramCounter }
     
     public func executeNextStep() throws {
-        let result = try executor.executeNextStep(parent: self)
+        let result = try executor.executeNextStep(parent: createCopy())
         
         executor.applyNewCPUVars(vars: result)
         internalVars.applyNewCPUVars(vars: result)
@@ -73,86 +71,18 @@ public class StandardCPUVars {
     }
 }
 
-
-public class NewCPUVars {
-    private var _programCounter: UInt16? = nil
-    private var _opcode: UInt16? = nil
-    private var _operand: UInt16? = nil
-    private var _stackpointer: UInt16? = nil
-    private var _accumulator: UInt16? = nil
-    private var _dataBus: UInt16? = nil
-    private var _addressBus: UInt16? = nil
-    private var _lastMemoryInteraction: UInt16? = nil
-    private var _operator: Operator? = nil
-    private var _operandType: AccessibleOperandType? = nil
-    private var _vFlag: Bool? = nil
-    
-    public init() {}
-    
-    public var programCounter: UInt16? {
-        get {_programCounter}
-        set(programCounter) { if programCounter != nil
-            { _programCounter = programCounter}
-        }
-    }
-    public var opcode: UInt16? {
-        get {_opcode}
-        set(opcode) { if opcode != nil
-            {_opcode = opcode}
-        }
-    }
-    public var operand: UInt16? {
-        get {_operand}
-        set(operand) { if operand != nil
-            { _operand = operand}
-        }
-    }
-    public var stackpointer: UInt16? {
-        get {_stackpointer}
-        set(stackpointer) { if stackpointer != nil
-            { _stackpointer = stackpointer}
-        }
-    }
-    public var accumulator: UInt16? {
-        get {_accumulator}
-        set(accumulator) { if accumulator != nil
-            { _accumulator = accumulator}
-        }
-    }
-    public var dataBus: UInt16? {
-        get {_dataBus}
-        set(dataBus) { if dataBus != nil
-            { _dataBus = dataBus}
-        }
-    }
-    public var addressBus: UInt16? {
-        get {_addressBus}
-        set(addressBus) { if addressBus != nil
-            { _addressBus = addressBus}
-        }
-    }
-    public var lastMemoryInteraction: UInt16? {
-        get {_lastMemoryInteraction}
-        set(lastMemoryInteraction) { if lastMemoryInteraction != nil
-            { _lastMemoryInteraction = lastMemoryInteraction}
-        }
-    }
-    public var currentOperator: Operator? {
-        get {_operator}
-        set(currentOperator) { if currentOperator != nil
-            { _operator = currentOperator }
-        }
-    }
-    public var operandType: AccessibleOperandType? {
-        get {_operandType}
-        set(operandType) { if operandType != nil
-            { _operandType = operandType }
-        }
-    }
-    public var vFlag: Bool? {
-        get { _vFlag }
-        set (vFlag) { if vFlag != nil
-            { _vFlag = vFlag }
-        }
+extension CPU {
+    public func createCopy() -> CPUCopy {
+        CPUCopy(memory: memory,
+                programCounter: programCounter,
+                opcode: opcode,
+                operand: operand,
+                stackpointer: stackpointer,
+                accumulator: accumulator,
+                nFlag: nFlag, zFlag: zFlag, vFlag: vFlag,
+                currentOperator: currentOperator,
+                operandType: operandType,
+                realOperandType: executor.realOperandType,
+                operatorProgramCounter: operatorProgramCounter)
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public func decodeInstruction(cpu: CPU) throws -> NewCPUVars {
+public func decodeInstruction(cpu: CPUCopy) throws -> NewCPUVars {
     var tmpVars = DecodeVars(cpu: cpu)
     
     extractCodes(vars: &tmpVars)
@@ -41,7 +41,7 @@ public func getOperandTypeOrThrowError(operandTypeCode: UInt8, address: UInt16) 
     return assignment[operandTypeCode]!()
 }
 
-public func resolveOperand(result: NewCPUVars, cpu: CPU, operand: UInt16) {
+public func resolveOperand(result: NewCPUVars, cpu: CPUCopy, operand: UInt16) {
         
     if let operandType = getOperandType(result: result, cpu: cpu) {
         let changes = operandType.resolveOperand(oldOperand: operand, cpu: cpu)
@@ -70,7 +70,7 @@ private func applyBusChanges(result: NewCPUVars, changes: OperandResolutionResul
     result.dataBus = changes.dataBus
 }
 
-private func getOperandType(result: NewCPUVars, cpu: CPU) -> AccessibleOperandType? {
+private func getOperandType(result: NewCPUVars, cpu: CPUCopy) -> AccessibleOperandType? {
     if let operandType = result.operandType {
         return operandType
     }

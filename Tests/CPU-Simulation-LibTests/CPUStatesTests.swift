@@ -92,7 +92,7 @@ fileprivate class NewStart: CPUState {
     public init() {}
     
     
-    public func operate(cpu: CPU) -> NewCPUVars {
+    public func operate(cpu: CPUCopy) -> NewCPUVars {
         let result = NewCPUVars()
         
         result.programCounter = cpu.programCounter &- 2
@@ -120,7 +120,7 @@ fileprivate class AnotherState: CPUState {
     
     class var instructionEnded: Bool {true}
     
-    func operate(cpu: CPU) -> NewCPUVars {
+    func operate(cpu: CPUCopy) -> NewCPUVars {
         NewCPUVars()
     }
     

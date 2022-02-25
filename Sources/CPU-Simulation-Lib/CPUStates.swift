@@ -16,7 +16,7 @@ public protocol CPUState {
     var id: UUID { get }
     static var instructionEnded: Bool { get }
     
-    func operate(cpu: CPU) throws -> NewCPUVars
+    func operate(cpu: CPUCopy) throws -> NewCPUVars
 }
 
 extension CPUState {

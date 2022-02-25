@@ -48,11 +48,11 @@ private typealias Intern = OperandTypesInternal
 open class AddressOperandType: CoreOperandType {
     public let id: UUID = UUID()
     
-    open func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
+    open func resolveOperand(oldOperand: UInt16, cpu: CPUCopy) -> OperandResolutionResult {
         Intern.getStandardOperandResolutionResult(operand: oldOperand, cpu: cpu)
     }
     
-    open func getOperandValue(cpu: CPU) -> UInt16? {
+    open func getOperandValue(cpu: CPUCopy) -> UInt16? {
         Intern.getOperandValueAddress(cpu: cpu)
     }
     
@@ -68,11 +68,11 @@ open class AddressOperandType: CoreOperandType {
 open class InstantLiteralOperandType: CoreOperandType {
     public let id: UUID = UUID()
     
-    open func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
+    open func resolveOperand(oldOperand: UInt16, cpu: CPUCopy) -> OperandResolutionResult {
         Intern.getStandardOperandResolutionResult(operand: oldOperand, cpu: cpu)
     }
     
-    open func getOperandValue(cpu: CPU) -> UInt16? {
+    open func getOperandValue(cpu: CPUCopy) -> UInt16? {
         cpu.operand
     }
     
@@ -96,7 +96,7 @@ open class IndirectAddressOperandType: AccessibleOperandType {
     
     public let id: UUID = UUID()
     
-    open func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
+    open func resolveOperand(oldOperand: UInt16, cpu: CPUCopy) -> OperandResolutionResult {
         Intern.getIndirectOperandResolutionResult(oldOperand: oldOperand, cpu: cpu)
     }
     
@@ -110,7 +110,7 @@ open class StackOperandType: AccessibleOperandType {
     
     public let id: UUID = UUID()
     
-    open func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
+    open func resolveOperand(oldOperand: UInt16, cpu: CPUCopy) -> OperandResolutionResult {
         Intern.getStackOperandResolutionResult(oldOperand: oldOperand, cpu: cpu)
     }
     
@@ -124,7 +124,7 @@ open class IndirectStackOperandType: AccessibleOperandType {
     
     public let id: UUID = UUID()
     
-    open func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
+    open func resolveOperand(oldOperand: UInt16, cpu: CPUCopy) -> OperandResolutionResult {
         Intern.getIndirectStackOperandResolutionResult(oldOperand: oldOperand, cpu: cpu)
     }
     
@@ -138,7 +138,7 @@ open class LiteralStackOperandType: AccessibleOperandType {
     
     public let id: UUID = UUID()
     
-    open func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
+    open func resolveOperand(oldOperand: UInt16, cpu: CPUCopy) -> OperandResolutionResult {
         Intern.getLiteralStackOperandResolutionResult(oldOperand: oldOperand, cpu: cpu)
     }
     
@@ -150,11 +150,11 @@ open class LiteralStackOperandType: AccessibleOperandType {
 open class NonexistingOperandType: CoreOperandType {
     public let id: UUID = UUID()
     
-    open func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
+    open func resolveOperand(oldOperand: UInt16, cpu: CPUCopy) -> OperandResolutionResult {
         OperandResolutionResult(operand: nil, addressBus: nil, dataBus: nil)
     }
     
-    open func getOperandValue(cpu: CPU) -> UInt16? {
+    open func getOperandValue(cpu: CPUCopy) -> UInt16? {
         nil
     }
     

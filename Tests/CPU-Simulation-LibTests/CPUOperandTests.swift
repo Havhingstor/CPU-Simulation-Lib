@@ -113,7 +113,7 @@ class CPUOperandTests: XCTestCase {
 }
 
 fileprivate class OwnOperandType: AddressOperandType {
-    override func getOperandValue(cpu: CPU) -> UInt16? {
+    override func getOperandValue(cpu: CPUCopy) -> UInt16? {
         50
     }
     

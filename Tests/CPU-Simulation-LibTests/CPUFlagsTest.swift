@@ -68,7 +68,7 @@ class CPUFlagsTest: XCTestCase {
 }
 
 private class ZTestState: FetchedOperandToExecuteState {
-    override func operate(cpu: CPU) -> NewCPUVars {
+    override func operate(cpu: CPUCopy) -> NewCPUVars {
         let result = NewCPUVars()
         
         if cpu.accumulator == 0 {
@@ -82,13 +82,13 @@ private class ZTestState: FetchedOperandToExecuteState {
 }
 
 private class ZTestNothingDoingState: FetchedOperandToExecuteState {
-    override func operate(cpu: CPU) -> NewCPUVars {
+    override func operate(cpu: CPUCopy) -> NewCPUVars {
         NewCPUVars()
     }
 }
 
 private class NTestState: FetchedOperandToExecuteState {
-    override func operate(cpu: CPU) -> NewCPUVars {
+    override func operate(cpu: CPUCopy) -> NewCPUVars {
         let result = NewCPUVars()
         
         result.accumulator = signedToUnsigned(-50)

@@ -15,7 +15,7 @@ public protocol AccessibleOperandType {
     static var standardCoreOperandTypeProvider: StandardNextValueProvider<CoreOperandType> { get }
     var id: UUID { get }
     
-    func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult
+    func resolveOperand(oldOperand: UInt16, cpu: CPUCopy) -> OperandResolutionResult
     
     init()
 }
@@ -44,7 +44,7 @@ public protocol CoreOperandType: AccessibleOperandType {
     static var providesAddressOrWriteAccess: Bool { get }
     static var readAccess: ReadAccess { get }
     
-    func getOperandValue(cpu: CPU) -> UInt16?
+    func getOperandValue(cpu: CPUCopy) -> UInt16?
 }
 
 extension CoreOperandType {

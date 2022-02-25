@@ -38,7 +38,7 @@ class OperandResolutionWithNewOTTest: XCTestCase {
 }
 
 private class OwnFetchOperandState: DecodedToFetchOperandState {
-    override func operate(cpu: CPU) -> NewCPUVars {
+    override func operate(cpu: CPUCopy) -> NewCPUVars {
         let result = NewCPUVars()
         result.operand = cpu.memory.read(address: cpu.programCounter)
         

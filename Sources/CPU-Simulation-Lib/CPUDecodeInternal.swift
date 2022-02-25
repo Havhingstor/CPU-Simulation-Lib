@@ -9,7 +9,7 @@ import Foundation
 
 struct DecodeVars {
     let result = NewCPUVars()
-    let cpu: CPU
+    let cpu: CPUCopy
     var opcode: UInt16 { cpu.opcode }
     var operatorCode: UInt8 = 0
     var operandTypeCode: UInt8 = 0
@@ -18,7 +18,7 @@ struct DecodeVars {
     var coreOperandType: CoreOperandType? { operandType?.coreOperandType }
 }
 
-func decodeCodes(vars: inout DecodeVars, cpu: CPU) throws {
+func decodeCodes(vars: inout DecodeVars, cpu: CPUCopy) throws {
     vars.currentOperator = try getOperatorOrThrowError(operatorCode: vars.operatorCode, address: cpu.operatorProgramCounter)
     vars.operandType = try getOperandTypeOrThrowError(operandTypeCode: vars.operandTypeCode, address: cpu.operatorProgramCounter)
 }

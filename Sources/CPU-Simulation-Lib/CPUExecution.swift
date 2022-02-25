@@ -35,7 +35,7 @@ public class CPUExecutionInput {
 }
 
 public class StackpointerHandler {
-    private let cpu: CPU
+    private let cpu: CPUCopy
     fileprivate var stackpointer: UInt16
     private var memory: Memory { cpu.memory }
     
@@ -51,13 +51,13 @@ public class StackpointerHandler {
         handler.stackpointer &-= 1
     }
     
-    fileprivate init(cpu: CPU) {
+    fileprivate init(cpu: CPUCopy) {
         self.cpu = cpu
         self.stackpointer = cpu.stackpointer
     }
 }
 
-public func executeInstruction(cpu: CPU) -> NewCPUVars {
+public func executeInstruction(cpu: CPUCopy) -> NewCPUVars {
     if testIfNoDecodeHappend(cpu: cpu)  {
         return NewCPUVars()
     }
@@ -65,7 +65,7 @@ public func executeInstruction(cpu: CPU) -> NewCPUVars {
     return executeWithAssumptionOfDecoding(cpu: cpu)
 }
 
-private func executeWithAssumptionOfDecoding(cpu: CPU) -> NewCPUVars {
+private func executeWithAssumptionOfDecoding(cpu: CPUCopy) -> NewCPUVars {
     let result = NewCPUVars()
     
     let stackpointer = StackpointerHandler(cpu: cpu)
@@ -86,19 +86,19 @@ private func applyStackpointer(result: NewCPUVars, stackpointer: StackpointerHan
     result.stackpointer = stackpointer.stackpointer
 }
 
-private func testForMemoryUseOfInstruction(input: CPUExecutionInput, cpu: CPU) -> Bool {
+private func testForMemoryUseOfInstruction(input: CPUExecutionInput, cpu: CPUCopy) -> Bool {
     input.operandRead && cpu.operandType!.providesAddressOrWriteAccess
 }
 
-private func setBusses(result: NewCPUVars, cpu: CPU, input: CPUExecutionInput) {
+private func setBusses(result: NewCPUVars, cpu: CPUCopy, input: CPUExecutionInput) {
     result.addressBus = cpu.operand
     result.dataBus = input.operandValue!
 }
 
-private func createInput(cpu: CPU, stackpointer: StackpointerHandler) -> CPUExecutionInput {
+private func createInput(cpu: CPUCopy, stackpointer: StackpointerHandler) -> CPUExecutionInput {
     CPUExecutionInput(accumulator: cpu.accumulator, nFlag: cpu.nFlag, zFlag: cpu.zFlag, vFlag: cpu.vFlag, stackpointer: stackpointer, operandValue: cpu.operandType?.getOperandValue(cpu: cpu))
 }
 
-private func testIfNoDecodeHappend(cpu: CPU) -> Bool {
+private func testIfNoDecodeHappend(cpu: CPUCopy) -> Bool {
     cpu.currentOperator == nil || cpu.operandType == nil
 }

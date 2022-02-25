@@ -27,7 +27,7 @@ open class ExecutedToFetchOperatorState: CPUState {
     open class var state: String { "executed" }
     public static var instructionEnded: Bool { true }
     
-    open func operate(cpu: CPU) -> NewCPUVars {
+    open func operate(cpu: CPUCopy) -> NewCPUVars {
         let result = fetchOpcode(cpu: cpu)
         
         increaseProgramCounter(result: result,cpu: cpu)
@@ -50,7 +50,7 @@ open class FetchedOperatorToDecodeState: CPUState {
     open class var state: String { "operator-fetched" }
     public static var instructionEnded: Bool { false }
     
-    open func operate(cpu: CPU) throws -> NewCPUVars {
+    open func operate(cpu: CPUCopy) throws -> NewCPUVars {
         try decodeInstruction(cpu: cpu)
     }
     
@@ -65,7 +65,7 @@ open class DecodedToFetchOperandState: CPUState {
     open class var state: String { "decoded" }
     public static var instructionEnded: Bool { false }
     
-    open func operate(cpu: CPU) -> NewCPUVars {
+    open func operate(cpu: CPUCopy) -> NewCPUVars {
         let result = fetchOperand(cpu: cpu)
         
         increaseProgramCounter(result: result, cpu: cpu)
@@ -84,13 +84,13 @@ open class FetchedOperandToExecuteState: CPUState {
     open class var state: String {"operand-fetched"}
     public static var instructionEnded: Bool { false }
     
-    open func operate(cpu: CPU) -> NewCPUVars {
+    open func operate(cpu: CPUCopy) -> NewCPUVars {
         return executeInstruction(cpu: cpu)
     }
     
     public init() {}
 }
 
-fileprivate func increaseProgramCounter(result: NewCPUVars, cpu: CPU) {
+fileprivate func increaseProgramCounter(result: NewCPUVars, cpu: CPUCopy) {
     result.programCounter = cpu.programCounter &+ 1
 }

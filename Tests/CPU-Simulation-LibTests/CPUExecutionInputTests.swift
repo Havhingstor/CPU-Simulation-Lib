@@ -177,7 +177,7 @@ private class OwnExecutionState: CPUState {
     
     public static let standardNextStateProvider: StandardNextValueProvider<CPUState> = StandardNextValueProvider(builder: FetchedOperandToExecuteState.init)
     
-    func operate(cpu: CPU) -> NewCPUVars {
+    func operate(cpu: CPUCopy) -> NewCPUVars {
         let result = NewCPUVars()
         
         result.accumulator = signedToUnsigned(-50)

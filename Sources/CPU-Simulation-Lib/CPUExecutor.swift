@@ -17,7 +17,7 @@ class CPUExecutor {
     var realOperandType: AccessibleOperandType?
     var operandType: CoreOperandType? { realOperandType?.coreOperandType }
     
-    func executeNextStep(parent: CPU) throws -> NewCPUVars {
+    func executeNextStep(parent: CPUCopy) throws -> NewCPUVars {
         let newVars = try state.operate(cpu: parent)
         
         state = state.nextState()
