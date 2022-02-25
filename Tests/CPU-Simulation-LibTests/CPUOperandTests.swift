@@ -96,6 +96,20 @@ class CPUOperandTests: XCTestCase {
         }
     }
     
+    func testChangeOfCoreOperandType() {
+        XCTAssertNoThrow(try memory.writeValues(values: [0x314, 0x100 ]))
+        
+        XCTAssertEqual(IndirectAddressOperandType.standardCoreOperandType().operandTypeCode, 1)
+        
+        IndirectAddressOperandType.standardCoreOperandType = InstantLiteralOperandType.init
+        XCTAssertEqual(IndirectAddressOperandType.standardCoreOperandType().operandTypeCode, 2)
+        
+        XCTAssertNoThrow(try cpu.endInstruction())
+        XCTAssertEqual(cpu.operandTypeCode, 2)
+        
+        IndirectAddressOperandType.resetStandardCoreOperandType()
+    }
+    
 }
 
 fileprivate class OwnOperandType: AddressOperandType {

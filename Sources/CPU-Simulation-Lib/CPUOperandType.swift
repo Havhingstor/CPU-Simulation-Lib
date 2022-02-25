@@ -6,10 +6,14 @@
 //
 
 import Foundation
+import CPU_Simulation_Utilities
 
 public protocol AccessibleOperandType {
+    typealias Builder = StandardNextValueProvider<CoreOperandType>.Builder
+    
     static var operandTypeCode: UInt8 { get }
-    var coreOperandType: CoreOperandType { get }
+    static var standardCoreOperandTypeProvider: StandardNextValueProvider<CoreOperandType> { get }
+    var id: UUID { get }
     
     func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult
     
@@ -19,6 +23,21 @@ public protocol AccessibleOperandType {
 extension AccessibleOperandType {
     public var operandTypeCode: UInt8 { Self.operandTypeCode }
     public var operandTypeCodePreparedForOpcode: UInt16 { UInt16(operandTypeCode) << 8}
+    
+    public var coreOperandType: CoreOperandType { Self.standardCoreOperandTypeProvider.getNextValue(uuid: id)() }
+    
+    public static var standardCoreOperandType: Builder {
+        get {
+            standardCoreOperandTypeProvider.standardNextValue
+        }
+        set(standardCoreOperandType) {
+            standardCoreOperandTypeProvider.standardNextValue = standardCoreOperandType
+        }
+    }
+    
+    public static func resetStandardCoreOperandType() {
+        standardCoreOperandTypeProvider.resetStandardNextValue()
+    }
 }
 
 public protocol CoreOperandType: AccessibleOperandType {
@@ -33,7 +52,7 @@ extension CoreOperandType {
     public var providesInstantLiteral: Bool { Self.readAccess == .instantLiteralRead }
     public var providesAddressOrWriteAccess: Bool { Self.providesAddressOrWriteAccess }
     
-    public var coreOperandType: CoreOperandType { self as CoreOperandType }
+    public static var standardCoreOperandTypeProvider: StandardNextValueProvider<CoreOperandType> { StandardNextValueProvider(builder: Self.init)}
 }
 
 public enum ReadAccess {

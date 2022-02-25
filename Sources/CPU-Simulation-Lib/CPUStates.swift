@@ -24,10 +24,10 @@ extension CPUState {
     
     public static var standardNextState: Builder {
         get {
-            Self.standardNextStateProvider.standardNextValue
+            standardNextStateProvider.standardNextValue
         }
         set(newStandardNextState) {
-            Self.standardNextStateProvider.standardNextValue = newStandardNextState
+            standardNextStateProvider.standardNextValue = newStandardNextState
         }
     }
     

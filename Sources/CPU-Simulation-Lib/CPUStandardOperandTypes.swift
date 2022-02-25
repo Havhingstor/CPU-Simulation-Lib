@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CPU_Simulation_Utilities
 
 public class StandardOperandTypes {
     public typealias operandTypeInit = () -> AccessibleOperandType
@@ -45,6 +46,7 @@ public class StandardOperandTypes {
 private typealias Intern = OperandTypesInternal
 
 open class AddressOperandType: CoreOperandType {
+    public let id: UUID = UUID()
     
     open func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
         Intern.getStandardOperandResolutionResult(operand: oldOperand, cpu: cpu)
@@ -64,6 +66,8 @@ open class AddressOperandType: CoreOperandType {
 }
 
 open class InstantLiteralOperandType: CoreOperandType {
+    public let id: UUID = UUID()
+    
     open func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
         Intern.getStandardOperandResolutionResult(operand: oldOperand, cpu: cpu)
     }
@@ -88,7 +92,9 @@ open class IndirectLiteralOperandType: InstantLiteralOperandType {
 }
 
 open class IndirectAddressOperandType: AccessibleOperandType {
-    public var coreOperandType: CoreOperandType { AddressOperandType() }
+    public static let standardCoreOperandTypeProvider: StandardNextValueProvider<CoreOperandType> = StandardNextValueProvider(builder: AddressOperandType.init)
+    
+    public let id: UUID = UUID()
     
     open func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
         Intern.getIndirectOperandResolutionResult(oldOperand: oldOperand, cpu: cpu)
@@ -100,7 +106,9 @@ open class IndirectAddressOperandType: AccessibleOperandType {
 }
 
 open class StackOperandType: AccessibleOperandType {
-    public var coreOperandType: CoreOperandType { AddressOperandType() }
+    public static let standardCoreOperandTypeProvider: StandardNextValueProvider<CoreOperandType> = StandardNextValueProvider(builder: AddressOperandType.init)
+    
+    public let id: UUID = UUID()
     
     open func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
         Intern.getStackOperandResolutionResult(oldOperand: oldOperand, cpu: cpu)
@@ -112,7 +120,9 @@ open class StackOperandType: AccessibleOperandType {
 }
 
 open class IndirectStackOperandType: AccessibleOperandType {
-    public var coreOperandType: CoreOperandType { AddressOperandType() }
+    public static let standardCoreOperandTypeProvider: StandardNextValueProvider<CoreOperandType> = StandardNextValueProvider(builder: AddressOperandType.init)
+    
+    public let id: UUID = UUID()
     
     open func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
         Intern.getIndirectStackOperandResolutionResult(oldOperand: oldOperand, cpu: cpu)
@@ -124,7 +134,9 @@ open class IndirectStackOperandType: AccessibleOperandType {
 }
 
 open class LiteralStackOperandType: AccessibleOperandType {
-    public var coreOperandType: CoreOperandType { IndirectLiteralOperandType() }
+    public static let standardCoreOperandTypeProvider: StandardNextValueProvider<CoreOperandType> = StandardNextValueProvider(builder: IndirectLiteralOperandType.init)
+    
+    public let id: UUID = UUID()
     
     open func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
         Intern.getLiteralStackOperandResolutionResult(oldOperand: oldOperand, cpu: cpu)
@@ -136,6 +148,7 @@ open class LiteralStackOperandType: AccessibleOperandType {
 }
 
 open class NonexistingOperandType: CoreOperandType {
+    public let id: UUID = UUID()
     
     open func resolveOperand(oldOperand: UInt16, cpu: CPU) -> OperandResolutionResult {
         OperandResolutionResult(operand: nil, addressBus: nil, dataBus: nil)
