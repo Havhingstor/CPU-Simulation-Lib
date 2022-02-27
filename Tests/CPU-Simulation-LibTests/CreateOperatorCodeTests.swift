@@ -34,7 +34,7 @@ class CreateOperatorCodeTests: XCTestCase {
 }
 
 fileprivate class OwnOperator: Operator {
-    func operate(input: CPUExecutionInput) {
+    func execute(input: CPUExecutionInput) {
         
     }
     

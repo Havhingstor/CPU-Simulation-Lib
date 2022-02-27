@@ -71,7 +71,7 @@ private func executeWithAssumptionOfDecoding(cpu: CPUCopy) -> NewCPUVars {
     let stackpointer = StackpointerHandler(cpu: cpu)
     let input = createInput(cpu: cpu, stackpointer: stackpointer)
     
-    cpu.currentOperator!.operate(input: input)
+    cpu.currentOperator!.execute(input: input)
     
     applyStackpointer(result: result, stackpointer: stackpointer)
     

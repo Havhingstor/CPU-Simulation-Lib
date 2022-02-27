@@ -1,5 +1,5 @@
 //
-//  CPUExecutor.swift
+//  CPUOperationVars.swift
 //  
 //
 //  Created by Paul on 10.02.22.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class CPUExecutor {
+class CPUOperationVars {
     var programCounter: UInt16 = 0
     var state: CPUState = StandardStates.startingState()
     var opcode: UInt16 = 0
@@ -17,7 +17,7 @@ class CPUExecutor {
     var realOperandType: AccessibleOperandType?
     var operandType: CoreOperandType? { realOperandType?.coreOperandType }
     
-    func executeNextStep(parent: CPUCopy) throws -> NewCPUVars {
+    func operateNextStep(parent: CPUCopy) throws -> NewCPUVars {
         let newVars = try state.operate(cpu: parent)
         
         state = state.nextState()

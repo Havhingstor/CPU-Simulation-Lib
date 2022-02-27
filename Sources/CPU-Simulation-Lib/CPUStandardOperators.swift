@@ -67,7 +67,7 @@ public class StandardOperators {
 
 
 public class LOADOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -82,7 +82,7 @@ public class LOADOperator: Operator {
 }
 
 public class STOREOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -97,7 +97,7 @@ public class STOREOperator: Operator {
 }
 
 public class ADDOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -112,7 +112,7 @@ public class ADDOperator: Operator {
 }
 
 public class SUBOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -127,7 +127,7 @@ public class SUBOperator: Operator {
 }
 
 public class MULOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -142,7 +142,7 @@ public class MULOperator: Operator {
 }
 
 public class DIVOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -157,7 +157,7 @@ public class DIVOperator: Operator {
 }
 
 public class MODOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -172,7 +172,7 @@ public class MODOperator: Operator {
 }
 
 public class CMPOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -187,7 +187,7 @@ public class CMPOperator: Operator {
 }
 
 public class ANDOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -202,7 +202,7 @@ public class ANDOperator: Operator {
 }
 
 public class OROperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -217,7 +217,7 @@ public class OROperator: Operator {
 }
 
 public class XOROperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -232,7 +232,7 @@ public class XOROperator: Operator {
 }
 
 public class SHLOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -247,7 +247,7 @@ public class SHLOperator: Operator {
 }
 
 public class SHROperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -262,7 +262,7 @@ public class SHROperator: Operator {
 }
 
 public class SHRAOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -277,7 +277,7 @@ public class SHRAOperator: Operator {
 }
 
 public class JMPPOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -292,7 +292,7 @@ public class JMPPOperator: Operator {
 }
 
 public class JMPNNOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -307,7 +307,7 @@ public class JMPNNOperator: Operator {
 }
 
 public class JMPNOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -322,7 +322,7 @@ public class JMPNOperator: Operator {
 }
 
 public class JMPNPOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -337,7 +337,7 @@ public class JMPNPOperator: Operator {
 }
 
 public class JMPZOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -352,7 +352,7 @@ public class JMPZOperator: Operator {
 }
 
 public class JMPNZOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -367,7 +367,7 @@ public class JMPNZOperator: Operator {
 }
 
 public class JMPVOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -382,7 +382,7 @@ public class JMPVOperator: Operator {
 }
 
 public class JMPOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -397,7 +397,7 @@ public class JMPOperator: Operator {
 }
 
 public class JSROperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -412,7 +412,7 @@ public class JSROperator: Operator {
 }
 
 public class RSVOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -427,7 +427,7 @@ public class RSVOperator: Operator {
 }
 
 public class RELOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -442,7 +442,7 @@ public class RELOperator: Operator {
 }
 
 public class NOOPOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -457,7 +457,7 @@ public class NOOPOperator: Operator {
 }
 
 public class HOLDOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -472,7 +472,7 @@ public class HOLDOperator: Operator {
 }
 
 public class RESETOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -487,7 +487,7 @@ public class RESETOperator: Operator {
 }
 
 public class NOTOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -502,7 +502,7 @@ public class NOTOperator: Operator {
 }
 
 public class RTSOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -517,7 +517,7 @@ public class RTSOperator: Operator {
 }
 
 public class PUSHOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     
@@ -532,7 +532,7 @@ public class PUSHOperator: Operator {
 }
 
 public class POPOperator: Operator {
-    public func operate(input: CPUExecutionInput) {
+    public func execute(input: CPUExecutionInput) {
         
     }
     

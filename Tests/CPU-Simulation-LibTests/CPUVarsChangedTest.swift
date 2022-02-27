@@ -37,7 +37,7 @@ class CPUVarsChangedTest: XCTestCase {
         let cpu = CPU(memory: memory)
         NewStart.standardNextState = ExecutedToFetchOperatorState.init
         
-        XCTAssertNoThrow(try cpu.executeNextStep())
+        XCTAssertNoThrow(try cpu.operateNextStep())
         XCTAssertEqual(cpu.state, "executed")
         
         cpu.reset()

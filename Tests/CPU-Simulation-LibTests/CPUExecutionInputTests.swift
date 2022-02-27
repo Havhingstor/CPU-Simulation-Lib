@@ -114,7 +114,7 @@ private class OwnReadingOperator: Operator {
     
     static var dontAllowOperandIfPossible: Bool {false}
     
-    func operate(input: CPUExecutionInput) {
+    func execute(input: CPUExecutionInput) {
         CPUExecutionInputTests.executionInput = input
         let stackpointer = input.stackpointer
         stackpointer--
@@ -136,7 +136,7 @@ private class OwnValueReadingOperator: Operator {
     
     static var dontAllowOperandIfPossible: Bool {false}
     
-    func operate(input: CPUExecutionInput) {
+    func execute(input: CPUExecutionInput) {
         CPUExecutionInputTests.executionInput = input
         _ = input.operandValue!
         let stackpointer = input.stackpointer
@@ -149,7 +149,7 @@ private class OwnValueReadingOperator: Operator {
 }
 
 private class OwnNothingOperator: Operator {
-    func operate(input: CPUExecutionInput) {
+    func execute(input: CPUExecutionInput) {
         CPUExecutionInputTests.executionInput = input
         let stackpointer = input.stackpointer
         stackpointer++

@@ -20,7 +20,7 @@ class CPUStatesTests: XCTestCase {
         let cpu = CPU(memory: memory, startingPoint: 0x1b)
         XCTAssertEqual(cpu.state, "newState")
         
-        XCTAssertNoThrow(try cpu.executeNextStep())
+        XCTAssertNoThrow(try cpu.operateNextStep())
         XCTAssertEqual(cpu.state, "newState")
         XCTAssertEqual(cpu.programCounter, 0x19)
         
@@ -39,11 +39,11 @@ class CPUStatesTests: XCTestCase {
         XCTAssertNoThrow(try cpu.endInstruction())
         XCTAssertEqual(cpu.state, "anotherState")
         
-        XCTAssertNoThrow(try cpu.executeNextStep())
+        XCTAssertNoThrow(try cpu.operateNextStep())
         XCTAssertEqual(cpu.state, "newState")
         
         NewStart.resetStandardNextState()
-        XCTAssertNoThrow(try cpu.executeNextStep())
+        XCTAssertNoThrow(try cpu.operateNextStep())
         XCTAssertEqual(cpu.state, "newState")
     }
     
@@ -52,20 +52,20 @@ class CPUStatesTests: XCTestCase {
         let cpu = CPU(memory: memory)
         XCTAssertEqual(cpu.state, "newState")
         
-        XCTAssertNoThrow(try cpu.executeNextStep())
+        XCTAssertNoThrow(try cpu.operateNextStep())
         XCTAssertEqual(cpu.state, "newState")
         
         NewStart.alternativeNextState = true
         NewStart.resetNextState = false
-        XCTAssertNoThrow(try cpu.executeNextStep())
+        XCTAssertNoThrow(try cpu.operateNextStep())
         XCTAssertEqual(cpu.state, "anotherState")
         
-        XCTAssertNoThrow(try cpu.executeNextStep())
+        XCTAssertNoThrow(try cpu.operateNextStep())
         XCTAssertEqual(cpu.state, "newState")
         
         NewStart.alternativeNextState = true
         NewStart.resetNextState = true
-        XCTAssertNoThrow(try cpu.executeNextStep())
+        XCTAssertNoThrow(try cpu.operateNextStep())
         XCTAssertEqual(cpu.state, "newState")
     }
     
