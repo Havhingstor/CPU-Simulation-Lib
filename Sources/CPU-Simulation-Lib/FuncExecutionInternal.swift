@@ -54,7 +54,7 @@ class ExecutionInternal {
     }
     
     private static func testForMemoryUseOfInstruction(input: CPUExecutionInput, cpu: CPUCopy) -> Bool {
-        input.operandRead && cpu.operandType!.providesAddressOrWriteAccess
+        input.operandRead && cpu.operandType!.providesAddressOrWriteAccess && input.operandValue != nil
     }
     
     private static func setBusses(result: NewCPUVars, cpu: CPUCopy, input: CPUExecutionInput) {
