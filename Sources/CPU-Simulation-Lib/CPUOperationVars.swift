@@ -18,9 +18,9 @@ class CPUOperationVars {
     var operandType: CoreOperandType? { realOperandType?.coreOperandType }
     
     func operateNextStep(parent: CPUCopy) throws -> NewCPUVars {
-        let newVars = try state.operate(cpu: parent)
-        
         state = state.nextState()
+        
+        let newVars = try state.operate(cpu: parent)
         
         return newVars
     }

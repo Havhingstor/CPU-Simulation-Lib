@@ -8,7 +8,7 @@
 import Foundation
 import CPU_Simulation_Lib
 
-class OwnDecode: FetchedOperatorToDecodeState {
+class OwnDecode: DecodedState {
     override func operate(cpu: CPUCopy) -> NewCPUVars {
         NewCPUVars()
     }

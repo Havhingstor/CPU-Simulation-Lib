@@ -18,12 +18,12 @@ class CPUExecutionTests: XCTestCase {
     }
     
     func testExecutionWithoutDecoding() {
-        FetchedOperatorToDecodeState.standardNextState = DecodedToFetchOperandState.init
+        DecodedState.standardNextState = OperandFetchedState.init
         
         XCTAssertNoThrow(try cpu.endInstruction())
         
         
-        FetchedOperatorToDecodeState.resetStandardNextState()
+        DecodedState.resetStandardNextState()
     }
     
 }

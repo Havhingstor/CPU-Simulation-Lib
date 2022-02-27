@@ -86,7 +86,7 @@ class CPUTests: XCTestCase {
     }
     
     func testFetchInstructions() {
-        ExecutedToFetchOperatorState.standardNextState = OwnDecode.init
+        OperatorFetchedState.standardNextState = OwnDecode.init
         XCTAssertNoThrow(try memory.writeValues(values: [1,2,3,4,5,6]))
 
         let cpu = CPU(memory: memory)
@@ -117,7 +117,7 @@ class CPUTests: XCTestCase {
         XCTAssertEqual(cpu.opcode, 5)
         XCTAssertEqual(cpu.operand, 6)
         
-        ExecutedToFetchOperatorState.resetStandardNextState()
+        OperatorFetchedState.resetStandardNextState()
     }
     
     func testFetchDataBus() {

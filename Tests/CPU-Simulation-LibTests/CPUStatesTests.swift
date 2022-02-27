@@ -52,19 +52,21 @@ class CPUStatesTests: XCTestCase {
         let cpu = CPU(memory: memory)
         XCTAssertEqual(cpu.state, "newState")
         
+        NewStart.alternativeNextState = true // Affects the state after next
+        NewStart.resetNextState = false
+        
         XCTAssertNoThrow(try cpu.operateNextStep())
         XCTAssertEqual(cpu.state, "newState")
         
-        NewStart.alternativeNextState = true
-        NewStart.resetNextState = false
         XCTAssertNoThrow(try cpu.operateNextStep())
         XCTAssertEqual(cpu.state, "anotherState")
         
+        NewStart.alternativeNextState = true // Affects the state after next
+        NewStart.resetNextState = true
+        
         XCTAssertNoThrow(try cpu.operateNextStep())
         XCTAssertEqual(cpu.state, "newState")
         
-        NewStart.alternativeNextState = true
-        NewStart.resetNextState = true
         XCTAssertNoThrow(try cpu.operateNextStep())
         XCTAssertEqual(cpu.state, "newState")
     }

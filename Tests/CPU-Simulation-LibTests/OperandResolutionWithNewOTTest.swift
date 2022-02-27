@@ -16,7 +16,7 @@ class OperandResolutionWithNewOTTest: XCTestCase {
     
     override func setUp() {
         cpu = CPU(memory: memory)
-        FetchedOperatorToDecodeState.standardNextState = OwnFetchOperandState.init
+        DecodedState.standardNextState = OwnFetchOperandState.init
     }
     
     func testOperandResolutionWithNewOperandType() {
@@ -32,12 +32,12 @@ class OperandResolutionWithNewOTTest: XCTestCase {
     }
     
     override class func tearDown() {
-        FetchedOperatorToDecodeState.resetStandardNextState()
+        DecodedState.resetStandardNextState()
     }
     
 }
 
-private class OwnFetchOperandState: DecodedToFetchOperandState {
+private class OwnFetchOperandState: OperandFetchedState {
     override func operate(cpu: CPUCopy) -> NewCPUVars {
         let result = NewCPUVars()
         result.operand = cpu.memory.read(address: cpu.programCounter)

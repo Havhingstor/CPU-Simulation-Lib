@@ -19,7 +19,7 @@ class CPUFlagsTest: XCTestCase {
     }
     
     func testZFlag() {
-        DecodedToFetchOperandState.standardNextState = ZTestState.init
+        OperandFetchedState.standardNextState = ZTestState.init
         
         XCTAssertNoThrow(try cpu.endInstruction())
         XCTAssertEqual(cpu.accumulator, 1)
@@ -28,11 +28,11 @@ class CPUFlagsTest: XCTestCase {
         XCTAssertEqual(cpu.accumulator, 0)
         XCTAssertTrue(cpu.zFlag)
         
-        DecodedToFetchOperandState.resetStandardNextState()
+        OperandFetchedState.resetStandardNextState()
     }
     
     func testZFlagAtStart() {
-        DecodedToFetchOperandState.standardNextState = ZTestNothingDoingState.init
+        OperandFetchedState.standardNextState = ZTestNothingDoingState.init
         
         XCTAssertTrue(!cpu.zFlag)
         
@@ -45,7 +45,7 @@ class CPUFlagsTest: XCTestCase {
         XCTAssertNoThrow(try cpu.endInstruction())
         XCTAssertTrue(!cpu.zFlag)
         
-        DecodedToFetchOperandState.standardNextState = ZTestState.init
+        OperandFetchedState.standardNextState = ZTestState.init
         
         XCTAssertNoThrow(try cpu.endInstruction())
         
@@ -53,21 +53,21 @@ class CPUFlagsTest: XCTestCase {
         XCTAssertTrue(cpu.zFlag)
         
         
-        DecodedToFetchOperandState.resetStandardNextState()
+        OperandFetchedState.resetStandardNextState()
     }
     
     func testNFlag() {
-        DecodedToFetchOperandState.standardNextState = NTestState.init
+        OperandFetchedState.standardNextState = NTestState.init
         
         XCTAssertNoThrow(try cpu.endInstruction())
         XCTAssertEqual(cpu.accumulator, signedToUnsigned(-50))
         XCTAssertTrue(cpu.nFlag)
         
-        DecodedToFetchOperandState.resetStandardNextState()
+        OperandFetchedState.resetStandardNextState()
     }
 }
 
-private class ZTestState: FetchedOperandToExecuteState {
+private class ZTestState: ExecutedState {
     override func operate(cpu: CPUCopy) -> NewCPUVars {
         let result = NewCPUVars()
         
@@ -81,13 +81,13 @@ private class ZTestState: FetchedOperandToExecuteState {
     }
 }
 
-private class ZTestNothingDoingState: FetchedOperandToExecuteState {
+private class ZTestNothingDoingState: ExecutedState {
     override func operate(cpu: CPUCopy) -> NewCPUVars {
         NewCPUVars()
     }
 }
 
-private class NTestState: FetchedOperandToExecuteState {
+private class NTestState: ExecutedState {
     override func operate(cpu: CPUCopy) -> NewCPUVars {
         let result = NewCPUVars()
         
