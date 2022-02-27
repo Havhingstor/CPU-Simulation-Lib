@@ -288,7 +288,7 @@ class InstructionTests: XCTestCase {
         memory.write(0xff, address: 0)
         
         XCTAssertThrowsError(try cpu.endInstruction()) { err in
-            XCTAssertEqual(err as? CPUErrors, CPUErrors.OperatorCodeNotDecodable(address: 0, operatorCode: 0xff))
+            XCTAssertEqual(err as? CPUSimErrors, CPUSimErrors.OperatorCodeNotDecodable(address: 0, operatorCode: 0xff))
         }
     }
     
@@ -327,7 +327,7 @@ class InstructionTests: XCTestCase {
         StandardOperators.resetOperators()
          
         XCTAssertThrowsError(try cpu.endInstruction()) { err in
-            XCTAssertEqual(err as? CPUErrors, CPUErrors.OperatorCodeNotDecodable(address: 0, operatorCode: 0xff))
+            XCTAssertEqual(err as? CPUSimErrors, CPUSimErrors.OperatorCodeNotDecodable(address: 0, operatorCode: 0xff))
         }
     }
 }

@@ -1,5 +1,5 @@
 //
-//  CPUOperandType.swift
+//  OperandType.swift
 //  
 //
 //  Created by Paul on 14.02.22.

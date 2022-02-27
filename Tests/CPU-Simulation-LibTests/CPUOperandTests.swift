@@ -92,7 +92,7 @@ class CPUOperandTests: XCTestCase {
         StandardOperandTypes.resetOperandTypes()
         
         XCTAssertThrowsError(try cpu.endInstruction()) { err in
-            XCTAssertEqual(err as? CPUErrors, CPUErrors.OperandTypeCodeNotDecodable(address: 0, operandTypeCode: 0xff))
+            XCTAssertEqual(err as? CPUSimErrors, CPUSimErrors.OperandTypeCodeNotDecodable(address: 0, operandTypeCode: 0xff))
         }
     }
     

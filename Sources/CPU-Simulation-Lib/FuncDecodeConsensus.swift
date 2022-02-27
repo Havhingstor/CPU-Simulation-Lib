@@ -1,5 +1,5 @@
 //
-//  CPUDecodeRequiremestTest.swift
+//  FuncDecodeConsensus.swift
 //  
 //
 //  Created by Paul on 17.02.22.
@@ -55,17 +55,17 @@ func testForNeededOperand(vars: DecodeVars) -> Bool {
 }
 
 func throwLiteralRequiredError(vars: DecodeVars) throws {
-    throw CPUErrors.OperatorRequiresInstantLiteralOperandAccess(address: vars.cpu.operatorProgramCounter, operatorCode: vars.operatorCode, operandTypeCode: vars.operandTypeCode)
+    throw CPUSimErrors.OperatorRequiresInstantLiteralOperandAccess(address: vars.cpu.operatorProgramCounter, operatorCode: vars.operatorCode, operandTypeCode: vars.operandTypeCode)
 }
 
 func throwOperatorAllowsNoOperandError(vars: DecodeVars) throws {
-    throw CPUErrors.OperatorAllowsNoOperand(address: vars.cpu.operatorProgramCounter, operatorCode: vars.operatorCode, operandTypeCode: vars.operandTypeCode)
+    throw CPUSimErrors.OperatorAllowsNoOperand(address: vars.cpu.operatorProgramCounter, operatorCode: vars.operatorCode, operandTypeCode: vars.operandTypeCode)
 }
 
 func throwAddressOrWriteAccessRequiredError(vars: DecodeVars) throws {
-    throw CPUErrors.OperatorRequiresAddressOrWriteAccess(address: vars.cpu.operatorProgramCounter, operatorCode: vars.operatorCode, operandTypeCode: vars.operandTypeCode)
+    throw CPUSimErrors.OperatorRequiresAddressOrWriteAccess(address: vars.cpu.operatorProgramCounter, operatorCode: vars.operatorCode, operandTypeCode: vars.operandTypeCode)
 }
 
 func throwOperandAccessNeededError(vars: DecodeVars) throws {
-    throw CPUErrors.OperatorRequiresExistingOperand(address: vars.cpu.operatorProgramCounter, operatorCode: vars.operatorCode, operandTypeCode: vars.operandTypeCode)
+    throw CPUSimErrors.OperatorRequiresExistingOperand(address: vars.cpu.operatorProgramCounter, operatorCode: vars.operatorCode, operandTypeCode: vars.operandTypeCode)
 }

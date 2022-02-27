@@ -1,5 +1,5 @@
 //
-//  CPUStates.swift
+//  State.swift
 //  
 //
 //  Created by Paul on 09.02.22.

@@ -1,5 +1,5 @@
 //
-//  CPUOperators.swift
+//  Operator.swift
 //  
 //
 //  Created by Paul on 12.02.22.

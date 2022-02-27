@@ -32,14 +32,14 @@ class OperatorAndOperandTypeCombinedTests: XCTestCase {
         XCTAssertEqual(cpu.operandTypeCode, 1)
         
         XCTAssertThrowsError(try cpu.endInstruction()) { err in
-            XCTAssertEqual(err as? CPUErrors, CPUErrors.OperatorRequiresInstantLiteralOperandAccess(address: 6, operatorCode: 7, operandTypeCode: 1))
+            XCTAssertEqual(err as? CPUSimErrors, CPUSimErrors.OperatorRequiresInstantLiteralOperandAccess(address: 6, operatorCode: 7, operandTypeCode: 1))
         }
         
         XCTAssertNoThrow(try memory.writeValues(values: [0x163, 0x100]))
         cpu.reset()
         
         XCTAssertThrowsError(try cpu.endInstruction()) { err in
-            XCTAssertEqual(err as? CPUErrors, CPUErrors.OperatorAllowsNoOperand(address: 0, operatorCode: 0x63, operandTypeCode: 1))
+            XCTAssertEqual(err as? CPUSimErrors, CPUSimErrors.OperatorAllowsNoOperand(address: 0, operatorCode: 0x63, operandTypeCode: 1))
         }
     }
 
@@ -59,14 +59,14 @@ class OperatorAndOperandTypeCombinedTests: XCTestCase {
         XCTAssertEqual(cpu.operandTypeCode, 2)
         
         XCTAssertThrowsError(try cpu.endInstruction()) { err in
-            XCTAssertEqual(err as? CPUErrors, CPUErrors.OperatorRequiresAddressOrWriteAccess(address: 6, operatorCode: 0x1E, operandTypeCode: 2))
+            XCTAssertEqual(err as? CPUSimErrors, CPUSimErrors.OperatorRequiresAddressOrWriteAccess(address: 6, operatorCode: 0x1E, operandTypeCode: 2))
         }
         
         XCTAssertNoThrow(try memory.writeValues(values: [0x263, 0x100]))
         cpu.reset()
         
         XCTAssertThrowsError(try cpu.endInstruction()) { err in
-            XCTAssertEqual(err as? CPUErrors, CPUErrors.OperatorAllowsNoOperand(address: 0, operatorCode: 0x63, operandTypeCode: 2))
+            XCTAssertEqual(err as? CPUSimErrors, CPUSimErrors.OperatorAllowsNoOperand(address: 0, operatorCode: 0x63, operandTypeCode: 2))
         }
     }
     
@@ -90,14 +90,14 @@ class OperatorAndOperandTypeCombinedTests: XCTestCase {
         XCTAssertEqual(cpu.operand, 0x555)
         
         XCTAssertThrowsError(try cpu.endInstruction()) { err in
-            XCTAssertEqual(err as? CPUErrors, CPUErrors.OperatorRequiresInstantLiteralOperandAccess(address: 6, operatorCode: 7, operandTypeCode: 3))
+            XCTAssertEqual(err as? CPUSimErrors, CPUSimErrors.OperatorRequiresInstantLiteralOperandAccess(address: 6, operatorCode: 7, operandTypeCode: 3))
         }
         
         XCTAssertNoThrow(try memory.writeValues(values: [0x363, 0x100]))
         cpu.reset()
         
         XCTAssertThrowsError(try cpu.endInstruction()) { err in
-            XCTAssertEqual(err as? CPUErrors, CPUErrors.OperatorAllowsNoOperand(address: 0, operatorCode: 0x63, operandTypeCode: 3))
+            XCTAssertEqual(err as? CPUSimErrors, CPUSimErrors.OperatorAllowsNoOperand(address: 0, operatorCode: 0x63, operandTypeCode: 3))
         }
     }
     
@@ -113,7 +113,7 @@ class OperatorAndOperandTypeCombinedTests: XCTestCase {
         XCTAssertEqual(cpu.operandTypeCode, 0)
         
         XCTAssertThrowsError(try cpu.endInstruction()) { err in
-            XCTAssertEqual(err as? CPUErrors, CPUErrors.OperatorRequiresExistingOperand(address: 4, operatorCode: 0x14, operandTypeCode: 0))
+            XCTAssertEqual(err as? CPUSimErrors, CPUSimErrors.OperatorRequiresExistingOperand(address: 4, operatorCode: 0x14, operandTypeCode: 0))
         }
     }
 }

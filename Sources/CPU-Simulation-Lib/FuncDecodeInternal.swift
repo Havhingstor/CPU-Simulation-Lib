@@ -1,5 +1,5 @@
 //
-//  CPUDecodeInternal.swift
+//  FuncDecodeInternal.swift
 //  
 //
 //  Created by Paul on 17.02.22.

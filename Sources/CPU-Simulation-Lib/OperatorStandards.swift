@@ -1,5 +1,5 @@
 //
-//  CPUStandardOperators.swift
+//  OperatorStandards.swift
 //  
 //
 //  Created by Paul on 12.02.22.

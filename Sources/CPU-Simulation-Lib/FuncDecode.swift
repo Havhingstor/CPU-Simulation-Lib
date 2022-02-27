@@ -1,5 +1,5 @@
 //
-//  CPUDecode.swift
+//  FuncDecode.swift
 //  
 //
 //  Created by Paul on 10.02.22.
@@ -25,7 +25,7 @@ public func getOperatorOrThrowError(operatorCode: UInt8, address: UInt16) throws
     let assignment = StandardOperators.getOperatorAssignment()
     
     if !codeIsInAssignment(code: operatorCode, assignment: assignment) {
-        throw CPUErrors.OperatorCodeNotDecodable(address: address, operatorCode: operatorCode)
+        throw CPUSimErrors.OperatorCodeNotDecodable(address: address, operatorCode: operatorCode)
     }
     
     return assignment[operatorCode]!()
@@ -35,7 +35,7 @@ public func getOperandTypeOrThrowError(operandTypeCode: UInt8, address: UInt16) 
     let assignment = StandardOperandTypes.getOperandTypeAssignment()
     
     if !codeIsInAssignment(code: operandTypeCode, assignment: assignment) {
-        throw CPUErrors.OperandTypeCodeNotDecodable(address: address, operandTypeCode: operandTypeCode)
+        throw CPUSimErrors.OperandTypeCodeNotDecodable(address: address, operandTypeCode: operandTypeCode)
     }
     
     return assignment[operandTypeCode]!()
