@@ -7,6 +7,8 @@
 
 import Foundation
 
+private typealias Internal = ExecutionInternal
+
 public class CPUExecutionInput {
     public let accumulator: UInt16
     public let nFlag: Bool
@@ -34,71 +36,10 @@ public class CPUExecutionInput {
     }
 }
 
-public class StackpointerHandler {
-    private let cpu: CPUCopy
-    fileprivate var stackpointer: UInt16
-    private var memory: Memory { cpu.memory }
-    
-    public var underlyingValue: UInt16 {
-        return memory.read(address: stackpointer)
-    }
-    
-    public static postfix func ++(handler: StackpointerHandler) {
-        handler.stackpointer &+= 1
-    }
-    
-    public static postfix func --(handler: StackpointerHandler) {
-        handler.stackpointer &-= 1
-    }
-    
-    fileprivate init(cpu: CPUCopy) {
-        self.cpu = cpu
-        self.stackpointer = cpu.stackpointer
-    }
-}
-
 public func executeInstruction(cpu: CPUCopy) -> NewCPUVars {
-    if testIfNoDecodeHappend(cpu: cpu)  {
+    if Internal.testIfNoDecodeHappend(cpu: cpu)  {
         return NewCPUVars()
     }
     
-    return executeWithAssumptionOfDecoding(cpu: cpu)
-}
-
-private func executeWithAssumptionOfDecoding(cpu: CPUCopy) -> NewCPUVars {
-    let result = NewCPUVars()
-    
-    let stackpointer = StackpointerHandler(cpu: cpu)
-    let input = createInput(cpu: cpu, stackpointer: stackpointer)
-    
-    cpu.currentOperator!.execute(input: input)
-    
-    applyStackpointer(result: result, stackpointer: stackpointer)
-    
-    if testForMemoryUseOfInstruction(input: input, cpu: cpu) {
-        setBusses(result: result, cpu: cpu, input: input)
-    }
-    
-    return result
-}
-
-private func applyStackpointer(result: NewCPUVars, stackpointer: StackpointerHandler) {
-    result.stackpointer = stackpointer.stackpointer
-}
-
-private func testForMemoryUseOfInstruction(input: CPUExecutionInput, cpu: CPUCopy) -> Bool {
-    input.operandRead && cpu.operandType!.providesAddressOrWriteAccess
-}
-
-private func setBusses(result: NewCPUVars, cpu: CPUCopy, input: CPUExecutionInput) {
-    result.addressBus = cpu.operand
-    result.dataBus = input.operandValue!
-}
-
-private func createInput(cpu: CPUCopy, stackpointer: StackpointerHandler) -> CPUExecutionInput {
-    CPUExecutionInput(accumulator: cpu.accumulator, nFlag: cpu.nFlag, zFlag: cpu.zFlag, vFlag: cpu.vFlag, stackpointer: stackpointer, operandValue: cpu.operandType?.getOperandValue(cpu: cpu))
-}
-
-private func testIfNoDecodeHappend(cpu: CPUCopy) -> Bool {
-    cpu.currentOperator == nil || cpu.operandType == nil
+    return Internal.executeWithAssumptionOfDecoding(cpu: cpu)
 }
