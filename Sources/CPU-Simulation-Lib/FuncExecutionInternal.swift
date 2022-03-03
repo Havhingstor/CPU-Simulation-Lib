@@ -63,7 +63,10 @@ class ExecutionInternal {
     }
     
     private static func createInput(cpu: CPUCopy, stackpointer: StackpointerHandler) -> CPUExecutionInput {
-        CPUExecutionInput(accumulator: cpu.accumulator, nFlag: cpu.nFlag, zFlag: cpu.zFlag, vFlag: cpu.vFlag, stackpointer: stackpointer, operandValue: cpu.operandType?.getOperandValue(cpu: cpu))
+        
+        let operand = cpu.currentOperator!.requiresAddressOrWriteAccess ? cpu.operand : nil
+        
+        return CPUExecutionInput(accumulator: cpu.accumulator, nFlag: cpu.nFlag, zFlag: cpu.zFlag, vFlag: cpu.vFlag, stackpointer: stackpointer, operandValue: cpu.operandType?.getOperandValue(cpu: cpu), operand: operand)
     }
     
     static func testIfNoDecodeHappend(cpu: CPUCopy) -> Bool {

@@ -15,6 +15,7 @@ public class CPUExecutionInput {
     public let zFlag: Bool
     public let vFlag: Bool
     public let stackpointer: StackpointerHandler
+    public let operand: UInt16?
     
     private var _operandValue: UInt16?
     public var operandValue: UInt16? {
@@ -26,13 +27,14 @@ public class CPUExecutionInput {
         _operandRead
     }
     
-    public init(accumulator: UInt16, nFlag: Bool, zFlag: Bool, vFlag: Bool, stackpointer: StackpointerHandler, operandValue: UInt16?) {
+    public init(accumulator: UInt16, nFlag: Bool, zFlag: Bool, vFlag: Bool, stackpointer: StackpointerHandler, operandValue: UInt16?, operand: UInt16?) {
         self.accumulator = accumulator
         self.nFlag = nFlag
         self.zFlag = zFlag
         self.vFlag = vFlag
         self.stackpointer = stackpointer
         self._operandValue = operandValue
+        self.operand = operand
     }
 }
 
