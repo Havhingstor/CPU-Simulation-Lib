@@ -52,7 +52,7 @@ class CPUStatesTests: XCTestCase {
         let cpu = CPU(memory: memory)
         XCTAssertEqual(cpu.state, "newState")
         
-        NewStart.alternativeNextState = true // Affects the state after next
+        NewStart.alternativeNextState = true // Affects the state after the next one
         NewStart.resetNextState = false
         
         XCTAssertNoThrow(try cpu.operateNextStep())
@@ -61,7 +61,7 @@ class CPUStatesTests: XCTestCase {
         XCTAssertNoThrow(try cpu.operateNextStep())
         XCTAssertEqual(cpu.state, "anotherState")
         
-        NewStart.alternativeNextState = true // Affects the state after next
+        NewStart.alternativeNextState = true // Affects the state after the next one
         NewStart.resetNextState = true
         
         XCTAssertNoThrow(try cpu.operateNextStep())

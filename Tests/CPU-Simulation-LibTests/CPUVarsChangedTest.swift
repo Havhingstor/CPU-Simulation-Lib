@@ -35,10 +35,10 @@ class CPUVarsChangedTest: XCTestCase {
     func testReset() {
         let memory = Memory()
         let cpu = CPU(memory: memory)
-        NewStart.standardNextState = OperatorFetchedState.init
+        NewStart.standardNextState = OpcodeFetchedState.init
         
         XCTAssertNoThrow(try cpu.operateNextStep())
-        XCTAssertEqual(cpu.state, "operator-fetched")
+        XCTAssertEqual(cpu.state, "opcode-fetched")
         
         cpu.reset()
         XCTAssertEqual(cpu.state, "newState")

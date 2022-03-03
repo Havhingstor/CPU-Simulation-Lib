@@ -26,13 +26,13 @@ open class HoldState: ExecutedState {
     }
 }
 
-open class OperatorFetchedState: CPUState {
+open class OpcodeFetchedState: CPUState {
     public let id: UUID = UUID()
     
     public static let standardNextStateProvider: StandardNextValueProvider<CPUState> = StandardNextValueProvider(builder: DecodedState.init)
     
     
-    open class var state: String { "operator-fetched" }
+    open class var state: String { "opcode-fetched" }
     public static var instructionEnded: Bool { false }
     
     open func operate(cpu: CPUCopy) -> NewCPUVars {
@@ -83,7 +83,7 @@ open class OperandFetchedState: CPUState {
 open class ExecutedState: CPUState {
     public let id: UUID = UUID()
     
-    public static let standardNextStateProvider: StandardNextValueProvider<CPUState> = StandardNextValueProvider(builder: OperatorFetchedState.init)
+    public static let standardNextStateProvider: StandardNextValueProvider<CPUState> = StandardNextValueProvider(builder: OpcodeFetchedState.init)
     
     open class var state: String {"executed"}
     public static var instructionEnded: Bool { true }

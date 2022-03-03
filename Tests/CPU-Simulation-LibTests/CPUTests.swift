@@ -56,7 +56,7 @@ class CPUTests: XCTestCase {
         XCTAssertEqual(cpu.state, "hold")
         
         XCTAssertNoThrow(try cpu.operateNextStep())
-        XCTAssertEqual(cpu.state, "operator-fetched")
+        XCTAssertEqual(cpu.state, "opcode-fetched")
         
         XCTAssertNoThrow(try cpu.operateNextStep())
         XCTAssertEqual(cpu.state, "decoded")
@@ -68,7 +68,7 @@ class CPUTests: XCTestCase {
         XCTAssertEqual(cpu.state, "executed")
         
         XCTAssertNoThrow(try cpu.operateNextStep())
-        XCTAssertEqual(cpu.state, "operator-fetched")
+        XCTAssertEqual(cpu.state, "opcode-fetched")
     }
     
     func testEndInstruction() {
@@ -79,14 +79,14 @@ class CPUTests: XCTestCase {
         XCTAssertEqual(cpu.state, "executed")
         
         XCTAssertNoThrow(try cpu.operateNextStep())
-        XCTAssertEqual(cpu.state, "operator-fetched")
+        XCTAssertEqual(cpu.state, "opcode-fetched")
         
         XCTAssertNoThrow(try cpu.endInstruction())
         XCTAssertEqual(cpu.state, "executed")
     }
     
     func testFetchInstructions() {
-        OperatorFetchedState.standardNextState = OwnDecode.init
+        OpcodeFetchedState.standardNextState = OwnDecode.init
         XCTAssertNoThrow(try memory.writeValues(values: [1,2,3,4,5,6]))
 
         let cpu = CPU(memory: memory)
@@ -117,7 +117,7 @@ class CPUTests: XCTestCase {
         XCTAssertEqual(cpu.opcode, 5)
         XCTAssertEqual(cpu.operand, 6)
         
-        OperatorFetchedState.resetStandardNextState()
+        OpcodeFetchedState.resetStandardNextState()
     }
     
     func testFetchDataBus() {
