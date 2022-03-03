@@ -38,7 +38,11 @@ class ExecutionInternal {
         let stackpointer = StackpointerHandler(cpu: cpu)
         let input = createInput(cpu: cpu, stackpointer: stackpointer)
         
-        cpu.currentOperator!.execute(input: input)
+        let tmpResult = cpu.currentOperator!.execute(input: input)
+        
+        applyTmpResult(finalResult: result, tmpResult: tmpResult)
+        
+        writeToMemory(results: tmpResult, address: cpu.operand, memory: cpu.memory, memoryAccess: cpu.currentOperator!.requiresAddressOrWriteAccess)
         
         applyStackpointer(result: result, stackpointer: stackpointer)
         
@@ -47,6 +51,42 @@ class ExecutionInternal {
         }
         
         return result
+    }
+    
+    private static func applyTmpResult(finalResult: NewCPUVars, tmpResult: CPUExecutionResult) {
+        applyAccumulator(tmpResult, finalResult)
+        
+        applyVFlag(tmpResult, finalResult)
+        
+        applyProgramCounter(tmpResult, finalResult)
+    }
+    
+    private static func applyAccumulator(_ tmpResult: CPUExecutionResult, _ finalResult: NewCPUVars) {
+        if let accumulator = tmpResult.accumulator {
+            finalResult.accumulator = accumulator
+        }
+    }
+    
+    private static func applyVFlag(_ tmpResult: CPUExecutionResult, _ finalResult: NewCPUVars) {
+        if let vFlag = tmpResult.vFlag {
+            finalResult.vFlag = vFlag
+        }
+    }
+    
+    private static func applyProgramCounter(_ tmpResult: CPUExecutionResult, _ finalResult: NewCPUVars) {
+        if let programCounter = tmpResult.programCounter {
+            finalResult.programCounter = programCounter
+        }
+    }
+    
+    private static func writeToMemory(results: CPUExecutionResult, address: UInt16, memory: Memory, memoryAccess: Bool) {
+        if isWritingAllowed(results: results, memoryAccess: memoryAccess) {
+            memory.write(results.toWrite!, address: address)
+        }
+    }
+    
+    private static func isWritingAllowed(results: CPUExecutionResult, memoryAccess: Bool) -> Bool {
+        results.toWrite != nil && memoryAccess
     }
     
     private static func applyStackpointer(result: NewCPUVars, stackpointer: StackpointerHandler) {

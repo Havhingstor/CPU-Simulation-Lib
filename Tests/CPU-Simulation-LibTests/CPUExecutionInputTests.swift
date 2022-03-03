@@ -114,11 +114,12 @@ private class OwnReadingOperator: Operator {
     
     static var dontAllowOperandIfPossible: Bool {false}
     
-    func execute(input: CPUExecutionInput) {
+    func execute(input: CPUExecutionInput)  -> CPUExecutionResult {
         CPUExecutionInputTests.executionInput = input
         let stackpointer = input.stackpointer
         stackpointer--
         CPUExecutionInputTests.underStackpointer = stackpointer.underlyingValue
+        return CPUExecutionResult()
     }
     
     public required init() {}
@@ -136,12 +137,14 @@ private class OwnValueReadingOperator: Operator {
     
     static var dontAllowOperandIfPossible: Bool {false}
     
-    func execute(input: CPUExecutionInput) {
+    func execute(input: CPUExecutionInput) -> CPUExecutionResult {
         CPUExecutionInputTests.executionInput = input
         _ = input.operandValue!
         let stackpointer = input.stackpointer
         stackpointer--
         CPUExecutionInputTests.underStackpointer = stackpointer.underlyingValue
+        
+        return CPUExecutionResult()
     }
     
     public required init() {}
@@ -149,11 +152,13 @@ private class OwnValueReadingOperator: Operator {
 }
 
 private class OwnNothingOperator: Operator {
-    func execute(input: CPUExecutionInput) {
+    func execute(input: CPUExecutionInput) -> CPUExecutionResult {
         CPUExecutionInputTests.executionInput = input
         let stackpointer = input.stackpointer
         stackpointer++
         CPUExecutionInputTests.underStackpointer = stackpointer.underlyingValue
+        
+        return CPUExecutionResult()
     }
     
     static var requiresAddressOrWriteAccess: Bool {false}

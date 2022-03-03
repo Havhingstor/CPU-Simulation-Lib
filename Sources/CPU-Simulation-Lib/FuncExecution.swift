@@ -38,6 +38,15 @@ public class CPUExecutionInput {
     }
 }
 
+public struct CPUExecutionResult {
+    public var accumulator: UInt16?
+    public var vFlag: Bool?
+    public var programCounter: UInt16?
+    public var toWrite: UInt16?
+    
+    public init() {}
+}
+
 public func executeInstruction(cpu: CPUCopy) -> NewCPUVars {
     if Internal.testIfNoDecodeHappend(cpu: cpu)  {
         return NewCPUVars()

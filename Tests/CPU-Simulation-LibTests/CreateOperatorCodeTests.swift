@@ -34,8 +34,8 @@ class CreateOperatorCodeTests: XCTestCase {
 }
 
 fileprivate class OwnOperator: Operator {
-    func execute(input: CPUExecutionInput) {
-        
+    func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     static var operatorCode: UInt8 { 0xAB }

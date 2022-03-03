@@ -67,8 +67,8 @@ public class StandardOperators {
 
 
 public class LOADOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"LOAD"}
@@ -82,8 +82,8 @@ public class LOADOperator: Operator {
 }
 
 public class STOREOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"STORE"}
@@ -97,8 +97,8 @@ public class STOREOperator: Operator {
 }
 
 public class ADDOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"ADD"}
@@ -112,8 +112,8 @@ public class ADDOperator: Operator {
 }
 
 public class SUBOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"SUB"}
@@ -127,8 +127,8 @@ public class SUBOperator: Operator {
 }
 
 public class MULOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"MUL"}
@@ -142,8 +142,8 @@ public class MULOperator: Operator {
 }
 
 public class DIVOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"DIV"}
@@ -157,8 +157,8 @@ public class DIVOperator: Operator {
 }
 
 public class MODOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"MOD"}
@@ -172,8 +172,8 @@ public class MODOperator: Operator {
 }
 
 public class CMPOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"CMP"}
@@ -187,8 +187,8 @@ public class CMPOperator: Operator {
 }
 
 public class ANDOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"AND"}
@@ -202,8 +202,8 @@ public class ANDOperator: Operator {
 }
 
 public class OROperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"OR"}
@@ -217,8 +217,8 @@ public class OROperator: Operator {
 }
 
 public class XOROperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"XOR"}
@@ -232,8 +232,8 @@ public class XOROperator: Operator {
 }
 
 public class SHLOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"SHL"}
@@ -247,8 +247,8 @@ public class SHLOperator: Operator {
 }
 
 public class SHROperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"SHR"}
@@ -262,8 +262,8 @@ public class SHROperator: Operator {
 }
 
 public class SHRAOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"SHRA"}
@@ -277,8 +277,8 @@ public class SHRAOperator: Operator {
 }
 
 public class JMPPOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"JMPP"}
@@ -292,8 +292,8 @@ public class JMPPOperator: Operator {
 }
 
 public class JMPNNOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"JMPNN"}
@@ -307,8 +307,8 @@ public class JMPNNOperator: Operator {
 }
 
 public class JMPNOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"JMPN"}
@@ -322,8 +322,8 @@ public class JMPNOperator: Operator {
 }
 
 public class JMPNPOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"JMPNP"}
@@ -337,8 +337,8 @@ public class JMPNPOperator: Operator {
 }
 
 public class JMPZOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"JMPZ"}
@@ -352,8 +352,8 @@ public class JMPZOperator: Operator {
 }
 
 public class JMPNZOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"JMPNZ"}
@@ -367,8 +367,8 @@ public class JMPNZOperator: Operator {
 }
 
 public class JMPVOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"JMPV"}
@@ -382,8 +382,8 @@ public class JMPVOperator: Operator {
 }
 
 public class JMPOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"JMP"}
@@ -397,8 +397,8 @@ public class JMPOperator: Operator {
 }
 
 public class JSROperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"JSR"}
@@ -412,8 +412,8 @@ public class JSROperator: Operator {
 }
 
 public class RSVOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"RSV"}
@@ -427,8 +427,8 @@ public class RSVOperator: Operator {
 }
 
 public class RELOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"REL"}
@@ -442,8 +442,8 @@ public class RELOperator: Operator {
 }
 
 public class NOOPOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"NOOP"}
@@ -457,8 +457,8 @@ public class NOOPOperator: Operator {
 }
 
 public class HOLDOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"HOLD"}
@@ -472,8 +472,8 @@ public class HOLDOperator: Operator {
 }
 
 public class RESETOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"RESET"}
@@ -487,8 +487,8 @@ public class RESETOperator: Operator {
 }
 
 public class NOTOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"NOT"}
@@ -502,8 +502,8 @@ public class NOTOperator: Operator {
 }
 
 public class RTSOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"RTS"}
@@ -517,8 +517,8 @@ public class RTSOperator: Operator {
 }
 
 public class PUSHOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"PUSH"}
@@ -532,8 +532,8 @@ public class PUSHOperator: Operator {
 }
 
 public class POPOperator: Operator {
-    public func execute(input: CPUExecutionInput) {
-        
+    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        return CPUExecutionResult()
     }
     
     public static var stringRepresentation: String {"POP"}

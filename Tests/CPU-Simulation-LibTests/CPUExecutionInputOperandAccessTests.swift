@@ -60,8 +60,9 @@ private class InputOAWriteOperator: Operator {
     
     static var dontAllowOperandIfPossible: Bool { false }
     
-    func execute(input: CPUExecutionInput) {
+    func execute(input: CPUExecutionInput) -> CPUExecutionResult {
         copyOperand(input: input)
+        return CPUExecutionResult()
     }
     
     required public init() {}
@@ -78,8 +79,9 @@ private class InputOALiteralOperator: Operator {
     
     static var dontAllowOperandIfPossible: Bool { false }
     
-    func execute(input: CPUExecutionInput) {
+    func execute(input: CPUExecutionInput) -> CPUExecutionResult {
         copyOperand(input: input)
+        return CPUExecutionResult()
     }
     
     required public init() {}
@@ -96,8 +98,9 @@ private class InputOAStandardOperator: Operator {
     
     static var dontAllowOperandIfPossible: Bool { false }
     
-    func execute(input: CPUExecutionInput) {
+    func execute(input: CPUExecutionInput) -> CPUExecutionResult {
         copyOperand(input: input)
+        return CPUExecutionResult()
     }
     
     required public init() {}
@@ -114,8 +117,9 @@ private class InputOANothingOperator: Operator {
     
     static var dontAllowOperandIfPossible: Bool { true }
     
-    func execute(input: CPUExecutionInput) {
+    func execute(input: CPUExecutionInput) -> CPUExecutionResult {
         copyOperand(input: input)
+        return CPUExecutionResult()
     }
     
     required public init() {}
