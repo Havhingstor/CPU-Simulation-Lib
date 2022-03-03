@@ -71,6 +71,27 @@ class CPUStatesTests: XCTestCase {
         XCTAssertEqual(cpu.state, "newState")
     }
     
+    func testOperateOfHoldState() {
+        let holdState = HoldState()
+        
+        let memory = Memory()
+        let cpu = CPU(memory: memory)
+        
+        let result = holdState.operate(cpu: cpu.createCopy())
+        
+        XCTAssertEqual(result.accumulator, nil)
+        XCTAssertEqual(result.vFlag, nil)
+        XCTAssertEqual(result.lastMemoryInteraction, nil)
+        XCTAssertEqual(result.addressBus, nil)
+        XCTAssertEqual(result.dataBus, nil)
+        XCTAssertEqual(result.stackpointer, nil)
+        XCTAssertEqual(result.operand, nil)
+        XCTAssertEqual(result.programCounter, nil)
+        XCTAssertTrue(result.operandType == nil)
+        XCTAssertTrue(result.currentOperator == nil)
+        
+    }
+    
     override class func tearDown() {
         StandardStates.resetStartingState()
     }
