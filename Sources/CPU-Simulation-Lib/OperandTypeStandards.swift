@@ -32,7 +32,7 @@ public class StandardOperandTypes {
     
     public static var standardOperandTypes: [operandTypeInit] { [
         AddressOperandType.init,
-        InstantLiteralOperandType.init,
+        LiteralOperandType.init,
         IndirectAddressOperandType.init,
         StackOperandType.init,
         IndirectStackOperandType.init,
@@ -65,7 +65,7 @@ open class AddressOperandType: CoreOperandType {
     public required init() {}
 }
 
-open class InstantLiteralOperandType: CoreOperandType {
+open class LiteralOperandType: CoreOperandType {
     public let id: UUID = UUID()
     
     open func resolveOperand(oldOperand: UInt16, cpu: CPUCopy) -> OperandResolutionResult {
@@ -85,7 +85,7 @@ open class InstantLiteralOperandType: CoreOperandType {
     public required init() {}
 }
 
-open class IndirectLiteralOperandType: InstantLiteralOperandType {
+open class IndirectLiteralOperandType: LiteralOperandType {
     override open class var readAccess: ReadAccess { .read }
     
     public required init() {}

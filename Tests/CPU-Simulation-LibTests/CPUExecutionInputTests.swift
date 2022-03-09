@@ -36,8 +36,8 @@ class CPUExecutionInputTests: XCTestCase {
         XCTAssertEqual(Self.executionInput.operandValue!, 0x555)
         XCTAssertEqual(Self.underStackpointer, 0)
         XCTAssertEqual(cpu.stackpointer, 0xfffd)
-        XCTAssertEqual(cpu.addressBus, nil)
-        XCTAssertEqual(cpu.dataBus, nil)
+        XCTAssertEqual(cpu.addressBus, 0xfffd)
+        XCTAssertEqual(cpu.dataBus, 0)
         
         XCTAssertNoThrow(try cpu.endInstruction())
         XCTAssertEqual(cpu.operatorString, "VALUE-READING")
@@ -75,8 +75,8 @@ class CPUExecutionInputTests: XCTestCase {
         XCTAssertEqual(cpu.dataBus, 0x555)
         
         XCTAssertNoThrow(try cpu.endInstruction())
-        XCTAssertEqual(cpu.addressBus, nil)
-        XCTAssertEqual(cpu.dataBus, nil)
+        XCTAssertEqual(cpu.addressBus, 0xfffc)
+        XCTAssertEqual(cpu.dataBus, 0)
         
         XCTAssertNoThrow(try cpu.endInstruction())
         XCTAssertEqual(cpu.addressBus, 0x555)
@@ -93,12 +93,12 @@ class CPUExecutionInputTests: XCTestCase {
         XCTAssertEqual(cpu.dataBus, 0x1fe)
         
         XCTAssertNoThrow(try cpu.endInstruction())
-        XCTAssertEqual(cpu.addressBus, nil)
-        XCTAssertEqual(cpu.dataBus, nil)
+        XCTAssertEqual(cpu.addressBus, 0xfff8)
+        XCTAssertEqual(cpu.dataBus, 0)
     }
     
     override class func tearDown() {
-        ExecutedState.resetStandardNextState()
+        OperandFetchedState.resetStandardNextState()
         StandardOperators.resetOperators()
     }
 }

@@ -15,4 +15,6 @@ public enum CPUSimErrors: Error, Equatable {
     case OperatorAllowsNoOperand(address: UInt16, operatorCode: UInt8, operandTypeCode: UInt8)
     case OperatorRequiresAddressOrWriteAccess(address: UInt16, operatorCode: UInt8, operandTypeCode: UInt8)
     case OperatorRequiresExistingOperand(address: UInt16, operatorCode: UInt8, operandTypeCode: UInt8)
+    
+    case DivisionByZero(operatorAddress: UInt16)
 }

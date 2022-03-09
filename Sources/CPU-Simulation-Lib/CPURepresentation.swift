@@ -41,6 +41,8 @@ public class NewCPUVars {
     private var _operator: Operator? = nil
     private var _operandType: AccessibleOperandType? = nil
     private var _vFlag: Bool? = nil
+    private var _zFlag: Bool? = nil
+    private var _nFlag: Bool? = nil
     
     public init() {}
     
@@ -110,5 +112,23 @@ public class NewCPUVars {
             { _vFlag = vFlag }
         }
     }
+    public var zFlag: Bool? {
+        get { _zFlag }
+        set (zFlag) { if zFlag != nil
+            { _zFlag = zFlag }
+        }
+    }
+    public var nFlag: Bool? {
+        get { _nFlag }
+        set (nFlag) { if nFlag != nil
+            { _nFlag = nFlag }
+        }
+    }
+    public var continuation: CPUContinuation = .standard
 }
 
+public enum CPUContinuation {
+    case standard
+    case hold
+    case reset
+}

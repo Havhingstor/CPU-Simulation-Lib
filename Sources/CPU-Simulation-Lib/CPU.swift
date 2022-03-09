@@ -11,6 +11,7 @@ public class CPU {
     private let _memory: Memory
     private var operationVars: CPUOperationVars
     private var internalVars: InternalCPUVars
+    private var continuation = CPUContinuation.standard
     
     public init(memory: Memory, startingPoint: UInt16 = 0) {
         _memory = memory
@@ -48,12 +49,26 @@ public class CPU {
         
         operationVars.applyNewCPUVars(vars: result)
         internalVars.applyNewCPUVars(vars: result)
+        
+        continuation = result.continuation
+        
+        if continuation == .reset {
+            reset()
+        }
     }
     
     public func endInstruction() throws {
         repeat {
             try operateNextStep()
         } while !operationVars.state.instructionEnded
+    }
+    
+    public func run() throws {
+        while continuation == .standard {
+            try endInstruction()
+        }
+        continuation = .standard
+        operationVars.state = StandardStates.startingState()
     }
     
     public func reset(startingPoint: UInt16 = 0) {

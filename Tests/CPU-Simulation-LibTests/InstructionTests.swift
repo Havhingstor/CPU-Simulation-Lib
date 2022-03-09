@@ -14,6 +14,11 @@ class InstructionTests: XCTestCase {
     
     override func setUp() {
         cpu = CPU(memory: memory)
+        OperandFetchedState.standardNextState = OwnExecution.init
+    }
+    
+    override class func tearDown() {
+        OperandFetchedState.resetStandardNextState()
     }
     
     func testOperators() {

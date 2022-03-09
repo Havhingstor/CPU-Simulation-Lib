@@ -14,6 +14,11 @@ class CPUOperandTests: XCTestCase {
     
     override func setUp() {
         cpu = CPU(memory: memory)
+        OperandFetchedState.standardNextState = OwnExecution.init
+    }
+    
+    override class func tearDown() {
+        OperandFetchedState.resetStandardNextState()
     }
     
     func testDecodeOperandTypeCode() {
@@ -101,7 +106,7 @@ class CPUOperandTests: XCTestCase {
         
         XCTAssertEqual(IndirectAddressOperandType.standardCoreOperandType().operandTypeCode, 1)
         
-        IndirectAddressOperandType.standardCoreOperandType = InstantLiteralOperandType.init
+        IndirectAddressOperandType.standardCoreOperandType = LiteralOperandType.init
         XCTAssertEqual(IndirectAddressOperandType.standardCoreOperandType().operandTypeCode, 2)
         
         XCTAssertNoThrow(try cpu.endInstruction())

@@ -36,7 +36,7 @@ class CPUTests: XCTestCase {
         XCTAssertEqual(cpu.programCounter, 3)
     }
     
-    func testprogramCounterInit() {
+    func testProgramCounterInit() {
         let cpu = CPU(memory: memory, startingPoint: 10)
         XCTAssertEqual(cpu.programCounter, 10)
         

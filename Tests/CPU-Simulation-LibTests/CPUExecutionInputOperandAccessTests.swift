@@ -42,6 +42,9 @@ class CPUExecutionInputOperandAccessTests: XCTestCase {
         Self.operand = nil
     }
     
+    override class func tearDown() {
+        StandardOperators.resetOperators()
+    }
     
 }
 

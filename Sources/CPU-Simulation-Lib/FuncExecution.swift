@@ -16,6 +16,8 @@ public class CPUExecutionInput {
     public let vFlag: Bool
     public let stackpointer: StackpointerHandler
     public let operand: UInt16?
+    public let operatorAddress: UInt16
+    public let programCounter: UInt16
     
     private var _operandValue: UInt16?
     public var operandValue: UInt16? {
@@ -27,7 +29,8 @@ public class CPUExecutionInput {
         _operandRead
     }
     
-    public init(accumulator: UInt16, nFlag: Bool, zFlag: Bool, vFlag: Bool, stackpointer: StackpointerHandler, operandValue: UInt16?, operand: UInt16?) {
+    public init(accumulator: UInt16, nFlag: Bool, zFlag: Bool, vFlag: Bool, stackpointer: StackpointerHandler, operandValue: UInt16?,
+                operand: UInt16?, operatorAddress: UInt16, programCounter: UInt16) {
         self.accumulator = accumulator
         self.nFlag = nFlag
         self.zFlag = zFlag
@@ -35,22 +38,27 @@ public class CPUExecutionInput {
         self.stackpointer = stackpointer
         self._operandValue = operandValue
         self.operand = operand
+        self.operatorAddress = operatorAddress
+        self.programCounter = programCounter
     }
 }
 
 public struct CPUExecutionResult {
     public var accumulator: UInt16?
     public var vFlag: Bool?
+    public var zFlag: Bool? = nil
+    public var nFlag: Bool? = nil
     public var programCounter: UInt16?
     public var toWrite: UInt16?
+    public var continuation = CPUContinuation.standard
     
     public init() {}
 }
 
-public func executeInstruction(cpu: CPUCopy) -> NewCPUVars {
+public func executeInstruction(cpu: CPUCopy) throws -> NewCPUVars {
     if Internal.testIfNoDecodeHappend(cpu: cpu)  {
         return NewCPUVars()
     }
     
-    return Internal.executeWithAssumptionOfDecoding(cpu: cpu)
+    return try Internal.executeWithAssumptionOfDecoding(cpu: cpu)
 }

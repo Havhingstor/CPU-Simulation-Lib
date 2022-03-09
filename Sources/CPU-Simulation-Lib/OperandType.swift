@@ -24,6 +24,8 @@ extension AccessibleOperandType {
     public var operandTypeCode: UInt8 { Self.operandTypeCode }
     public var operandTypeCodePreparedForOpcode: UInt16 { UInt16(operandTypeCode) << 8}
     
+    public static var operandTypeCodePreparedForOpcode: UInt16 { UInt16(operandTypeCode) << 8}
+    
     public var coreOperandType: CoreOperandType { Self.standardCoreOperandTypeProvider.getNextValue(uuid: id)() }
     
     public static var standardCoreOperandType: Builder {

@@ -13,3 +13,9 @@ class OwnDecode: DecodedState {
         NewCPUVars()
     }
 }
+
+class OwnExecution: ExecutedState {
+    override func operate(cpu: CPUCopy) -> NewCPUVars {
+        NewCPUVars()
+    }
+}

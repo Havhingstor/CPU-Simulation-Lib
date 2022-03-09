@@ -15,10 +15,10 @@ class InternalCPUVars {
     var addressBus: UInt16?
     var lastMemoryInteraction: UInt16 = 0
     var nFlag = false
-    var _zFlag: Bool?
+    var zFlag = false
     var vFlag = false
     
-    var zFlag: Bool { _zFlag ?? false }
+//    var zFlag: Bool { _zFlag ?? false }
     
     func applyNewCPUVars(vars: NewCPUVars) {
         applyStackpointer(vars.stackpointer)
@@ -27,8 +27,8 @@ class InternalCPUVars {
         applyAddressBus(vars.addressBus)
         applyLastMemoryInteraction(vars.lastMemoryInteraction)
         applyVFlag(vars.vFlag)
-        applyZFlag(accumulator: accumulator)
-        applyNFlag(accumulator: accumulator)
+        applyZFlag(vars.zFlag, newAccumulator: vars.accumulator)
+        applyNFlag(vars.nFlag, accumulator: accumulator)
     }
     
     private func applyVFlag(_ newVFlag: Bool?) {
@@ -37,18 +37,31 @@ class InternalCPUVars {
         }
     }
     
-    private func applyZFlag(accumulator: UInt16) {
-        if accumulator != 0 {
-            _zFlag = false
-        }else if _zFlag != nil {
-            _zFlag = true
+    private func applyZFlag(_ newZFlag: Bool?, newAccumulator: UInt16?) {
+        if let newZFlag = newZFlag {
+            zFlag = newZFlag
+        } else {
+            applyZFlagFromAccumulator(newAccumulator)
         }
     }
     
-    private func applyNFlag(accumulator: UInt16) {
-        if unsignedToSigned(accumulator) < 0 {
-            nFlag = true
+    private func applyZFlagFromAccumulator(_ newAccumulator: UInt16?) {
+        guard newAccumulator != nil else {
+            return
         }
+        zFlag = newAccumulator! == 0
+    }
+    
+    private func applyNFlag(_ newNFlag: Bool?, accumulator: UInt16) {
+        if let newNFlag = newNFlag {
+            nFlag = newNFlag
+        } else {
+            applyNFlagFromAccumulator(accumulator: accumulator)
+        }
+    }
+    
+    private func applyNFlagFromAccumulator(accumulator: UInt16) {
+        nFlag = unsignedToSigned(accumulator) < 0
     }
     
     private func applyStackpointer(_ newStackpointer: UInt16?) {

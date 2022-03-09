@@ -88,8 +88,8 @@ open class ExecutedState: CPUState {
     open class var state: String {"executed"}
     public static var instructionEnded: Bool { true }
     
-    open func operate(cpu: CPUCopy) -> NewCPUVars {
-        return executeInstruction(cpu: cpu)
+    open func operate(cpu: CPUCopy) throws -> NewCPUVars {
+        return try executeInstruction(cpu: cpu)
     }
     
     public init() {}

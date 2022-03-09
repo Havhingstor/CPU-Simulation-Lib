@@ -28,6 +28,10 @@ class CPUFlagsTest: XCTestCase {
         XCTAssertEqual(cpu.accumulator, 0)
         XCTAssertTrue(cpu.zFlag)
         
+        XCTAssertNoThrow(try cpu.endInstruction())
+        XCTAssertEqual(cpu.accumulator, 1)
+        XCTAssertTrue(!cpu.zFlag)
+        
         OperandFetchedState.resetStandardNextState()
     }
     
@@ -62,6 +66,12 @@ class CPUFlagsTest: XCTestCase {
         XCTAssertNoThrow(try cpu.endInstruction())
         XCTAssertEqual(cpu.accumulator, signedToUnsigned(-50))
         XCTAssertTrue(cpu.nFlag)
+        
+        OperandFetchedState.standardNextState = ZTestState.init
+        
+        XCTAssertNoThrow(try cpu.endInstruction())
+        XCTAssertEqual(cpu.accumulator, signedToUnsigned(0))
+        XCTAssertTrue(!cpu.nFlag)
         
         OperandFetchedState.resetStandardNextState()
     }

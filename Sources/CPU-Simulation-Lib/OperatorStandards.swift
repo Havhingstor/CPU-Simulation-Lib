@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CPU_Simulation_Utilities
 
 public class StandardOperators {
     public typealias OperatorInit = () -> Operator
@@ -65,10 +66,16 @@ public class StandardOperators {
     ] }
 }
 
+private typealias Intern = OperatorStandardsInternal
 
 public class LOADOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        result.accumulator = input.operandValue
+        result.vFlag = false
+        
+        return result
     }
     
     public static var stringRepresentation: String {"LOAD"}
@@ -83,7 +90,11 @@ public class LOADOperator: Operator {
 
 public class STOREOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        result.toWrite = input.accumulator
+        
+        return result
     }
     
     public static var stringRepresentation: String {"STORE"}
@@ -98,7 +109,11 @@ public class STOREOperator: Operator {
 
 public class ADDOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        Intern.calcMaths(real: {$0 &+ $1}, expected: {$0 + $1}, input: input, result: &result)
+        
+        return result
     }
     
     public static var stringRepresentation: String {"ADD"}
@@ -113,7 +128,11 @@ public class ADDOperator: Operator {
 
 public class SUBOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        Intern.calcMaths(real: {$0 &- $1}, expected: {$0 - $1}, input: input, result: &result)
+        
+        return result
     }
     
     public static var stringRepresentation: String {"SUB"}
@@ -128,7 +147,11 @@ public class SUBOperator: Operator {
 
 public class MULOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        Intern.calcMaths(real: {$0 &* $1}, expected: {$0 * $1}, input: input, result: &result)
+        
+        return result
     }
     
     public static var stringRepresentation: String {"MUL"}
@@ -142,8 +165,17 @@ public class MULOperator: Operator {
 }
 
 public class DIVOperator: Operator {
-    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+    public func execute(input: CPUExecutionInput) throws -> CPUExecutionResult {
+        var result = CPUExecutionResult()
+        
+        guard input.operandValue != 0 else {
+            throw CPUSimErrors.DivisionByZero(operatorAddress: input.operatorAddress)
+        }
+        
+        result.accumulator = signedToUnsigned(unsignedToSigned(input.accumulator) / unsignedToSigned(input.operandValue!))
+        result.vFlag = false
+        
+        return result
     }
     
     public static var stringRepresentation: String {"DIV"}
@@ -157,8 +189,17 @@ public class DIVOperator: Operator {
 }
 
 public class MODOperator: Operator {
-    public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+    public func execute(input: CPUExecutionInput) throws -> CPUExecutionResult {
+        var result = CPUExecutionResult()
+        
+        guard input.operandValue != 0 else {
+            throw CPUSimErrors.DivisionByZero(operatorAddress: input.operatorAddress)
+        }
+        
+        result.accumulator = signedToUnsigned(unsignedToSigned(input.accumulator) % unsignedToSigned(input.operandValue!))
+        result.vFlag = false
+        
+        return result
     }
     
     public static var stringRepresentation: String {"MOD"}
@@ -173,7 +214,15 @@ public class MODOperator: Operator {
 
 public class CMPOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        let numResult = Intern.convertForExpected(input.accumulator) - Intern.convertForExpected(input.operandValue!)
+        
+        result.vFlag = false
+        result.nFlag = numResult < 0
+        result.zFlag = numResult == 0
+        
+        return result
     }
     
     public static var stringRepresentation: String {"CMP"}
@@ -188,7 +237,12 @@ public class CMPOperator: Operator {
 
 public class ANDOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        result.accumulator = input.accumulator & input.operandValue!
+        result.vFlag = false
+        
+        return result
     }
     
     public static var stringRepresentation: String {"AND"}
@@ -203,7 +257,12 @@ public class ANDOperator: Operator {
 
 public class OROperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        result.accumulator = input.accumulator | input.operandValue!
+        result.vFlag = false
+        
+        return result
     }
     
     public static var stringRepresentation: String {"OR"}
@@ -218,7 +277,12 @@ public class OROperator: Operator {
 
 public class XOROperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        result.accumulator = input.accumulator ^ input.operandValue!
+        result.vFlag = false
+        
+        return result
     }
     
     public static var stringRepresentation: String {"XOR"}
@@ -233,7 +297,12 @@ public class XOROperator: Operator {
 
 public class SHLOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        result.accumulator = input.accumulator << input.operandValue!
+        result.vFlag = false
+        
+        return result
     }
     
     public static var stringRepresentation: String {"SHL"}
@@ -248,7 +317,12 @@ public class SHLOperator: Operator {
 
 public class SHROperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        result.accumulator = input.accumulator >> input.operandValue!
+        result.vFlag = false
+        
+        return result
     }
     
     public static var stringRepresentation: String {"SHR"}
@@ -263,7 +337,17 @@ public class SHROperator: Operator {
 
 public class SHRAOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        let signedPrevAccu = unsignedToSigned(input.accumulator)
+        let signedOperand = unsignedToSigned(input.operandValue!)
+        
+        let signedResult = signedPrevAccu >> signedOperand
+        
+        result.accumulator = signedToUnsigned(signedResult)
+        result.vFlag = false
+        
+        return result
     }
     
     public static var stringRepresentation: String {"SHRA"}
@@ -278,7 +362,13 @@ public class SHRAOperator: Operator {
 
 public class JMPPOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        if !(input.nFlag || input.zFlag) {
+            result.programCounter = input.operand!
+        }
+        
+        return result
     }
     
     public static var stringRepresentation: String {"JMPP"}
@@ -293,7 +383,13 @@ public class JMPPOperator: Operator {
 
 public class JMPNNOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        if !input.nFlag {
+            result.programCounter = input.operand!
+        }
+        
+        return result
     }
     
     public static var stringRepresentation: String {"JMPNN"}
@@ -308,7 +404,13 @@ public class JMPNNOperator: Operator {
 
 public class JMPNOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        if input.nFlag {
+            result.programCounter = input.operand!
+        }
+        
+        return result
     }
     
     public static var stringRepresentation: String {"JMPN"}
@@ -323,7 +425,13 @@ public class JMPNOperator: Operator {
 
 public class JMPNPOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        if input.nFlag || input.zFlag {
+            result.programCounter = input.operand
+        }
+        
+        return result
     }
     
     public static var stringRepresentation: String {"JMPNP"}
@@ -338,7 +446,13 @@ public class JMPNPOperator: Operator {
 
 public class JMPZOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        if input.zFlag {
+            result.programCounter = input.operand
+        }
+        
+        return result
     }
     
     public static var stringRepresentation: String {"JMPZ"}
@@ -353,7 +467,13 @@ public class JMPZOperator: Operator {
 
 public class JMPNZOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        if !input.zFlag {
+            result.programCounter = input.operand
+        }
+        
+        return result
     }
     
     public static var stringRepresentation: String {"JMPNZ"}
@@ -368,7 +488,13 @@ public class JMPNZOperator: Operator {
 
 public class JMPVOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        if input.vFlag {
+            result.programCounter = input.operand
+        }
+        
+        return result
     }
     
     public static var stringRepresentation: String {"JMPV"}
@@ -383,7 +509,11 @@ public class JMPVOperator: Operator {
 
 public class JMPOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        result.programCounter = input.operand
+        
+        return result
     }
     
     public static var stringRepresentation: String {"JMP"}
@@ -398,7 +528,13 @@ public class JMPOperator: Operator {
 
 public class JSROperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        result.programCounter = input.operand
+        input.stackpointer--
+        input.stackpointer.underlyingValue = input.programCounter
+        
+        return result
     }
     
     public static var stringRepresentation: String {"JSR"}
@@ -413,6 +549,10 @@ public class JSROperator: Operator {
 
 public class RSVOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        for _ in 0 ..< input.operandValue! {
+            input.stackpointer--
+        }
+        
         return CPUExecutionResult()
     }
     
@@ -428,6 +568,10 @@ public class RSVOperator: Operator {
 
 public class RELOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        for _ in 0 ..< input.operandValue! {
+            input.stackpointer++
+        }
+        
         return CPUExecutionResult()
     }
     
@@ -458,7 +602,11 @@ public class NOOPOperator: Operator {
 
 public class HOLDOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        result.continuation = .hold
+        
+        return result
     }
     
     public static var stringRepresentation: String {"HOLD"}
@@ -473,7 +621,11 @@ public class HOLDOperator: Operator {
 
 public class RESETOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        result.continuation = .reset
+        
+        return result
     }
     
     public static var stringRepresentation: String {"RESET"}
@@ -488,7 +640,12 @@ public class RESETOperator: Operator {
 
 public class NOTOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        result.accumulator = ~input.accumulator
+        result.vFlag = false
+        
+        return result
     }
     
     public static var stringRepresentation: String {"NOT"}
@@ -503,7 +660,12 @@ public class NOTOperator: Operator {
 
 public class RTSOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        result.programCounter = input.stackpointer.underlyingValue
+        input.stackpointer++
+        
+        return result
     }
     
     public static var stringRepresentation: String {"RTS"}
@@ -518,6 +680,9 @@ public class RTSOperator: Operator {
 
 public class PUSHOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
+        input.stackpointer--
+        input.stackpointer.underlyingValue = input.accumulator
+        
         return CPUExecutionResult()
     }
     
@@ -533,7 +698,14 @@ public class PUSHOperator: Operator {
 
 public class POPOperator: Operator {
     public func execute(input: CPUExecutionInput) -> CPUExecutionResult {
-        return CPUExecutionResult()
+        var result = CPUExecutionResult()
+        
+        result.accumulator = input.stackpointer.underlyingValue
+        result.vFlag = false
+        
+        input.stackpointer++
+        
+        return result
     }
     
     public static var stringRepresentation: String {"POP"}
