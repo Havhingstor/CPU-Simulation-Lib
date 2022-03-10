@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class Memory {
+public class Memory: CustomStringConvertible {
     private var memory: [UInt16]
     
     public init() {

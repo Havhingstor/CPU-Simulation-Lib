@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import CPU_Simulation_Lib
+import CPU_Simulation_Lib
 
 class MemoryTests: XCTestCase {
     var memory: Memory = Memory()
@@ -55,5 +55,14 @@ class MemoryTests: XCTestCase {
         XCTAssertThrowsError(try memory.writeValues(values: values)) { err in
             XCTAssertEqual(err as? Memory.Errors, Memory.Errors.tooMuchValues)
         }
+    }
+    
+    func testMemoryToString() {
+        XCTAssertNoThrow(try memory.writeValues(values: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,
+                                                         0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,
+                                                         0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]))
+        
+        XCTAssertGreaterThan(memory.description.count,0)
+        print(memory)
     }
 }
