@@ -51,6 +51,47 @@ class CPUVarsChangedTest: XCTestCase {
         XCTAssertEqual(cpu.opcode, 0)
         XCTAssertEqual(cpu.operand, 0)
     }
+    
+    func testResetWithewStartingPoint() {
+        let memory = Memory()
+        let cpu = CPU(memory: memory)
+        NewStart.standardNextState = OpcodeFetchedState.init
+        
+        XCTAssertNoThrow(try cpu.operateNextStep())
+        XCTAssertEqual(cpu.state, "opcode-fetched")
+        
+        cpu.reset(startingPoint: 50)
+        XCTAssertEqual(cpu.state, "newState")
+        XCTAssertEqual(cpu.programCounter, 50)
+        XCTAssertEqual(cpu.accumulator, 0)
+        XCTAssertEqual(cpu.stackpointer, 0xfffe)
+        XCTAssertEqual(cpu.lastMemoryInteraction, 0)
+        XCTAssertEqual(cpu.addressBus, nil)
+        XCTAssertEqual(cpu.dataBus, nil)
+        XCTAssertEqual(cpu.opcode, 0)
+        XCTAssertEqual(cpu.operand, 0)
+    }
+    
+    func testResetWithNewMaxCycles() {
+        let memory = Memory()
+        let cpu = CPU(memory: memory)
+        NewStart.standardNextState = OpcodeFetchedState.init
+        
+        XCTAssertNoThrow(try cpu.operateNextStep())
+        XCTAssertEqual(cpu.state, "opcode-fetched")
+        
+        cpu.reset(maxCycles: 50)
+        XCTAssertEqual(cpu.state, "newState")
+        XCTAssertEqual(cpu.programCounter, 0)
+        XCTAssertEqual(cpu.accumulator, 0)
+        XCTAssertEqual(cpu.stackpointer, 0xfffe)
+        XCTAssertEqual(cpu.lastMemoryInteraction, 0)
+        XCTAssertEqual(cpu.addressBus, nil)
+        XCTAssertEqual(cpu.dataBus, nil)
+        XCTAssertEqual(cpu.opcode, 0)
+        XCTAssertEqual(cpu.operand, 0)
+        XCTAssertEqual(cpu.maxCycles, 50)
+    }
 
     func testStartingOperatorString() {
         let memory = Memory()

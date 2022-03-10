@@ -35,6 +35,22 @@ class CPUExecutionTests: XCTestCase {
         XCTAssertEqual(cpu.programCounter, 62)
     }
     
+    func testRunWithCycleCounter() {
+        XCTAssertEqual(cpu.cycleCount, 0)
+        XCTAssertEqual(cpu.maxCycles, 100000)
+        
+        cpu.maxCycles = 1000
+        XCTAssertEqual(cpu.maxCycles, 1000)
+        
+        memory.write(0, address: 0xfffe)    // Clear out the last two values
+        memory.write(0, address: 0xffff)
+        
+        // Every memory-address holds 0, so that the cpu will forever execute NOOP-operations
+        XCTAssertNoThrow(try cpu.run())
+        
+        XCTAssertEqual(cpu.cycleCount, 1000)
+    }
+    
     func testExecutionWithoutDecoding() {
         DecodedState.standardNextState = OperandFetchedState.init
         

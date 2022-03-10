@@ -12,12 +12,15 @@ public class CPU {
     private var operationVars: CPUOperationVars
     private var internalVars: InternalCPUVars
     private var continuation = CPUContinuation.standard
+    private var _cycleCount: UInt = 0
+    public var maxCycles: UInt
     
-    public init(memory: Memory, startingPoint: UInt16 = 0) {
+    public init(memory: Memory, startingPoint: UInt16 = 0, maxCycles: UInt = 100000) {
         _memory = memory
         operationVars = CPUOperationVars()
         internalVars = InternalCPUVars()
         operationVars.programCounter = startingPoint
+        self.maxCycles = maxCycles
     }
     
     public var memory: Memory { _memory }
@@ -44,6 +47,8 @@ public class CPU {
     
     public var operatorProgramCounter: UInt16 { operationVars.operatorProgramCounter }
     
+    public var cycleCount: UInt { _cycleCount }
+
     public func operateNextStep() throws {
         let result = try operationVars.operateNextStep(parent: createCopy())
         
@@ -64,17 +69,26 @@ public class CPU {
     }
     
     public func run() throws {
-        while continuation == .standard {
+        _cycleCount = 0
+        while continuation == .standard && cycleCount < maxCycles {
             try endInstruction()
+            _cycleCount += 1
         }
         continuation = .standard
         operationVars.state = StandardStates.startingState()
     }
     
-    public func reset(startingPoint: UInt16 = 0) {
+    public func reset(startingPoint: UInt16 = 0, maxCycles: UInt? = nil) {
         operationVars = CPUOperationVars()
         internalVars = InternalCPUVars()
         operationVars.programCounter = startingPoint
+        applyMaxCycles(maxCycles: maxCycles)
+    }
+
+    private func applyMaxCycles(maxCycles: UInt?) {
+        if let maxCycles = maxCycles {
+            self.maxCycles = maxCycles 
+        }
     }
 }
 
