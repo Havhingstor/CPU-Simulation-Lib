@@ -39,6 +39,22 @@ public class StandardOperandTypes {
         LiteralStackOperandType.init,
         NonexistingOperandType.init,
     ]}
+    
+    private static var standardIAppendedType: operandTypeInit { LiteralOperandType.init }
+    
+    public static var iAppendedType = standardIAppendedType
+    
+    public static func resetIAppendType() {
+        iAppendedType = standardIAppendedType
+    }
+    
+    private static var standardEmptyType: operandTypeInit { NonexistingOperandType.init }
+    
+    public static var emptyType = standardEmptyType
+    
+    public static func resetEmptyType() {
+        emptyType = standardEmptyType
+    }
 }
 
 
@@ -46,6 +62,11 @@ public class StandardOperandTypes {
 private typealias Intern = OperandTypesInternal
 
 open class AddressOperandType: CoreOperandType {
+    
+    open class var additionAtEnd: String { "" }
+    open class var additionInFront: String { "" }
+    open class var representationAddition: String { "" }
+    
     public let id: UUID = UUID()
     
     open func resolveOperand(oldOperand: UInt16, cpu: CPUCopy) -> OperandResolutionResult {
@@ -66,6 +87,11 @@ open class AddressOperandType: CoreOperandType {
 }
 
 open class LiteralOperandType: CoreOperandType {
+    
+    open class var additionInFront: String { "$" }
+    open class var additionAtEnd: String { "" }
+    open class var representationAddition: String { "I" }
+    
     public let id: UUID = UUID()
     
     open func resolveOperand(oldOperand: UInt16, cpu: CPUCopy) -> OperandResolutionResult {
@@ -92,6 +118,11 @@ open class IndirectLiteralOperandType: LiteralOperandType {
 }
 
 open class IndirectAddressOperandType: AccessibleOperandType {
+    
+    open class var additionInFront: String { "(" }
+    open class var additionAtEnd: String { ")" }
+    open class var representationAddition: String { "@" }
+    
     public static let standardCoreOperandTypeProvider: StandardNextValueProvider<CoreOperandType> = StandardNextValueProvider(builder: AddressOperandType.init)
     
     public let id: UUID = UUID()
@@ -106,6 +137,11 @@ open class IndirectAddressOperandType: AccessibleOperandType {
 }
 
 open class StackOperandType: AccessibleOperandType {
+    
+    open class var additionInFront: String { "" }
+    open class var additionAtEnd: String { "(SP)" }
+    open class var representationAddition: String { "(SP)" }
+    
     public static let standardCoreOperandTypeProvider: StandardNextValueProvider<CoreOperandType> = StandardNextValueProvider(builder: AddressOperandType.init)
     
     public let id: UUID = UUID()
@@ -120,6 +156,11 @@ open class StackOperandType: AccessibleOperandType {
 }
 
 open class IndirectStackOperandType: AccessibleOperandType {
+    
+    open class var additionInFront: String { "@" }
+    open class var additionAtEnd: String { "(SP)" }
+    open class var representationAddition: String { "@(SP)" }
+    
     public static let standardCoreOperandTypeProvider: StandardNextValueProvider<CoreOperandType> = StandardNextValueProvider(builder: AddressOperandType.init)
     
     public let id: UUID = UUID()
@@ -134,6 +175,11 @@ open class IndirectStackOperandType: AccessibleOperandType {
 }
 
 open class LiteralStackOperandType: AccessibleOperandType {
+    
+    open class var additionInFront: String { "$" }
+    open class var additionAtEnd: String { "(SP)" }
+    open class var representationAddition: String { "I(SP)" }
+    
     public static let standardCoreOperandTypeProvider: StandardNextValueProvider<CoreOperandType> = StandardNextValueProvider(builder: IndirectLiteralOperandType.init)
     
     public let id: UUID = UUID()
@@ -148,6 +194,11 @@ open class LiteralStackOperandType: AccessibleOperandType {
 }
 
 open class NonexistingOperandType: CoreOperandType {
+    
+    open class var additionAtEnd: String { "" }
+    open class var additionInFront: String { "" }
+    open class var representationAddition: String { "" }
+    
     public let id: UUID = UUID()
     
     open func resolveOperand(oldOperand: UInt16, cpu: CPUCopy) -> OperandResolutionResult {

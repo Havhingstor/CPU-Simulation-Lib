@@ -20,6 +20,8 @@ public protocol Operator {
 }
 
 extension Operator {
+    
+    
     public var stringRepresentation: String { Self.stringRepresentation }
     public var operatorCode: UInt8 { Self.operatorCode }
     

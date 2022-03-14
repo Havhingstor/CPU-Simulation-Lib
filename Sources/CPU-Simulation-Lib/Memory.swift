@@ -41,6 +41,10 @@ public class Memory: CustomStringConvertible {
         }
     }
     
+    public func loadAssembly(assemblyCode: String) throws -> AssemblingResults {
+        try assemble(assemblyCode: assemblyCode, memory: self)
+    }
+    
     public enum Errors: Error {
         case tooMuchValues
     }

@@ -15,6 +15,10 @@ public protocol AccessibleOperandType {
     static var standardCoreOperandTypeProvider: StandardNextValueProvider<CoreOperandType> { get }
     var id: UUID { get }
     
+    static var additionInFront: String { get }
+    static var additionAtEnd: String { get }
+    static var representationAddition: String { get }
+    
     func resolveOperand(oldOperand: UInt16, cpu: CPUCopy) -> OperandResolutionResult
     
     init()
@@ -40,6 +44,10 @@ extension AccessibleOperandType {
     public static func resetStandardCoreOperandType() {
         standardCoreOperandTypeProvider.resetStandardNextValue()
     }
+    
+    public var additionInFront: String { Self.additionInFront }
+    public var additionAtEnd: String { Self.additionAtEnd }
+    public var representationAddition: String { Self.representationAddition }
 }
 
 public protocol CoreOperandType: AccessibleOperandType {
