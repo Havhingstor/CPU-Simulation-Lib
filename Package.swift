@@ -9,7 +9,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "CPU-Simulation-Lib",
-            targets: ["CPU-Simulation-Lib"]),
+            targets: ["CPU-Simulation-Lib", "CPU-Simulation-Utilities"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
