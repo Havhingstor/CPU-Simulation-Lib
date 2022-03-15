@@ -88,7 +88,7 @@ class CPUStatesTests: XCTestCase {
         XCTAssertEqual(result.operand, nil)
         XCTAssertEqual(result.programCounter, nil)
         XCTAssertTrue(result.operandType == nil)
-        XCTAssertTrue(result.currentOperator == nil)
+        XCTAssertTrue(result.`operator` == nil)
         
     }
     

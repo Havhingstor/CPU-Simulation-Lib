@@ -20,7 +20,7 @@ public struct CPUCopy {
     public var zFlag: Bool
     public var vFlag: Bool
     
-    public var currentOperator: Operator?
+    public var `operator`: Operator?
     
     public var operandType: CoreOperandType?
     
@@ -94,10 +94,10 @@ public class NewCPUVars {
             { _lastMemoryInteraction = lastMemoryInteraction}
         }
     }
-    public var currentOperator: Operator? {
+    public var `operator`: Operator? {
         get {_operator}
-        set(currentOperator) { if currentOperator != nil
-            { _operator = currentOperator }
+        set(`operator`) { if `operator` != nil
+            { _operator = `operator` }
         }
     }
     public var operandType: AccessibleOperandType? {

@@ -44,19 +44,19 @@ class DecodeConsensus {
     }
 
     static func testForRequiredLiteral(vars: DecodeVars) -> Bool {
-        vars.currentOperator!.requiresLiteralReadAccess && !vars.coreOperandType!.providesInstantLiteral
+        vars.`operator`!.requiresLiteralReadAccess && !vars.coreOperandType!.providesInstantLiteral
     }
 
     static func testForNoAllowedOperand(vars: DecodeVars) -> Bool {
-        vars.currentOperator!.allowsNoOperand && !vars.coreOperandType!.isNothing
+        vars.`operator`!.allowsNoOperand && !vars.coreOperandType!.isNothing
     }
 
     static func testForRequiredAddressOrWriteAccess(vars: DecodeVars) -> Bool {
-        vars.currentOperator!.requiresAddressOrWriteAccess && !vars.coreOperandType!.providesAddressOrWriteAccess
+        vars.`operator`!.requiresAddressOrWriteAccess && !vars.coreOperandType!.providesAddressOrWriteAccess
     }
 
     static func testForNeededOperand(vars: DecodeVars) -> Bool {
-        !vars.currentOperator!.allowsNoOperand && vars.coreOperandType!.isNothing
+        !vars.`operator`!.allowsNoOperand && vars.coreOperandType!.isNothing
     }
 
     static func throwLiteralRequiredError(vars: DecodeVars) throws {

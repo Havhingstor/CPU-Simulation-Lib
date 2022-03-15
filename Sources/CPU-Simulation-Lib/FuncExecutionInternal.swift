@@ -54,14 +54,14 @@ class ExecutionInternal {
         let stackpointer = StackpointerHandler(cpu: cpu)
         let input = createInput(cpu: cpu, stackpointer: stackpointer)
         
-       let tmpResult = try cpu.currentOperator!.execute(input: input)
+       let tmpResult = try cpu.`operator`!.execute(input: input)
         
         applyTmpResult(finalResult: &result, tmpResult: tmpResult)
         
-        writeToOperandLocation(results: tmpResult, address: cpu.operand, memory: cpu.memory, memoryAccess: cpu.currentOperator!.requiresAddressOrWriteAccess)
+        writeToOperandLocation(results: tmpResult, address: cpu.operand, memory: cpu.memory, memoryAccess: cpu.`operator`!.requiresAddressOrWriteAccess)
         
         setBussesFromStackChanges(result: result, stack: stackpointer)
-        overwriteBussesWhenWrittenToOperandLocation(finalResult: result, tmpResult: tmpResult, address: cpu.operand, memory: cpu.memory, memoryAccess: cpu.currentOperator!.requiresAddressOrWriteAccess)
+        overwriteBussesWhenWrittenToOperandLocation(finalResult: result, tmpResult: tmpResult, address: cpu.operand, memory: cpu.memory, memoryAccess: cpu.`operator`!.requiresAddressOrWriteAccess)
         
         applyStackpointer(result: result, stackpointer: stackpointer)
         
@@ -162,13 +162,13 @@ class ExecutionInternal {
     
     private static func createInput(cpu: CPUCopy, stackpointer: StackpointerHandler) -> CPUExecutionInput {
         
-        let operand = cpu.currentOperator!.requiresAddressOrWriteAccess ? cpu.operand : nil
+        let operand = cpu.`operator`!.requiresAddressOrWriteAccess ? cpu.operand : nil
         
         return CPUExecutionInput(accumulator: cpu.accumulator, nFlag: cpu.nFlag, zFlag: cpu.zFlag, vFlag: cpu.vFlag, stackpointer: stackpointer, operandValue: cpu.operandType?.getOperandValue(cpu: cpu), operand: operand, operatorAddress: cpu.operatorProgramCounter, programCounter: cpu.programCounter)
     }
     
     static func testIfNoDecodeHappend(cpu: CPUCopy) -> Bool {
-        cpu.currentOperator == nil || cpu.operandType == nil
+        cpu.`operator` == nil || cpu.operandType == nil
     }
 
 }

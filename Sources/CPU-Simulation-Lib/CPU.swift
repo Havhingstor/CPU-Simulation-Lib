@@ -39,8 +39,8 @@ public class CPU {
     public var zFlag: Bool { internalVars.zFlag }
     public var vFlag: Bool { internalVars.vFlag }
     
-    public var operatorString: String { currentOperator?.stringRepresentation ?? StandardCPUVars.startingOperatorString }
-    public var currentOperator: Operator? { operationVars.currentOperator }
+    public var operatorString: String { `operator`?.stringRepresentation ?? StandardCPUVars.startingOperatorString }
+    public var `operator`: Operator? { operationVars.`operator` }
     
     public var operandTypeCode: UInt8 { operandType?.operandTypeCode ?? 0 }
     public var operandType: CoreOperandType? { operationVars.operandType }
@@ -109,7 +109,7 @@ extension CPU {
                 stackpointer: stackpointer,
                 accumulator: accumulator,
                 nFlag: nFlag, zFlag: zFlag, vFlag: vFlag,
-                currentOperator: currentOperator,
+                operator: `operator`,
                 operandType: operandType,
                 realOperandType: operationVars.realOperandType,
                 operatorProgramCounter: operatorProgramCounter)

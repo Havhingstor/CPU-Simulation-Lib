@@ -15,13 +15,13 @@ class DecodeInternal {
         var opcode: UInt16 { cpu.opcode }
         var operatorCode: UInt8 = 0
         var operandTypeCode: UInt8 = 0
-        var currentOperator: Operator?
+        var `operator`: Operator?
         var operandType: AccessibleOperandType?
         var coreOperandType: CoreOperandType? { operandType?.coreOperandType }
     }
 
     static func decodeCodes(vars: inout DecodeVars, cpu: CPUCopy) throws {
-        vars.currentOperator = try getOperatorOrThrowError(operatorCode: vars.operatorCode, address: cpu.operatorProgramCounter)
+        vars.`operator` = try getOperatorOrThrowError(operatorCode: vars.operatorCode, address: cpu.operatorProgramCounter)
         vars.operandType = try getOperandTypeOrThrowError(operandTypeCode: vars.operandTypeCode, address: cpu.operatorProgramCounter)
     }
 
@@ -31,7 +31,7 @@ class DecodeInternal {
     }
 
     static func applyDecodedValsToNewCPUVars(vars: DecodeVars) {
-        vars.result.currentOperator = vars.currentOperator
+        vars.result.`operator` = vars.`operator`
         vars.result.operandType = vars.operandType
     }
 

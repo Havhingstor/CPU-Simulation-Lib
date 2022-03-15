@@ -12,7 +12,7 @@ class CPUOperationVars {
     var state: CPUState = StandardStates.startingState()
     var opcode: UInt16 = 0
     var operand: UInt16 = 0
-    var currentOperator: Operator?
+    var `operator`: Operator?
     var operatorProgramCounter: UInt16 = 0
     var realOperandType: AccessibleOperandType?
     var operandType: CoreOperandType? { realOperandType?.coreOperandType }
@@ -30,7 +30,7 @@ class CPUOperationVars {
         applyProgramCounter(programCounter: vars.programCounter)
         applyOpcode(opcode: vars.opcode)
         applyOperand(operand: vars.operand)
-        applyOperator(currentOperator: vars.currentOperator)
+        applyOperator(operator: vars.`operator`)
         applyOperandType(operandType: vars.operandType)
     }
     
@@ -57,9 +57,9 @@ class CPUOperationVars {
             self.operand = operand
         }
     }
-    private func applyOperator(currentOperator: Operator?) {
-        if let currentOperator = currentOperator {
-            self.currentOperator = currentOperator
+    private func applyOperator(`operator`: Operator?) {
+        if let `operator` = `operator` {
+            self.`operator` = `operator`
         }
     }
     private func applyOperandType(operandType: AccessibleOperandType?) {
