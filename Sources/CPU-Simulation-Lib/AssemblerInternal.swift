@@ -76,7 +76,7 @@ class AssemblerInternal {
         return item.first == "#"
     }
     
-    private static func lexItemsInLine(_ items: [Substring.SubSequence], _ result: inout [AssemblerInternal.Token]) {
+    private static func lexItemsInLine(_ items: [Substring.SubSequence], _ result: inout [Token]) {
         
         var hasAlreadyAOperator = false
         
@@ -89,7 +89,7 @@ class AssemblerInternal {
         }
     }
     
-    private static func lexLinesInString(_ lines: [String.SubSequence], _ result: inout [AssemblerInternal.Token]) {
+    private static func lexLinesInString(_ lines: [String.SubSequence], _ result: inout [Token]) {
         for line in lines {
             let items = splitLineIntoItems(line: line)
             
@@ -99,19 +99,19 @@ class AssemblerInternal {
         }
     }
     
-    private static func tokenIsMarker(_ token: AssemblerInternal.Token) -> Bool {
+    private static func tokenIsMarker(_ token: Token) -> Bool {
         return token.type == .marker
     }
     
-    private static func appendTokenToMarkerStack(_ markerStack: inout [String], _ token: AssemblerInternal.Token) {
+    private static func appendTokenToMarkerStack(_ markerStack: inout [String], _ token: Token) {
         markerStack.append(token.value)
     }
     
-    private static func tokenIsNewLine(_ token: AssemblerInternal.Token) -> Bool {
+    private static func tokenIsNewLine(_ token: Token) -> Bool {
         return token.type == .newline
     }
     
-    private static func appendTokenToParseResult(_ token: AssemblerInternal.Token, _ index: inout Int, _ tokens: [AssemblerInternal.Token],
+    private static func appendTokenToParseResult(_ token: Token, _ index: inout Int, _ tokens: [Token],
                                                  _ lineNr: Int, _ markerStack: inout [String], _ result: inout [ResultItem]) throws {
         let item = try parseToken(token: token, index: &index, tokenList: tokens, line: lineNr, markers: markerStack)
         
@@ -120,7 +120,7 @@ class AssemblerInternal {
         result.append(item)
     }
     
-    private static func handleToken(_ tokens: [AssemblerInternal.Token], _ index: inout Int, _ markerStack: inout [String],
+    private static func handleToken(_ tokens: [Token], _ index: inout Int, _ markerStack: inout [String],
                                     _ lineNr: inout Int, _ result: inout [ResultItem]) throws {
         let token = tokens[index]
         
@@ -133,7 +133,7 @@ class AssemblerInternal {
         }
     }
     
-    private static func parseTokens(_ tokens: [AssemblerInternal.Token]) throws -> [ResultItem] {
+    private static func parseTokens(_ tokens: [Token]) throws -> [ResultItem] {
         var result: [ResultItem] = []
         
         var markerStack: [String] = []
@@ -248,6 +248,10 @@ class AssemblerInternal {
         
         addressValueTypes.updateValue(OpcodeAddressValue(operator: `operator`, operandType: operandType), forKey: address)
         
+        getAddressValuesForOperand(operandType, &addressValueTypes, address)
+    }
+    
+    private static func getAddressValuesForOperand(_ operandType: AccessibleOperandType, _ addressValueTypes: inout [UInt16 : AddressValueType], _ address: UInt16) {
         if operandType.coreOperandType.providesAddressOrWriteAccess {
             addressValueTypes.updateValue(AddressAddressValue(), forKey: address &+ 1)
         } else {
@@ -300,84 +304,147 @@ class AssemblerInternal {
         try memory.writeValues(values: values)
     }
     
-    private static func parseToken(token firstToken: Token, index: inout Int, tokenList list: [Token], line: Int, markers: [String]) throws -> ResultItem {
-        var token = firstToken
-        
+    private static func handleUnallowedOperand(_ token: Token, _ line: Int) throws {
         if token.type == .operand {
             throw AssemblerErrors.OperandNotAllowedError(operand: token.value, line: line)
         }
+    }
+    
+    private static func isOperatorWord(_ token: Token) -> Bool {
+        return token.value.lowercased() == "word"
+    }
+    
+    private static func parseWord(_ index: inout Int, _ list: [Token], _ line: Int, _ markers: [String]) throws -> ResultItem {
+        index += 1
+        let token = list[index]
         
-        if token.value.lowercased() == "word" {
-            index += 1
-            token = list[index]
-            
-            let value = readNumber(input: token.value)
-            
-            if token.type != .operand || value == nil {
-                throw AssemblerErrors.OperandMissing(operator: token.value, line: line)
-            }
-            
-            return Variable(line: line, markers: markers, value: value!)
+        let value = readNumber(input: token.value)
+        
+        if token.type != .operand || value == nil {
+            throw AssemblerErrors.OperandMissing(operator: token.value, line: line)
         }
         
-        var tmpOperator = StandardOperators.getOperatorNameAssignment()[token.value.lowercased()]?()
-        var iAppended = false
-        
+        return Variable(line: line, markers: markers, value: value!)
+    }
+    
+    private static func parseOperator(_ token: Token) -> Operator? {
+        return StandardOperators.getOperatorNameAssignment()[token.value.lowercased()]?()
+    }
+    
+    private static func testForAppendedI(_ tmpOperator: inout Operator?, _ token: Token) -> Bool {
         if tmpOperator == nil && token.value.last?.lowercased() == "i" {
             let newOperatorString = String(token.value.dropLast())
+            
             let assignment = StandardOperators.getOperatorNameAssignment()
             tmpOperator = assignment[newOperatorString.lowercased()]?()
-            iAppended = true
+            
+            return true
         }
         
-        guard tmpOperator != nil else {
+        return false
+    }
+    
+    private static func handleUndecodableOperator(_ tmpOperator: Operator?, _ token: Token, _ line: Int) throws {
+        if tmpOperator == nil {
             throw AssemblerErrors.OperatorNotDecodableError(operator: token.value, line: line)
         }
+    }
+    
+    private static func testForNoOperand(index: Int, list: [Token]) -> Bool {
+        index >= list.count
+    }
+    
+    private static func handleNoOperand(_ index: inout Int, _ operandType: inout AccessibleOperandType?) {
+        index -= 1
+        operandType = StandardOperandTypes.emptyType()
+    }
+    
+    private static func tokenIsNewline(_ token: Token) -> Bool {
+        return token.type == .newline
+    }
+    
+    private static func tokenIsntOperand(_ token: Token) -> Bool {
+        return token.type != .operand
+    }
+    
+    private static func handleWrongTokenInsteadOfOperand(_ token: Token, _ line: Int) throws {
+        throw AssemblerErrors.OperandNotDecodableError(operand: token.value, line: line)
+    }
+    
+    private static func parseOperandTypeForExistingOperand(_ iAppended: Bool, _ operandType: inout AccessibleOperandType?, _ token: Token, _ operand: inout String, _ line: Int) throws {
+        if iAppended {
+            operandType = StandardOperandTypes.iAppendedType()
+        } else {
+            let operandTypeTmp = getOperandType(operand: token.value)
+            
+            guard operandTypeTmp != nil else {
+                throw AssemblerErrors.OperandNotDecodableError(operand: operand, line: line)
+            }
+            
+            operandType = operandTypeTmp!.0
+            operand = operandTypeTmp!.1
+        }
+    }
+    
+    private static func parseOperandTypeIfPossible(_ token: Token, _ index: inout Int, _ operandType: inout AccessibleOperandType?, _ line: Int, _ iAppended: Bool, _ operand: inout String) throws {
+        if tokenIsNewline(token) {
+            index -= 1
+            operandType = StandardOperandTypes.emptyType()
+        } else if tokenIsntOperand(token) {
+            try handleWrongTokenInsteadOfOperand(token, line)
+        } else {
+            try parseOperandTypeForExistingOperand(iAppended, &operandType, token, &operand, line)
+        }
+    }
+    
+    private static func parseForExistingOperand(token: inout Token, _ list: [Token], _ index: Int, _ operand: inout String) throws {
+        token = list[index]
+        
+        operand = token.value
+    }
+    
+    private static func parseOperandIfPossible(_ index: inout Int, _ list: [Token], _ operandType: inout AccessibleOperandType?,
+                                                   _ token: inout AssemblerInternal.Token, _ operand: inout String, _ line: Int, _ iAppended: Bool) throws {
+        if testForNoOperand(index: index, list: list) {
+            handleNoOperand(&index, &operandType)
+        } else {
+            try parseForExistingOperand(token: &token, list, index, &operand)
+            
+            try parseOperandTypeIfPossible(token, &index, &operandType, line, iAppended, &operand)
+        }
+    }
+    
+    private static func parseToken(token firstToken: Token, index: inout Int, tokenList list: [Token], line: Int, markers: [String]) throws -> ResultItem {
+        var token = firstToken
+        
+        try handleUnallowedOperand(token, line)
+        
+        if isOperatorWord(token) {
+            return try parseWord(&index, list, line, markers)
+        }
+        
+        var tmpOperator = parseOperator(token)
+        
+        let iAppended = testForAppendedI(&tmpOperator, token)
+        
+        try handleUndecodableOperator(tmpOperator, token, line)
         
         let `operator` = tmpOperator!
         
         index += 1
         
-        let operandType: AccessibleOperandType!
+        var operandType: AccessibleOperandType? = nil
         
         var operand = ""
         
-        if index >= list.count {
-            index -= 1
-            operandType = StandardOperandTypes.emptyType()
-        } else {
-        
-            token = list[index]
-            
-            operand = token.value
-            
-            if token.type == .newline {
-                index -= 1
-                operandType = StandardOperandTypes.emptyType()
-            } else if token.type != .operand {
-                throw AssemblerErrors.OperandNotDecodableError(operand: token.value, line: line)
-            } else {
-                if iAppended {
-                    operandType = StandardOperandTypes.iAppendedType()
-                } else {
-                    let operandTypeTmp = getOperandType(operand: token.value)
-                    
-                    guard operandTypeTmp != nil else {
-                        throw AssemblerErrors.OperandNotDecodableError(operand: operand, line: line)
-                    }
-                    
-                    operandType = operandTypeTmp!.0
-                    operand = operandTypeTmp!.1
-                }
-            }
-        }
+        try parseOperandIfPossible(&index, list, &operandType, &token, &operand, line, iAppended)
         
         let realOperandValue = readNumber(input: operand)
         
         if let realOperandValue = realOperandValue {
-            return TmpOperation(markers: markers, operator: `operator`, operandType: operandType, operand: realOperandValue, line: line)
+            return TmpOperation(markers: markers, operator: `operator`, operandType: operandType!, operand: realOperandValue, line: line)
         } else {
-            return TmpOperation(markers: markers, operator: `operator`, operandType: operandType, operand: operand, line: line)
+            return TmpOperation(markers: markers, operator: `operator`, operandType: operandType!, operand: operand, line: line)
         }
         
     }

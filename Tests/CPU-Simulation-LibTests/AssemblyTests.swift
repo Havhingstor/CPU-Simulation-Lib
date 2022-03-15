@@ -64,6 +64,10 @@ class AssemblyTests: XCTestCase {
         let assemblyResultsTmp = try? memory.loadAssembly(assemblyCode: assembly)
         XCTAssertNotNil(assemblyResultsTmp)
         
+        guard assemblyResultsTmp != nil else {
+            return
+        }
+        
         XCTAssertNotEqual(memory.read(address: 0), 0)
         XCTAssertEqual(memory.read(address: 1), 10)
         XCTAssertNotEqual(memory.read(address: 2), 0)
@@ -126,8 +130,12 @@ class AssemblyTests: XCTestCase {
         XCTAssertNotEqual(memory.read(address: 2), 0)
         XCTAssertEqual(memory.read(address: 3), 20)
         
-        let memoryValueTypes = assemblyResultsTmp!.memoryValues
+        guard assemblyResultsTmp != nil else {
+            return
+        }
         
+        let memoryValueTypes = assemblyResultsTmp!.memoryValues
+                
         XCTAssertEqual((memoryValueTypes[0] as? AssemblingResults.OpcodeAddressValue)?.transform(value: 0), "LOAD(SP)")
         XCTAssertNotNil(memoryValueTypes[1] as? AssemblingResults.AddressAddressValue)
         
