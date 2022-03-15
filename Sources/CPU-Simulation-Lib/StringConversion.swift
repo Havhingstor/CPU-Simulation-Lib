@@ -11,6 +11,10 @@ import CPU_Simulation_Utilities
 extension Memory {
     
     public var description: String {
+        getHexString()
+    }
+    
+    public func getString() -> String {
         var result = "Memory:\n"
         
         let usedLines = calculateUsedLines()
@@ -21,6 +25,23 @@ extension Memory {
         }
         
         let table = createTable(usedLines)
+        
+        result += getTable(values: table, header: true, additionalDistance: 2, unifiedDistance: true)
+        
+        return result
+    }
+    
+    public func getHexString() -> String {
+        var result = "Memory:\n"
+        
+        let usedLines = calculateUsedLines()
+        
+        if usedLines.isEmpty {
+            result += "No Values"
+            return result
+        }
+        
+        let table = createHexTable(usedLines)
         
         result += getTable(values: table, header: true, additionalDistance: 2, unifiedDistance: true)
         
@@ -64,8 +85,16 @@ extension Memory {
         return String(read(address: calculateAddressFromLineAndNr(lineNr: lineNr, address: address)))
     }
     
+    private func getHexStringOfAddress(lineNr: UInt16, address: UInt16) -> String {
+        return toLongHexString(read(address: calculateAddressFromLineAndNr(lineNr: lineNr, address: address)))
+    }
+    
     fileprivate func addAddressToLine(line: inout [String], lineNr: UInt16, address: UInt16) {
         line.append(getStringOfAddress(lineNr: lineNr, address: address))
+    }
+    
+    fileprivate func addAddressToLineAsHex(line: inout [String], lineNr: UInt16, address: UInt16) {
+        line.append(getHexStringOfAddress(lineNr: lineNr, address: address))
     }
     
     fileprivate func handleUsageOfLastLineInResultString(lastLineUsed:  Bool, result: inout [[String]]) {
@@ -85,6 +114,16 @@ extension Memory {
         result.append(newLine)
     }
     
+    fileprivate func appendUsedLineAsHex(firstAddressNr: UInt16, result: inout [[String]]) {
+        var newLine = createStartOfNewLine(firstAddressNr)
+        
+        for j in 0 ... UInt16(0xf) {
+            addAddressToLineAsHex(line: &newLine, lineNr: firstAddressNr, address: j)
+        }
+        
+        result.append(newLine)
+    }
+    
     private func createTable(_ usedLines: [UInt16]) -> [[String]] {
         var result = getStartOfTable()
         var lastLineUsed = true
@@ -94,6 +133,25 @@ extension Memory {
             
             if testIfLineWasUsed(usedLines: usedLines, lineNr: firstAddressNr) {
                 appendUsedLine(firstAddressNr: firstAddressNr, result: &result)
+                lastLineUsed = true
+            } else {
+                handleUsageOfLastLineInResultString(lastLineUsed: lastLineUsed, result: &result)
+                lastLineUsed = false
+            }
+        }
+        
+        return result
+    }
+    
+    private func createHexTable(_ usedLines: [UInt16]) -> [[String]] {
+        var result = getStartOfTable()
+        var lastLineUsed = true
+        
+        for i in 0 ... UInt16(0xfff) {
+            let firstAddressNr = createFirstAddressFromLineNr(i)
+            
+            if testIfLineWasUsed(usedLines: usedLines, lineNr: firstAddressNr) {
+                appendUsedLineAsHex(firstAddressNr: firstAddressNr, result: &result)
                 lastLineUsed = true
             } else {
                 handleUsageOfLastLineInResultString(lastLineUsed: lastLineUsed, result: &result)
