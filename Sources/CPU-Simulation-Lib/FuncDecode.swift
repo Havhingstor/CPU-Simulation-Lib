@@ -52,9 +52,10 @@ public func resolveOperand(result: NewCPUVars, cpu: CPUCopy, operand: UInt16) {
         Internal.applyOperandChanges(result: result, changes: changes, operandType: operandType)
         Internal.applyBusChanges(result: result, changes: changes)
         
-        return
+        if result.operand != nil {
+            return
+        }
     }
     
     result.operand = operand
-    return
 }

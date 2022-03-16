@@ -32,6 +32,7 @@ class CPUOperandTests: XCTestCase {
         XCTAssertTrue(!cpu.operandType!.providesInstantLiteral)
         XCTAssertTrue(!cpu.operandType!.providesAddressOrWriteAccess)
         XCTAssertTrue(cpu.operandType!.isNothing)
+        XCTAssertEqual(cpu.operand, 0x100)
         
         XCTAssertNoThrow(try cpu.endInstruction())
         XCTAssertEqual(cpu.operandTypeCode, 1)
