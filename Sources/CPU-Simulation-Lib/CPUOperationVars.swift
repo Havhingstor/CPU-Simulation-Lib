@@ -49,6 +49,8 @@ class CPUOperationVars {
     private func applyOpcode(opcode: UInt16?) {
         if let opcode = opcode {
             self.opcode = opcode
+            self.operator = nil
+            self.realOperandType = nil
         }
     }
     

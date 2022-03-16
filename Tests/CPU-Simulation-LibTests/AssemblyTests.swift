@@ -139,7 +139,7 @@ class AssemblyTests: XCTestCase {
         XCTAssertEqual((memoryValueTypes[0] as? AssemblingResults.OpcodeAddressValue)?.transform(value: 0), "LOAD(SP)")
         XCTAssertNotNil(memoryValueTypes[1] as? AssemblingResults.AddressAddressValue)
         
-        XCTAssertEqual((memoryValueTypes[2] as? AssemblingResults.OpcodeAddressValue)?.transform(value: 0), "ADDI")
+        XCTAssertEqual((memoryValueTypes[2] as? AssemblingResults.OpcodeAddressValue)?.transform(value: 0), "ADD$")
         XCTAssertNotNil(memoryValueTypes[3] as? AssemblingResults.LiteralAddressValue)
     }
     

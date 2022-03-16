@@ -397,7 +397,7 @@ class AssemblerInternal {
         }
     }
     
-    private static func parseForExistingOperand(token: inout Token, _ list: [Token], _ index: Int, _ operand: inout String) throws {
+    private static func parseForExistingOperand(token: inout Token, _ list: [Token], _ index: Int, _ operand: inout String) {
         token = list[index]
         
         operand = token.value
@@ -408,7 +408,7 @@ class AssemblerInternal {
         if testForNoOperand(index: index, list: list) {
             handleNoOperand(&index, &operandType)
         } else {
-            try parseForExistingOperand(token: &token, list, index, &operand)
+            parseForExistingOperand(token: &token, list, index, &operand)
             
             try parseOperandTypeIfPossible(token, &index, &operandType, line, iAppended, &operand)
         }
@@ -478,7 +478,7 @@ class AssemblerInternal {
         var isFirstChar = false
         
         for char in input {
-            let lettersAndDigits = char.isLetter || char.isNumber
+            let lettersAndDigits = char.isLetter || char.isNumber || char == "-"
             let acceptedSymbols = isFirstChar && ["_", "$"].contains(char)
             
             if !lettersAndDigits && !acceptedSymbols {

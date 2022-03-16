@@ -90,7 +90,7 @@ open class LiteralOperandType: CoreOperandType {
     
     open class var additionInFront: String { "$" }
     open class var additionAtEnd: String { "" }
-    open class var representationAddition: String { "I" }
+    open class var representationAddition: String { "$" }
     
     public let id: UUID = UUID()
     
@@ -178,7 +178,7 @@ open class LiteralStackOperandType: AccessibleOperandType {
     
     open class var additionInFront: String { "$" }
     open class var additionAtEnd: String { "(SP)" }
-    open class var representationAddition: String { "I(SP)" }
+    open class var representationAddition: String { "$(SP)" }
     
     public static let standardCoreOperandTypeProvider: StandardNextValueProvider<CoreOperandType> = StandardNextValueProvider(builder: IndirectLiteralOperandType.init)
     

@@ -37,12 +37,12 @@ fileprivate func testIfRowHasEntryInColumn(_ row: [String], columnNr: Int) -> Bo
     return row.count > columnNr
 }
 
-private func testIfMaxWidthInColumnNeedsToBeUpdated(row: [String], columnNr: Int, maxWidthPerColumnArray: [Int]) -> Bool {
-    row[columnNr].count > maxWidthPerColumnArray[columnNr]
+private func testIfMaxWidthInColumnNeedsToBeUpdated(row: [String], writeColumnNr: Int, readColumnNr: Int , maxWidthPerColumnArray: [Int]) -> Bool {
+    row[readColumnNr].count > maxWidthPerColumnArray[writeColumnNr]
 }
 
-private func updateMaxWidthInColumn(row: [String], columnNr: Int, maxWidthPerColumnArray: inout [Int]) {
-    maxWidthPerColumnArray[columnNr] = row[columnNr].count
+private func updateMaxWidthInColumn(row: [String], writeColumnNr: Int, readColumnNr: Int, maxWidthPerColumnArray: inout [Int]) {
+    maxWidthPerColumnArray[writeColumnNr] = row[readColumnNr].count
 }
 
 fileprivate func updateMaxWidthInColumnIfNeeded(row: [String], columnNr prevColumnNr: Int, maxWidthPerColumnArray: inout [Int], unifiedDistance: Bool) {
@@ -52,9 +52,9 @@ fileprivate func updateMaxWidthInColumnIfNeeded(row: [String], columnNr prevColu
         columnNr = 0
     }
     
-    if testIfRowHasEntryInColumn(row, columnNr: columnNr) {
-        if  testIfMaxWidthInColumnNeedsToBeUpdated(row: row, columnNr: columnNr, maxWidthPerColumnArray: maxWidthPerColumnArray) {
-            updateMaxWidthInColumn(row: row, columnNr: columnNr, maxWidthPerColumnArray: &maxWidthPerColumnArray)
+    if testIfRowHasEntryInColumn(row, columnNr: prevColumnNr) {
+        if  testIfMaxWidthInColumnNeedsToBeUpdated(row: row, writeColumnNr: columnNr, readColumnNr: prevColumnNr, maxWidthPerColumnArray: maxWidthPerColumnArray) {
+            updateMaxWidthInColumn(row: row, writeColumnNr: columnNr, readColumnNr: prevColumnNr, maxWidthPerColumnArray: &maxWidthPerColumnArray)
         }
     }
 }

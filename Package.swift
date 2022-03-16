@@ -10,6 +10,9 @@ let package = Package(
         .library(
             name: "CPU-Simulation-Lib",
             targets: ["CPU-Simulation-Lib", "CPU-Simulation-Utilities"]),
+        .library(
+            name: "CPU-Simulation-Utilities",
+            targets: ["CPU-Simulation-Utilities"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -20,7 +23,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "CPU-Simulation-Lib",
-            dependencies: []),
+            dependencies: ["CPU-Simulation-Utilities"]),
         .target(
             name: "CPU-Simulation-Utilities",
             dependencies: []),

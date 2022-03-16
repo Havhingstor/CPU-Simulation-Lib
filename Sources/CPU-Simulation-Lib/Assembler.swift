@@ -40,6 +40,10 @@ public struct AssemblingResults {
        
     
     public class LiteralAddressValue: AddressValueType {
+        public func transformOnlyNumber(value: UInt16) -> String {
+            transform(value: value)
+        }
+        
         public func transform(value: UInt16) -> String {
             toDecString(unsignedToSigned(value))
         }
@@ -48,6 +52,10 @@ public struct AssemblingResults {
     }
     
     public class AddressAddressValue: AddressValueType {
+        public func transformOnlyNumber(value: UInt16) -> String {
+            transform(value: value)
+        }
+        
         public func transform(value: UInt16) -> String {
             toLongHexString(value)
         }
@@ -56,6 +64,11 @@ public struct AssemblingResults {
     }
     
     public class OpcodeAddressValue: AddressValueType {
+        public func transformOnlyNumber(value: UInt16) -> String {
+            return toLongHexString(value)
+        }
+        
+        
         public var `operator`: Operator
         public var operandType: AccessibleOperandType
         
@@ -72,6 +85,7 @@ public struct AssemblingResults {
 
 public protocol AddressValueType {
     func transform(value: UInt16) -> String
+    func transformOnlyNumber(value: UInt16) -> String
 }
 
 public enum AssemblerErrors: Error {
