@@ -28,7 +28,7 @@ class InternalCPUVars {
         applyLastMemoryInteraction(vars.lastMemoryInteraction)
         applyVFlag(vars.vFlag)
         applyZFlag(vars.zFlag, newAccumulator: vars.accumulator)
-        applyNFlag(vars.nFlag, accumulator: accumulator)
+        applyNFlag(vars.nFlag, newAccumulator: vars.accumulator)
     }
     
     private func applyVFlag(_ newVFlag: Bool?) {
@@ -46,22 +46,23 @@ class InternalCPUVars {
     }
     
     private func applyZFlagFromAccumulator(_ newAccumulator: UInt16?) {
-        guard newAccumulator != nil else {
-            return
+        if let newAccumulator = newAccumulator {
+            zFlag = newAccumulator == 0
         }
-        zFlag = newAccumulator! == 0
     }
     
-    private func applyNFlag(_ newNFlag: Bool?, accumulator: UInt16) {
+    private func applyNFlag(_ newNFlag: Bool?, newAccumulator: UInt16?) {
         if let newNFlag = newNFlag {
             nFlag = newNFlag
         } else {
-            applyNFlagFromAccumulator(accumulator: accumulator)
+            applyNFlagFromAccumulator(newAccumulator)
         }
     }
     
-    private func applyNFlagFromAccumulator(accumulator: UInt16) {
-        nFlag = unsignedToSigned(accumulator) < 0
+    private func applyNFlagFromAccumulator(_ newAccumulator: UInt16?) {
+        if let newAccumulator = newAccumulator {
+            nFlag = unsignedToSigned(newAccumulator) < 0
+        }
     }
     
     private func applyStackpointer(_ newStackpointer: UInt16?) {
