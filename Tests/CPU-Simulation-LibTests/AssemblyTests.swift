@@ -136,10 +136,10 @@ class AssemblyTests: XCTestCase {
         
         let memoryValueTypes = assemblyResultsTmp!.memoryValues
                 
-        XCTAssertEqual((memoryValueTypes[0] as? AssemblingResults.OpcodeAddressValue)?.transform(value: 0), "LOAD(SP)")
+        XCTAssertEqual((memoryValueTypes[0] as? AssemblingResults.OpcodeAddressValue)?.transform(), "LOAD(SP)")
         XCTAssertNotNil(memoryValueTypes[1] as? AssemblingResults.AddressAddressValue)
         
-        XCTAssertEqual((memoryValueTypes[2] as? AssemblingResults.OpcodeAddressValue)?.transform(value: 0), "ADD$")
+        XCTAssertEqual((memoryValueTypes[2] as? AssemblingResults.OpcodeAddressValue)?.transform(), "ADD$")
         XCTAssertNotNil(memoryValueTypes[3] as? AssemblingResults.LiteralAddressValue)
     }
     
@@ -238,5 +238,44 @@ class AssemblyTests: XCTestCase {
         XCTAssertEqual(memory.read(address: 5), 1500)
         XCTAssertEqual(cpu.accumulator, 0)
         XCTAssertEqual(cpu.programCounter, 62)
+    }
+    
+    func testAddressTypeTransformations() {
+        let assembly = """
+        LOAD    $100
+        STORE   500
+        """
+        
+        let assemblingResults = try? memory.loadAssembly(assemblyCode: assembly)
+        XCTAssertNotNil(assemblingResults)
+        
+        let values = assemblingResults!.memoryValues
+        
+        let literalAddressType = values[1]
+        let addressAddressType = values[3]
+        let operatorAddressType = values[0]
+        
+        XCTAssertNotNil(literalAddressType)
+        XCTAssertNotNil(addressAddressType)
+        XCTAssertNotNil(operatorAddressType)
+        
+        XCTAssertNotNil(literalAddressType as? AssemblingResults.LiteralAddressValue)
+        XCTAssertNotNil(addressAddressType as? AssemblingResults.AddressAddressValue)
+        XCTAssertNotNil(operatorAddressType as? AssemblingResults.OpcodeAddressValue)
+        
+        if(literalAddressType != nil) {
+            XCTAssertEqual(literalAddressType!.transform(), "100")
+            XCTAssertEqual(literalAddressType!.transformOnlyNumber(), "100")
+        }
+        
+        if(addressAddressType != nil) {
+            XCTAssertEqual(addressAddressType!.transform(), "0x01F4")
+            XCTAssertEqual(addressAddressType!.transformOnlyNumber(), "0x01F4")
+        }
+        
+        if(operatorAddressType != nil) {
+            XCTAssertEqual(operatorAddressType!.transform(), "LOAD$")
+            XCTAssertEqual(operatorAddressType!.transformOnlyNumber(), "0x0214")
+        }
     }
 }

@@ -22,9 +22,9 @@ public func assemble(assemblyCode: String, memory: Memory) throws -> AssemblingR
 }
 
 public struct AssemblingResults {
-    public var markers: [Marker] = []
+    public var markers: [Marker]
     
-    public var memoryValues: [UInt16: AddressValueType] = [:]
+    public var memoryValues: [UInt16: AddressValueType]
     
     public struct Marker {
         public var name: String
@@ -40,39 +40,51 @@ public struct AssemblingResults {
        
     
     public class LiteralAddressValue: AddressValueType {
-        public func transformOnlyNumber(value: UInt16) -> String {
-            transform(value: value)
+        private let value: UInt16
+        
+        public func transformOnlyNumber() -> String {
+            transform()
         }
         
-        public func transform(value: UInt16) -> String {
+        public func transform() -> String {
             toDecString(unsignedToSigned(value))
         }
         
-        public init() {}
+        public init(value: UInt16) {
+            self.value = value
+        }
     }
     
     public class AddressAddressValue: AddressValueType {
-        public func transformOnlyNumber(value: UInt16) -> String {
-            transform(value: value)
+        private let value: UInt16
+        
+        public func transformOnlyNumber() -> String {
+            transform()
         }
         
-        public func transform(value: UInt16) -> String {
+        public func transform() -> String {
             toLongHexString(value)
         }
         
-        public init() {}
+        public init(value: UInt16) {
+            self.value = value
+        }
     }
     
     public class OpcodeAddressValue: AddressValueType {
-        public func transformOnlyNumber(value: UInt16) -> String {
+        public func transformOnlyNumber() -> String {
             return toLongHexString(value)
         }
         
+        private var value: UInt16 {
+            UInt16(`operator`.operatorCode) + operandType.operandTypeCodePreparedForOpcode
+        }
         
-        public var `operator`: Operator
-        public var operandType: AccessibleOperandType
+        public let `operator`: Operator
         
-        public func transform(value: UInt16) -> String {
+        public let operandType: AccessibleOperandType
+        
+        public func transform() -> String {
             `operator`.stringRepresentation + operandType.representationAddition
         }
         
@@ -84,8 +96,8 @@ public struct AssemblingResults {
 }
 
 public protocol AddressValueType {
-    func transform(value: UInt16) -> String
-    func transformOnlyNumber(value: UInt16) -> String
+    func transform() -> String
+    func transformOnlyNumber() -> String
 }
 
 public enum AssemblerErrors: Error {

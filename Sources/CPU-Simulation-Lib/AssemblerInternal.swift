@@ -248,19 +248,19 @@ class AssemblerInternal {
         
         addressValueTypes.updateValue(OpcodeAddressValue(operator: `operator`, operandType: operandType), forKey: address)
         
-        getAddressValuesForOperand(operandType, &addressValueTypes, address)
+        getAddressValuesForOperand(operandType, &addressValueTypes, address, valueInAddress: memVal.operand)
     }
     
-    private static func getAddressValuesForOperand(_ operandType: AccessibleOperandType, _ addressValueTypes: inout [UInt16 : AddressValueType], _ address: UInt16) {
+    private static func getAddressValuesForOperand(_ operandType: AccessibleOperandType, _ addressValueTypes: inout [UInt16 : AddressValueType], _ address: UInt16, valueInAddress: UInt16) {
         if operandType.coreOperandType.providesAddressOrWriteAccess {
-            addressValueTypes.updateValue(AddressAddressValue(), forKey: address &+ 1)
+            addressValueTypes.updateValue(AddressAddressValue(value: valueInAddress), forKey: address &+ 1)
         } else {
-            addressValueTypes.updateValue(LiteralAddressValue(), forKey: address &+ 1)
+            addressValueTypes.updateValue(LiteralAddressValue(value: valueInAddress), forKey: address &+ 1)
         }
     }
     
-    private static func createAssembleResultOfVariable(_ addressValueTypes: inout [UInt16 : AddressValueType], _ address: UInt16) {
-        addressValueTypes.updateValue(LiteralAddressValue(), forKey: address)
+    private static func createAssembleResultOfVariable(_ addressValueTypes: inout [UInt16 : AddressValueType], _ address: UInt16, valueInAddress: UInt16) {
+        addressValueTypes.updateValue(LiteralAddressValue(value: valueInAddress), forKey: address)
     }
     
     private static func createMarkersFromParseResult(_ memVal: ResultItem, _ markers: inout [AssemblingResults.Marker], _ address: UInt16, _ type: AssemblerInternal.Marker.`Type`) {
@@ -278,7 +278,7 @@ class AssemblerInternal {
             createAssembleResultOfOperation(memVal, &addressValueTypes, address)
         } else if let _ = memVal as? Variable {
             type = .variable
-            createAssembleResultOfVariable(&addressValueTypes, address)
+            createAssembleResultOfVariable(&addressValueTypes, address, valueInAddress: memVal.value)
         }
         
         createMarkersFromParseResult(memVal, &markers, address, type)
@@ -540,7 +540,6 @@ class AssemblerInternal {
         var operandType: AccessibleOperandType
         var operand: UInt16
     }
-    var address: UInt16?
     
     
     class TmpOperation: ResultItem {
@@ -604,7 +603,7 @@ class AssemblerInternal {
         var value: UInt16
     }
     
-    struct Token: CustomStringConvertible {
+    struct Token {
         var value: String
         var type: `Type`
         
@@ -613,10 +612,6 @@ class AssemblerInternal {
             case `operator`
             case operand
             case newline
-        }
-        
-        var description: String {
-            "\(type): \(value)"
         }
     }
 }
