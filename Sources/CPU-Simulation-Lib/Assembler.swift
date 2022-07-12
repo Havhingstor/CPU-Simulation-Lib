@@ -103,8 +103,8 @@ public protocol AddressValueType {
 public enum AssemblerErrors: Error {
     case OperatorNotDecodableError(`operator`: String, line: Int)
     case OperandNotDecodableError(operand: String, line: Int)
-    case OperandNotAllowedError(operand: String, line: Int)
-    case OperandMissing(`operator`: String, line: Int)
+    case TooManyOperandsError(operand: String, line: Int)
+    case WordValueMissingError(line: Int)
     case ProgramTooBigError
     case MarkerExistsTwiceError(marker: String, line: Int)
     case MarkerDoesntExistError(marker: String, line: Int)

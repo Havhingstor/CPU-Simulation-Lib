@@ -95,7 +95,7 @@ class AssemblerInternal {
             
             lexItemsInLine(items, &result)
             
-            result.append(Token(value: "", type: .newline))
+            result.append(Token(value: "", originalString: "", type: .newline))
         }
     }
     
@@ -306,7 +306,7 @@ class AssemblerInternal {
     
     private static func handleUnallowedOperand(_ token: Token, _ line: Int) throws {
         if token.type == .operand {
-            throw AssemblerErrors.OperandNotAllowedError(operand: token.value, line: line)
+            throw AssemblerErrors.TooManyOperandsError(operand: token.originalString, line: line)
         }
     }
     
@@ -321,7 +321,7 @@ class AssemblerInternal {
         let value = readNumber(input: token.value)
         
         if token.type != .operand || value == nil {
-            throw AssemblerErrors.OperandMissing(operator: token.value, line: line)
+            throw AssemblerErrors.WordValueMissingError(line: line)
         }
         
         return Variable(line: line, markers: markers, value: value!)
@@ -346,17 +346,8 @@ class AssemblerInternal {
     
     private static func handleUndecodableOperator(_ tmpOperator: Operator?, _ token: Token, _ line: Int) throws {
         if tmpOperator == nil {
-            throw AssemblerErrors.OperatorNotDecodableError(operator: token.value, line: line)
+            throw AssemblerErrors.OperatorNotDecodableError(operator: token.originalString, line: line)
         }
-    }
-    
-    private static func testForNoOperand(index: Int, list: [Token]) -> Bool {
-        index >= list.count
-    }
-    
-    private static func handleNoOperand(_ index: inout Int, _ operandType: inout AccessibleOperandType?) {
-        index -= 1
-        operandType = StandardOperandTypes.emptyType()
     }
     
     private static func tokenIsNewline(_ token: Token) -> Bool {
@@ -368,7 +359,7 @@ class AssemblerInternal {
     }
     
     private static func handleWrongTokenInsteadOfOperand(_ token: Token, _ line: Int) throws {
-        throw AssemblerErrors.OperandNotDecodableError(operand: token.value, line: line)
+        throw AssemblerErrors.OperandNotDecodableError(operand: token.originalString, line: line)
     }
     
     private static func parseOperandTypeForExistingOperand(_ iAppended: Bool, _ operandType: inout AccessibleOperandType?, _ token: Token, _ operand: inout String, _ line: Int) throws {
@@ -405,13 +396,9 @@ class AssemblerInternal {
     
     private static func parseOperandIfPossible(_ index: inout Int, _ list: [Token], _ operandType: inout AccessibleOperandType?,
                                                    _ token: inout AssemblerInternal.Token, _ operand: inout String, _ line: Int, _ iAppended: Bool) throws {
-        if testForNoOperand(index: index, list: list) {
-            handleNoOperand(&index, &operandType)
-        } else {
-            parseForExistingOperand(token: &token, list, index, &operand)
-            
-            try parseOperandTypeIfPossible(token, &index, &operandType, line, iAppended, &operand)
-        }
+        parseForExistingOperand(token: &token, list, index, &operand)
+        
+        try parseOperandTypeIfPossible(token, &index, &operandType, line, iAppended, &operand)
     }
     
     private static func parseToken(token firstToken: Token, index: inout Int, tokenList list: [Token], line: Int, markers: [String]) throws -> ResultItem {
@@ -507,17 +494,15 @@ class AssemblerInternal {
         if item.last == ":" { // Marker
             let markerName = String(item.dropLast())
             
-            token = Token(value: markerName, type: .marker)
+            token = Token(value: markerName, originalString: item, type: .marker)
         } else if !hasAlreadyAOperator { // Operator
-            let `operator` = String(item)
             
-            token = Token(value: `operator`, type: .operator)
+            token = Token(value: item, originalString: item, type: .operator)
             
             hasAlreadyAOperator = true
         } else { // operand
-            let operand = String(item)
             
-            token = Token(value: operand, type: .operand)
+            token = Token(value: item, originalString: item, type: .operand)
         }
         
         return token
@@ -529,7 +514,7 @@ class AssemblerInternal {
         }
     }
     
-    struct Operation: ResultItem {
+    class CoreOperation: ResultItem {
         var address: UInt16?
         var line: Int
         
@@ -538,19 +523,26 @@ class AssemblerInternal {
         
         var `operator`: Operator
         var operandType: AccessibleOperandType
+        
+        init(line: Int, markers: [String], operator: Operator, operandType: AccessibleOperandType) {
+            self.line = line
+            self.markers = markers
+            self.operator = `operator`
+            self.operandType = operandType
+        }
+    }
+    
+    class Operation: CoreOperation {
         var operand: UInt16
+        
+        init(line: Int, markers: [String], operator: Operator, operandType: AccessibleOperandType, operand: UInt16) {
+            self.operand = operand
+            super.init(line: line, markers: markers, operator: `operator`, operandType: operandType)
+        }
     }
     
     
-    class TmpOperation: ResultItem {
-        var address: UInt16?
-        
-        var line: Int = 0
-        var markers: [String]
-        var value: UInt16 { UInt16(`operator`.operatorCode) | operandType.operandTypeCodePreparedForOpcode }
-        
-        var `operator`: Operator
-        var operandType: AccessibleOperandType
+    class TmpOperation: CoreOperation {
         private var _operand: UInt16?
         private var _operandString: String?
         var operand: String {
@@ -575,19 +567,13 @@ class AssemblerInternal {
         }
         
         init(markers: [String], operator: Operator, operandType: AccessibleOperandType, operand: UInt16, line: Int) {
-            self.markers = markers
-            self.operator = `operator`
-            self.operandType = operandType
+            super.init(line: line, markers: markers, operator: `operator`, operandType: operandType)
             self._operand = operand
-            self.line = line
         }
         
         init(markers: [String], operator: Operator, operandType: AccessibleOperandType, operand: String, line: Int) {
-            self.markers = markers
-            self.operator = `operator`
-            self.operandType = operandType
+            super.init(line: line, markers: markers, operator: `operator`, operandType: operandType)
             self._operandString = operand
-            self.line = line
         }
         
     }
@@ -605,6 +591,7 @@ class AssemblerInternal {
     
     struct Token {
         var value: String
+        var originalString: String
         var type: `Type`
         
         enum `Type` {

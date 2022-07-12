@@ -159,23 +159,35 @@ class AssemblyTests: XCTestCase {
         XCTAssertNoThrow(try memory.loadAssembly(assemblyCode: assembly))
     }
     
-    func testError() {
+    func testTooManyOperandsError() {
         let assembly = """
             LOAD    10  This is not a comment
         """
         
         XCTAssertThrowsError(try memory.loadAssembly(assemblyCode: assembly)) { err in
-            print(err)
+            switch err as? AssemblerErrors {
+            case .TooManyOperandsError(let operand, let line):
+                XCTAssertEqual(operand, "This")
+                XCTAssertEqual(line, 1)
+            default:
+                XCTFail("\(String(describing: err)) is no TooManyOperandsError")
+            }
         }
     }
     
-    func testErrorWithValidOperator() {
+    func testTooManyOperandsErrorWithValidOperator() {
         let assembly = """
             LOAD    10  ADD 22
         """
         
         XCTAssertThrowsError(try memory.loadAssembly(assemblyCode: assembly)) { err in
-            print(err)
+            switch err as? AssemblerErrors {
+            case let .TooManyOperandsError(operand, line):
+                XCTAssertEqual(operand, "ADD")
+                XCTAssertEqual(line, 1)
+            default:
+                XCTFail("\(String(describing: err)) is no TooManyOperandsError")
+            }
         }
     }
     
@@ -188,7 +200,13 @@ class AssemblyTests: XCTestCase {
         """
         
         XCTAssertThrowsError(try memory.loadAssembly(assemblyCode: assembly)) { err in
-            print(err)
+            switch err as? AssemblerErrors {
+            case let .OperatorNotDecodableError(`operator`, line):
+                XCTAssertEqual(`operator`, "err")
+                XCTAssertEqual(line, 4)
+            default:
+                XCTFail("\(String(describing: err)) is no OperatorNotDecodableError")
+            }
         }
     }
     
@@ -277,5 +295,121 @@ class AssemblyTests: XCTestCase {
             XCTAssertEqual(operatorAddressType!.transform(), "LOAD$")
             XCTAssertEqual(operatorAddressType!.transformOnlyNumber(), "0x0214")
         }
+    }
+    
+    func testNonExistingMarkerError() {
+        let assembly = """
+        STORE   loc
+        """
+        
+        XCTAssertThrowsError(try memory.loadAssembly(assemblyCode: assembly)) { err in
+            switch err as? AssemblerErrors {
+            case let .MarkerDoesntExistError(marker, line):
+                XCTAssertEqual(marker, "loc")
+                XCTAssertEqual(line, 1)
+            default:
+                XCTFail("\(String(describing: err)) is no MarkerDoesntExistError")
+            }
+        }
+    }
+    
+    func testMarkerExistsTwiceError() {
+        let assembly = """
+        loc:
+            LOAD    $10
+        loc:
+            LOAD    $10
+        """
+        
+        XCTAssertThrowsError(try memory.loadAssembly(assemblyCode: assembly)) { err in
+            switch err as? AssemblerErrors {
+            case let .MarkerExistsTwiceError(marker, line):
+                XCTAssertEqual(marker, "loc")
+                XCTAssertEqual(line, 4)
+            default:
+                XCTFail("\(String(describing: err)) is no MarkerExistsTwiceError")
+            }
+        }
+    }
+    
+    func testTooBigProgramError() {
+        var assembly = ""
+        
+        for _ in 0...0x10000 {
+            assembly += "LOAD   $1\n"
+        }
+        
+        XCTAssertThrowsError(try memory.loadAssembly(assemblyCode: assembly)) { err in
+            switch err as? AssemblerErrors {
+            case .ProgramTooBigError:
+                break
+            default:
+                XCTFail("\(String(describing: err)) is no ProgramTooBigError")
+            }
+        }
+    }
+    
+    func testWordValueMissingError() {
+        let assembly = """
+        WORD
+        """
+        
+        XCTAssertThrowsError(try memory.loadAssembly(assemblyCode: assembly)) { err in
+            switch err as? AssemblerErrors {
+            case let .WordValueMissingError(line):
+                XCTAssertEqual(line, 1)
+            default:
+                XCTFail("\(String(describing: err)) is no WordValueMissingError")
+            }
+        }
+    }
+    
+    func testEndWithoutNewline() {
+        let assembly = "HOLD"
+        
+        XCTAssertNoThrow(try memory.loadAssembly(assemblyCode: assembly))
+    }
+    
+    func testOperandNotDecodableErrorIfTypeIsntDecodable() {
+        let assembly = """
+        LOAD    &1
+        """
+        
+        XCTAssertThrowsError(try memory.loadAssembly(assemblyCode: assembly)) { err in
+            switch err as? AssemblerErrors {
+            case let .OperandNotDecodableError(operand, line):
+                XCTAssertEqual(operand, "&1")
+                XCTAssertEqual(line, 1)
+            default:
+                XCTFail("\(String(describing: err)) is no OperandNotDecodableError")
+            }
+        }
+    }
+    
+    func testOperandNotDecodableErrorIfTokenIsntOperand() {
+        let assembly = """
+        LOAD    Test:
+        """
+        
+        XCTAssertThrowsError(try memory.loadAssembly(assemblyCode: assembly)) { err in
+            switch err as? AssemblerErrors {
+            case let .OperandNotDecodableError(operand, line):
+                XCTAssertEqual(operand, "Test:")
+                XCTAssertEqual(line, 1)
+            default:
+                XCTFail("\(String(describing: err)) is no OperandNotDecodableError")
+            }
+        }
+    }
+    
+    func testAssemblingNumberFormats() {
+        let assembly = """
+        LOAD    $0b1010010
+        STORE   0x100
+        """
+        
+        XCTAssertNoThrow(try memory.loadAssembly(assemblyCode: assembly))
+        XCTAssertEqual(memory.read(address: 1), 82)
+        XCTAssertEqual(memory.read(address: 3), 256)
     }
 }
