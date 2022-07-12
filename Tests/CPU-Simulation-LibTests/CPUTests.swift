@@ -144,7 +144,6 @@ class CPUTests: XCTestCase {
         XCTAssertEqual(cpu.accumulator, 0)
         XCTAssertEqual(cpu.addressBus, nil)
         XCTAssertEqual(cpu.dataBus, nil)
-        XCTAssertEqual(cpu.lastMemoryInteraction, 0)
         XCTAssertTrue(!cpu.nFlag)
         XCTAssertTrue(!cpu.zFlag)
         XCTAssertTrue(!cpu.vFlag)

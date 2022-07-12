@@ -13,19 +13,15 @@ class InternalCPUVars {
     var accumulator: UInt16 = 0
     var dataBus: UInt16?
     var addressBus: UInt16?
-    var lastMemoryInteraction: UInt16 = 0
     var nFlag = false
     var zFlag = false
     var vFlag = false
-    
-//    var zFlag: Bool { _zFlag ?? false }
     
     func applyNewCPUVars(vars: NewCPUVars) {
         applyStackpointer(vars.stackpointer)
         applyAccumulator(vars.accumulator)
         applyDataBus(vars.dataBus)
         applyAddressBus(vars.addressBus)
-        applyLastMemoryInteraction(vars.lastMemoryInteraction)
         applyVFlag(vars.vFlag)
         applyZFlag(vars.zFlag, newAccumulator: vars.accumulator)
         applyNFlag(vars.nFlag, newAccumulator: vars.accumulator)
@@ -90,12 +86,6 @@ class InternalCPUVars {
             addressBus = newAddressBus
         } else {
             addressBus = nil
-        }
-    }
-    
-    private func applyLastMemoryInteraction(_ newLastMemoryInteraction: UInt16?) {
-        if let newLastMemoryInteraction = newLastMemoryInteraction {
-            lastMemoryInteraction = newLastMemoryInteraction
         }
     }
 }

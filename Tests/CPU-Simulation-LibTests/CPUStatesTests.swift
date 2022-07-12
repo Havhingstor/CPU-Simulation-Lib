@@ -81,7 +81,6 @@ class CPUStatesTests: XCTestCase {
         
         XCTAssertEqual(result.accumulator, nil)
         XCTAssertEqual(result.vFlag, nil)
-        XCTAssertEqual(result.lastMemoryInteraction, nil)
         XCTAssertEqual(result.addressBus, nil)
         XCTAssertEqual(result.dataBus, nil)
         XCTAssertEqual(result.stackpointer, nil)

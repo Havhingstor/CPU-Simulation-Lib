@@ -37,7 +37,6 @@ public class NewCPUVars {
     private var _accumulator: UInt16? = nil
     private var _dataBus: UInt16? = nil
     private var _addressBus: UInt16? = nil
-    private var _lastMemoryInteraction: UInt16? = nil
     private var _operator: Operator? = nil
     private var _operandType: AccessibleOperandType? = nil
     private var _vFlag: Bool? = nil
@@ -86,12 +85,6 @@ public class NewCPUVars {
         get {_addressBus}
         set(addressBus) { if addressBus != nil
             { _addressBus = addressBus}
-        }
-    }
-    public var lastMemoryInteraction: UInt16? {
-        get {_lastMemoryInteraction}
-        set(lastMemoryInteraction) { if lastMemoryInteraction != nil
-            { _lastMemoryInteraction = lastMemoryInteraction}
         }
     }
     public var `operator`: Operator? {

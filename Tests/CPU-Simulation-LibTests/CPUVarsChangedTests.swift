@@ -24,11 +24,10 @@ class CPUVarsChangedTest: XCTestCase {
         XCTAssertEqual(cpu.programCounter, 1)
         XCTAssertEqual(cpu.accumulator, 2)
         XCTAssertEqual(cpu.stackpointer, 3)
-        XCTAssertEqual(cpu.lastMemoryInteraction, 4)
-        XCTAssertEqual(cpu.addressBus, 5)
-        XCTAssertEqual(cpu.dataBus, 6)
-        XCTAssertEqual(cpu.opcode, 7)
-        XCTAssertEqual(cpu.operand, 8)
+        XCTAssertEqual(cpu.addressBus, 4)
+        XCTAssertEqual(cpu.dataBus, 5)
+        XCTAssertEqual(cpu.opcode, 6)
+        XCTAssertEqual(cpu.operand, 7)
         XCTAssertTrue(cpu.vFlag)
     }
     
@@ -45,7 +44,6 @@ class CPUVarsChangedTest: XCTestCase {
         XCTAssertEqual(cpu.programCounter, 0)
         XCTAssertEqual(cpu.accumulator, 0)
         XCTAssertEqual(cpu.stackpointer, 0xfffe)
-        XCTAssertEqual(cpu.lastMemoryInteraction, 0)
         XCTAssertEqual(cpu.addressBus, nil)
         XCTAssertEqual(cpu.dataBus, nil)
         XCTAssertEqual(cpu.opcode, 0)
@@ -65,7 +63,6 @@ class CPUVarsChangedTest: XCTestCase {
         XCTAssertEqual(cpu.programCounter, 50)
         XCTAssertEqual(cpu.accumulator, 0)
         XCTAssertEqual(cpu.stackpointer, 0xfffe)
-        XCTAssertEqual(cpu.lastMemoryInteraction, 0)
         XCTAssertEqual(cpu.addressBus, nil)
         XCTAssertEqual(cpu.dataBus, nil)
         XCTAssertEqual(cpu.opcode, 0)
@@ -85,7 +82,6 @@ class CPUVarsChangedTest: XCTestCase {
         XCTAssertEqual(cpu.programCounter, 0)
         XCTAssertEqual(cpu.accumulator, 0)
         XCTAssertEqual(cpu.stackpointer, 0xfffe)
-        XCTAssertEqual(cpu.lastMemoryInteraction, 0)
         XCTAssertEqual(cpu.addressBus, nil)
         XCTAssertEqual(cpu.dataBus, nil)
         XCTAssertEqual(cpu.opcode, 0)
@@ -129,11 +125,10 @@ fileprivate class NewStart: CPUState {
         result.programCounter = 1
         result.accumulator = 2
         result.stackpointer = 3
-        result.lastMemoryInteraction = 4
-        result.addressBus = 5
-        result.dataBus = 6
-        result.opcode = 7
-        result.operand = 8
+        result.addressBus = 4
+        result.dataBus = 5
+        result.opcode = 6
+        result.operand = 7
         result.vFlag = true
         
         return result
