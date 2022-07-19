@@ -7,28 +7,16 @@
 
 import Foundation
 
-/// The interface for simulating a cpu and running programs on it
-public class CPU {
-    private let _memory: Memory
-    private var operationVars: CPUOperationVars
-    private var internalVars: InternalCPUVars
-    private var continuation = CPUContinuation.standard
-    private var _cycleCount: UInt = 0
+/// A container for the variables that present the interface to the user. Only a superclass
+public class CPUExternalVars {
+    internal let _memory: Memory
+    internal var operationVars: CPUOperationVars
+    internal var internalVars: InternalCPUVars
     
-    /// The maximal number of execution-cycles ``run()`` will perform, preventing a infinite loop
-    public var maxCycles: UInt
-    
-    /// Initializes the cpu, creates the internal components
-    /// - Parameters:
-    ///   - memory: The memory from which the cpu will take its operations and with which these operations can interact
-    ///   - startingPoint: The memory-address of the first operation, by default 0
-    ///   - maxCycles: The maximal number of execution-cycles ``run()`` will perform, preventing a infinite loop, by default 100000
-    public init(memory: Memory, startingPoint: UInt16 = 0, maxCycles: UInt = 100000) {
+    init(memory: Memory, operationVars: CPUOperationVars, internalVars: InternalCPUVars) {
         _memory = memory
-        operationVars = CPUOperationVars()
-        internalVars = InternalCPUVars()
-        operationVars.programCounter = startingPoint
-        self.maxCycles = maxCycles
+        self.operationVars = operationVars
+        self.internalVars = internalVars
     }
     
     /// The memory from which the cpu will take its operations and with which these operations can interact
@@ -70,6 +58,26 @@ public class CPU {
     
     /// The program counter of the next operator, differs from ``programCounter``, if that points to an operand
     public var operatorProgramCounter: UInt16 { operationVars.operatorProgramCounter }
+}
+
+/// The interface for simulating a cpu and running programs on it
+public class CPU: CPUExternalVars {
+    private var continuation = CPUContinuation.standard
+    private var _cycleCount: UInt = 0
+    
+    /// The maximal number of execution-cycles ``run()`` will perform, preventing a infinite loop
+    public var maxCycles: UInt
+    
+    /// Initializes the cpu, creates the internal components
+    /// - Parameters:
+    ///   - memory: The memory from which the cpu will take its operations and with which these operations can interact
+    ///   - startingPoint: The memory-address of the first operation, by default 0
+    ///   - maxCycles: The maximal number of execution-cycles ``run()`` will perform, preventing a infinite loop, by default 100000
+    public init(memory: Memory, startingPoint: UInt16 = 0, maxCycles: UInt = 100000) {
+        self.maxCycles = maxCycles
+        super.init(memory: memory, operationVars: CPUOperationVars(), internalVars: InternalCPUVars())
+        operationVars.programCounter = startingPoint
+    }
     
     /// The number of execution-cycles used by the ``run()``-method
     public var cycleCount: UInt { _cycleCount }
@@ -140,16 +148,6 @@ extension CPU {
     /// Copies the cpu without giving permission to change the values
     /// - Returns: A ``CPUCopy``, having the same values as the cpu
     public func createCopy() -> CPUCopy {
-        CPUCopy(memory: memory,
-                programCounter: programCounter,
-                opcode: opcode,
-                operand: operand,
-                stackpointer: stackpointer,
-                accumulator: accumulator,
-                nFlag: nFlag, zFlag: zFlag, vFlag: vFlag,
-                operator: `operator`,
-                operandType: operandType,
-                realOperandType: operationVars.realOperandType,
-                operatorProgramCounter: operatorProgramCounter)
+        CPUCopy(memory: memory, operationVars: operationVars, internalVars: internalVars)
     }
 }

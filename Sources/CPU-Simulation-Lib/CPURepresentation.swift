@@ -7,26 +7,13 @@
 
 import Foundation
 
-public struct CPUCopy {
-    public var memory: Memory
+/// A copy of ``CPU``, which holds the for the execution inportant values without permitting uncontrolled change of these values
+public class CPUCopy: CPUExternalVars {
+    public var realOperandType: AccessibleOperandType? { operationVars.realOperandType }
     
-    public var programCounter: UInt16
-    public var opcode: UInt16
-    public var operand: UInt16
-    public var stackpointer: UInt16
-    
-    public var accumulator: UInt16
-    public var nFlag: Bool
-    public var zFlag: Bool
-    public var vFlag: Bool
-    
-    public var `operator`: Operator?
-    
-    public var operandType: CoreOperandType?
-    
-    public var realOperandType: AccessibleOperandType?
-    
-    public var operatorProgramCounter: UInt16 
+    override init(memory: Memory, operationVars: CPUOperationVars, internalVars: InternalCPUVars) {
+        super.init(memory: memory, operationVars: operationVars, internalVars: internalVars)
+    }
 }
 
 public class NewCPUVars {
